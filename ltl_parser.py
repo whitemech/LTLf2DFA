@@ -105,11 +105,13 @@ parser = yacc.yacc()
 
 def run(p):
     if type(p) == tuple:
-        # if p[0] == '&':
-        #     print(p)
-        print(p)
+        if p[0] == '&':
+            # print(p)
+            a = run(p[1])
+            b = run(p[2])
+            return a+' & '+b
     else:
-        return p
+        return p+'(x)'
 
 while True:
     try:
