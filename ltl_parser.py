@@ -142,6 +142,11 @@ def run(p):
             a = run(p[1])
             b = run(p[2])
             return a+' & '+b
+        elif p[0] == '|':
+            # print(p)
+            a = run(p[1])
+            b = run(p[2])
+            return a+' | '+b        
     else:
         return p+'(x)'
 

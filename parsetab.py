@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftNOTNEXTleftUNTILANDleftORIMPLIESleftLPARRPARAND ATOM DIMPLIES FALSE FUTURE GLOBALLY IMPLIES LPAR NEXT NOT OR RPAR TRUE UNTIL\n    ltl : expression\n        | empty\n    \n    expression : LPAR expression UNTIL expression RPAR\n               | LPAR expression AND expression RPAR\n               | LPAR expression OR expression RPAR\n               | LPAR expression IMPLIES expression RPAR\n               | LPAR expression DIMPLIES expression RPAR\n               | expression UNTIL expression\n               | expression AND expression\n               | expression OR expression\n               | expression IMPLIES expression\n               | expression DIMPLIES expression\n\n    \n    expression : NOT expression\n    \n    expression : NEXT expression\n    \n    expression : FUTURE expression\n    \n    expression : GLOBALLY expression\n    \n    expression : ATOM\n    \n    empty :\n    '
+_lr_signature = 'leftNOTNEXTleftUNTILANDleftORIMPLIESleftLPARRPARAND ATOM DIMPLIES FALSE FUTURE GLOBALLY IMPLIES LPAR NEXT NOT OR RPAR TRUE UNTIL\n    ltl : expression\n        | empty\n    \n    expression : LPAR expression UNTIL expression RPAR\n               | LPAR expression AND expression RPAR\n               | LPAR expression OR expression RPAR\n               | LPAR expression IMPLIES expression RPAR\n               | LPAR expression DIMPLIES expression RPAR\n               | expression UNTIL expression\n               | expression AND expression\n               | expression OR expression\n               | expression IMPLIES expression\n               | expression DIMPLIES expression\n\n    \n    expression : TRUE\n    \n    expression : FALSE\n    \n    expression : NOT expression\n    \n    expression : NEXT expression\n    \n    expression : FUTURE expression\n    \n    expression : GLOBALLY expression\n    \n    expression : ATOM\n    \n    empty :\n    '
     
-_lr_action_items = {'LPAR':([0,4,5,6,7,8,10,11,12,13,14,25,26,27,28,29,],[4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,]),'NOT':([0,4,5,6,7,8,10,11,12,13,14,25,26,27,28,29,],[5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,]),'NEXT':([0,4,5,6,7,8,10,11,12,13,14,25,26,27,28,29,],[6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,]),'FUTURE':([0,4,5,6,7,8,10,11,12,13,14,25,26,27,28,29,],[7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,]),'GLOBALLY':([0,4,5,6,7,8,10,11,12,13,14,25,26,27,28,29,],[8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,]),'ATOM':([0,4,5,6,7,8,10,11,12,13,14,25,26,27,28,29,],[9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,]),'$end':([0,1,2,3,9,16,17,18,19,20,21,22,23,24,35,36,37,38,39,],[-18,0,-1,-2,-17,-13,-14,-15,-16,-8,-9,-10,-11,-12,-3,-4,-5,-6,-7,]),'UNTIL':([2,9,15,16,17,18,19,20,21,22,23,24,30,31,32,33,34,35,36,37,38,39,],[10,-17,25,10,10,10,10,-8,-9,-10,-11,10,-8,-9,-10,-11,10,-3,-4,-5,-6,-7,]),'AND':([2,9,15,16,17,18,19,20,21,22,23,24,30,31,32,33,34,35,36,37,38,39,],[11,-17,26,11,11,11,11,-8,-9,-10,-11,11,-8,-9,-10,-11,11,-3,-4,-5,-6,-7,]),'OR':([2,9,15,16,17,18,19,20,21,22,23,24,30,31,32,33,34,35,36,37,38,39,],[12,-17,27,12,12,12,12,12,12,-10,-11,12,12,12,-10,-11,12,-3,-4,-5,-6,-7,]),'IMPLIES':([2,9,15,16,17,18,19,20,21,22,23,24,30,31,32,33,34,35,36,37,38,39,],[13,-17,28,13,13,13,13,13,13,-10,-11,13,13,13,-10,-11,13,-3,-4,-5,-6,-7,]),'DIMPLIES':([2,9,15,16,17,18,19,20,21,22,23,24,30,31,32,33,34,35,36,37,38,39,],[14,-17,29,-13,-14,14,14,-8,-9,-10,-11,14,-8,-9,-10,-11,14,-3,-4,-5,-6,-7,]),'RPAR':([9,16,17,18,19,20,21,22,23,24,30,31,32,33,34,35,36,37,38,39,],[-17,-13,-14,-15,-16,-8,-9,-10,-11,-12,35,36,37,38,39,-3,-4,-5,-6,-7,]),}
+_lr_action_items = {'LPAR':([0,4,7,8,9,10,12,13,14,15,16,27,28,29,30,31,],[4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,]),'TRUE':([0,4,7,8,9,10,12,13,14,15,16,27,28,29,30,31,],[5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,]),'FALSE':([0,4,7,8,9,10,12,13,14,15,16,27,28,29,30,31,],[6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,]),'NOT':([0,4,7,8,9,10,12,13,14,15,16,27,28,29,30,31,],[7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,]),'NEXT':([0,4,7,8,9,10,12,13,14,15,16,27,28,29,30,31,],[8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,]),'FUTURE':([0,4,7,8,9,10,12,13,14,15,16,27,28,29,30,31,],[9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,]),'GLOBALLY':([0,4,7,8,9,10,12,13,14,15,16,27,28,29,30,31,],[10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,]),'ATOM':([0,4,7,8,9,10,12,13,14,15,16,27,28,29,30,31,],[11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,]),'$end':([0,1,2,3,5,6,11,18,19,20,21,22,23,24,25,26,37,38,39,40,41,],[-20,0,-1,-2,-13,-14,-19,-15,-16,-17,-18,-8,-9,-10,-11,-12,-3,-4,-5,-6,-7,]),'UNTIL':([2,5,6,11,17,18,19,20,21,22,23,24,25,26,32,33,34,35,36,37,38,39,40,41,],[12,-13,-14,-19,27,12,12,12,12,-8,-9,-10,-11,12,-8,-9,-10,-11,12,-3,-4,-5,-6,-7,]),'AND':([2,5,6,11,17,18,19,20,21,22,23,24,25,26,32,33,34,35,36,37,38,39,40,41,],[13,-13,-14,-19,28,13,13,13,13,-8,-9,-10,-11,13,-8,-9,-10,-11,13,-3,-4,-5,-6,-7,]),'OR':([2,5,6,11,17,18,19,20,21,22,23,24,25,26,32,33,34,35,36,37,38,39,40,41,],[14,-13,-14,-19,29,14,14,14,14,14,14,-10,-11,14,14,14,-10,-11,14,-3,-4,-5,-6,-7,]),'IMPLIES':([2,5,6,11,17,18,19,20,21,22,23,24,25,26,32,33,34,35,36,37,38,39,40,41,],[15,-13,-14,-19,30,15,15,15,15,15,15,-10,-11,15,15,15,-10,-11,15,-3,-4,-5,-6,-7,]),'DIMPLIES':([2,5,6,11,17,18,19,20,21,22,23,24,25,26,32,33,34,35,36,37,38,39,40,41,],[16,-13,-14,-19,31,-15,-16,16,16,-8,-9,-10,-11,16,-8,-9,-10,-11,16,-3,-4,-5,-6,-7,]),'RPAR':([5,6,11,18,19,20,21,22,23,24,25,26,32,33,34,35,36,37,38,39,40,41,],[-13,-14,-19,-15,-16,-17,-18,-8,-9,-10,-11,-12,37,38,39,40,41,-3,-4,-5,-6,-7,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'ltl':([0,],[1,]),'expression':([0,4,5,6,7,8,10,11,12,13,14,25,26,27,28,29,],[2,15,16,17,18,19,20,21,22,23,24,30,31,32,33,34,]),'empty':([0,],[3,]),}
+_lr_goto_items = {'ltl':([0,],[1,]),'expression':([0,4,7,8,9,10,12,13,14,15,16,27,28,29,30,31,],[2,17,18,19,20,21,22,23,24,25,26,32,33,34,35,36,]),'empty':([0,],[3,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -39,10 +39,12 @@ _lr_productions = [
   ('expression -> expression OR expression','expression',3,'p_expression','ltl_parser.py',75),
   ('expression -> expression IMPLIES expression','expression',3,'p_expression','ltl_parser.py',76),
   ('expression -> expression DIMPLIES expression','expression',3,'p_expression','ltl_parser.py',77),
-  ('expression -> NOT expression','expression',2,'p_expression_not','ltl_parser.py',87),
-  ('expression -> NEXT expression','expression',2,'p_expression_next','ltl_parser.py',93),
-  ('expression -> FUTURE expression','expression',2,'p_expression_future','ltl_parser.py',99),
-  ('expression -> GLOBALLY expression','expression',2,'p_expression_globally','ltl_parser.py',105),
-  ('expression -> ATOM','expression',1,'p_expression_atom','ltl_parser.py',111),
-  ('empty -> <empty>','empty',0,'p_empty','ltl_parser.py',120),
+  ('expression -> TRUE','expression',1,'p_true','ltl_parser.py',87),
+  ('expression -> FALSE','expression',1,'p_false','ltl_parser.py',93),
+  ('expression -> NOT expression','expression',2,'p_expression_not','ltl_parser.py',99),
+  ('expression -> NEXT expression','expression',2,'p_expression_next','ltl_parser.py',105),
+  ('expression -> FUTURE expression','expression',2,'p_expression_future','ltl_parser.py',111),
+  ('expression -> GLOBALLY expression','expression',2,'p_expression_globally','ltl_parser.py',117),
+  ('expression -> ATOM','expression',1,'p_expression_atom','ltl_parser.py',123),
+  ('empty -> <empty>','empty',0,'p_empty','ltl_parser.py',132),
 ]
