@@ -4,6 +4,8 @@ import sys
 
 tokens = [
 
+    'TRUE',
+    'FALSE',
     'ATOM',
     'NOT',
     'AND',
@@ -18,6 +20,8 @@ tokens = [
     'RPAR'
 ]
 
+t_TRUE = r'T'
+t_FALSE = r'F'
 t_ATOM = r'[a-z]+'
 t_AND = r'\&'
 t_NOT = r'\~'
@@ -77,6 +81,18 @@ def p_expression(p):
         p[0] = (p[2], p[1], p[3])
     else:
         p[0] = (p[3], p[2], p[4])
+
+def p_true(p):
+    '''
+    expression : TRUE
+    '''
+    p[0] = p[1]
+
+def p_false(p):
+    '''
+    expression : FALSE
+    '''
+    p[0] = p[1]
 
 def p_expression_not(p):
     '''
