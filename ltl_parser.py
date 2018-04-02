@@ -12,6 +12,8 @@ tokens = [
     'DIMPLIES',
     'NEXT',
     'UNTIL',
+    'FUTURE',
+    'GLOBALLY',
     'LPAR',
     'RPAR'
 ]
@@ -24,6 +26,8 @@ t_IMPLIES = r'\->'
 t_DIMPLIES = r'\<->'
 t_NEXT = r'X'
 t_UNTIL = r'U'
+t_FUTURE = r'F'
+t_GLOBALLY = r'G'
 t_LPAR = r'\('
 t_RPAR = r'\)'
 
@@ -83,6 +87,18 @@ def p_expression_not(p):
 def p_expression_next(p):
     '''
     expression : NEXT expression
+    '''
+    p[0] = (p[1], p[2])
+
+def p_expression_future(p):
+    '''
+    expression : FUTURE expression
+    '''
+    p[0] = (p[1], p[2])
+
+def p_expression_globally(p):
+    '''
+    expression : GLOBALLY expression
     '''
     p[0] = (p[1], p[2])
 
