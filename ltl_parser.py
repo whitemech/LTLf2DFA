@@ -30,7 +30,7 @@ t_IMPLIES = r'\->'
 t_DIMPLIES = r'\<->'
 t_NEXT = r'X'
 t_UNTIL = r'U'
-t_FUTURE = r'F'
+t_FUTURE = r'\<>'
 t_GLOBALLY = r'G'
 t_LPAR = r'\('
 t_RPAR = r'\)'
@@ -50,6 +50,7 @@ lexer = lex.lex()
 
 precedence = (
 
+    # ('left', 'NOT', 'ATOM'),
     ('left', 'NOT', 'NEXT'),
     ('left', 'UNTIL', 'AND'),
     ('left', 'OR', 'IMPLIES'),
@@ -63,9 +64,25 @@ def p_ltl(p):
     '''
     print(run(p[1]))
 
+def p_expression_not(p):
+    '''
+    expression : NOT ATOM
+               | NOT expression
+    '''
+    p[0] = (p[1], p[2])
+
+# def p_expression_atom(p):
+#     '''
+#     expression : ATOM
+#     '''
+#     p[0] = p[1]
+
 def p_expression(p):
     '''
-    expression : LPAR expression UNTIL expression RPAR
+    expression : TRUE
+               | FALSE
+               | ATOM
+               | LPAR expression UNTIL expression RPAR
                | LPAR expression AND expression RPAR
                | LPAR expression OR expression RPAR
                | LPAR expression IMPLIES expression RPAR
@@ -77,28 +94,12 @@ def p_expression(p):
                | expression DIMPLIES expression
 
     '''
-    if p[1] != '(':
+    if p[1] == 'T' or p[1] == 'F': p[0] = (p[1],)
+    elif len(p)<3: p[0] = p[1]
+    elif p[1] != '(':
         p[0] = (p[2], p[1], p[3])
     else:
         p[0] = (p[3], p[2], p[4])
-
-def p_true(p):
-    '''
-    expression : TRUE
-    '''
-    p[0] = p[1]
-
-def p_false(p):
-    '''
-    expression : FALSE
-    '''
-    p[0] = p[1]
-
-def p_expression_not(p):
-    '''
-    expression : NOT expression
-    '''
-    p[0] = (p[1], p[2])
 
 def p_expression_next(p):
     '''
@@ -118,12 +119,6 @@ def p_expression_globally(p):
     '''
     p[0] = (p[1], p[2])
 
-def p_expression_atom(p):
-    '''
-    expression : ATOM
-    '''
-    p[0] = p[1]
-
 def p_error(p):
     print("Syntax error")
 
@@ -137,16 +132,22 @@ parser = yacc.yacc()
 
 def run(p):
     if type(p) == tuple:
-        if p[0] == '&':
+        if p[0] == 'T': return 'True'
+        elif p[0] == 'F': return 'False'
+        elif p[0] == '&':
             # print(p)
             a = run(p[1])
             b = run(p[2])
-            return a+' & '+b
+            return '('+a+' & '+b+')'
         elif p[0] == '|':
             # print(p)
             a = run(p[1])
             b = run(p[2])
-            return a+' | '+b        
+            return '('+a+' | '+b+')'
+        elif p[0] == '~':
+            # print(p)
+            a = run(p[1])
+            return '~('+a+')'
     else:
         return p+'(x)'
 
