@@ -24,7 +24,6 @@ t_TRUE = r'T'
 t_FALSE = r'F'
 t_ATOM = r'[a-z]+'
 t_AND = r'\&'
-t_NOT = r'\~'
 t_OR = r'\|'
 t_IMPLIES = r'\->'
 t_DIMPLIES = r'\<->'
@@ -32,6 +31,7 @@ t_NEXT = r'X'
 t_UNTIL = r'U'
 t_FUTURE = r'\<>'
 t_GLOBALLY = r'G'
+t_NOT = r'\~'
 t_LPAR = r'\('
 t_RPAR = r'\)'
 
@@ -51,7 +51,10 @@ lexer = lex.lex()
 precedence = (
 
     # ('left', 'NOT', 'ATOM'),
-    ('left', 'NOT', 'NEXT'),
+    ('left', 'AND', 'NOT'),
+    ('left', 'OR', 'NOT'),
+    ('left', 'IMPLIES', 'NOT'),
+    ('left', 'DIMPLIES', 'NOT'),
     ('left', 'UNTIL', 'AND'),
     ('left', 'OR', 'IMPLIES'),
     ('left', 'LPAR', 'RPAR')
@@ -68,8 +71,13 @@ def p_expression_not(p):
     '''
     expression : NOT ATOM
                | NOT expression
+               | NOT LPAR expression RPAR
     '''
-    p[0] = (p[1], p[2])
+    if p[2] == '(':
+        p[0] = (p[1], p[3])
+        print("questa è p0"+str(p[0]))
+    else:
+        p[0] = (p[1], p[2])
 
 # def p_expression_atom(p):
 #     '''
@@ -135,17 +143,17 @@ def run(p):
         if p[0] == 'T': return 'True'
         elif p[0] == 'F': return 'False'
         elif p[0] == '&':
-            # print(p)
+            print(p)
             a = run(p[1])
             b = run(p[2])
             return '('+a+' & '+b+')'
         elif p[0] == '|':
-            # print(p)
+            print(p)
             a = run(p[1])
             b = run(p[2])
             return '('+a+' | '+b+')'
         elif p[0] == '~':
-            # print(p)
+            print(p)
             a = run(p[1])
             return '~('+a+')'
     else:

@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftNOTNEXTleftUNTILANDleftORIMPLIESleftLPARRPARAND ATOM DIMPLIES FALSE FUTURE GLOBALLY IMPLIES LPAR NEXT NOT OR RPAR TRUE UNTIL\n    ltl : expression\n        | empty\n    \n    expression : NOT ATOM\n               | NOT expression\n    \n    expression : TRUE\n               | FALSE\n               | ATOM\n               | LPAR expression UNTIL expression RPAR\n               | LPAR expression AND expression RPAR\n               | LPAR expression OR expression RPAR\n               | LPAR expression IMPLIES expression RPAR\n               | LPAR expression DIMPLIES expression RPAR\n               | expression UNTIL expression\n               | expression AND expression\n               | expression OR expression\n               | expression IMPLIES expression\n               | expression DIMPLIES expression\n\n    \n    expression : NEXT expression\n    \n    expression : FUTURE expression\n    \n    expression : GLOBALLY expression\n    \n    empty :\n    '
+_lr_signature = 'leftUNTILANDleftORIMPLIESleftLPARRPARAND ATOM DIMPLIES FALSE FUTURE GLOBALLY IMPLIES LPAR NEXT NOT OR RPAR TRUE UNTIL\n    ltl : expression\n        | empty\n    \n    expression : NOT ATOM\n               | NOT expression\n               | NOT LPAR expression RPAR\n    \n    expression : TRUE\n               | FALSE\n               | ATOM\n               | LPAR expression UNTIL expression RPAR\n               | LPAR expression AND expression RPAR\n               | LPAR expression OR expression RPAR\n               | LPAR expression IMPLIES expression RPAR\n               | LPAR expression DIMPLIES expression RPAR\n               | expression UNTIL expression\n               | expression AND expression\n               | expression OR expression\n               | expression IMPLIES expression\n               | expression DIMPLIES expression\n\n    \n    expression : NEXT expression\n    \n    expression : FUTURE expression\n    \n    expression : GLOBALLY expression\n    \n    empty :\n    '
     
-_lr_action_items = {'NOT':([0,4,8,9,10,11,12,13,14,15,16,28,29,30,31,32,],[4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,]),'TRUE':([0,4,8,9,10,11,12,13,14,15,16,28,29,30,31,32,],[6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,]),'FALSE':([0,4,8,9,10,11,12,13,14,15,16,28,29,30,31,32,],[7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,]),'ATOM':([0,4,8,9,10,11,12,13,14,15,16,28,29,30,31,32,],[5,17,5,5,5,5,5,5,5,5,5,5,5,5,5,5,]),'LPAR':([0,4,8,9,10,11,12,13,14,15,16,28,29,30,31,32,],[8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,]),'NEXT':([0,4,8,9,10,11,12,13,14,15,16,28,29,30,31,32,],[9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,]),'FUTURE':([0,4,8,9,10,11,12,13,14,15,16,28,29,30,31,32,],[10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,]),'GLOBALLY':([0,4,8,9,10,11,12,13,14,15,16,28,29,30,31,32,],[11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,]),'$end':([0,1,2,3,5,6,7,17,18,20,21,22,23,24,25,26,27,38,39,40,41,42,],[-21,0,-1,-2,-7,-5,-6,-3,-4,-18,-19,-20,-13,-14,-15,-16,-17,-8,-9,-10,-11,-12,]),'UNTIL':([2,5,6,7,17,18,19,20,21,22,23,24,25,26,27,33,34,35,36,37,38,39,40,41,42,],[12,-7,-5,-6,-3,12,28,12,12,12,-13,-14,-15,-16,12,-13,-14,-15,-16,12,-8,-9,-10,-11,-12,]),'AND':([2,5,6,7,17,18,19,20,21,22,23,24,25,26,27,33,34,35,36,37,38,39,40,41,42,],[13,-7,-5,-6,-3,13,29,13,13,13,-13,-14,-15,-16,13,-13,-14,-15,-16,13,-8,-9,-10,-11,-12,]),'OR':([2,5,6,7,17,18,19,20,21,22,23,24,25,26,27,33,34,35,36,37,38,39,40,41,42,],[14,-7,-5,-6,-3,14,30,14,14,14,14,14,-15,-16,14,14,14,-15,-16,14,-8,-9,-10,-11,-12,]),'IMPLIES':([2,5,6,7,17,18,19,20,21,22,23,24,25,26,27,33,34,35,36,37,38,39,40,41,42,],[15,-7,-5,-6,-3,15,31,15,15,15,15,15,-15,-16,15,15,15,-15,-16,15,-8,-9,-10,-11,-12,]),'DIMPLIES':([2,5,6,7,17,18,19,20,21,22,23,24,25,26,27,33,34,35,36,37,38,39,40,41,42,],[16,-7,-5,-6,-3,-4,32,-18,16,16,-13,-14,-15,-16,16,-13,-14,-15,-16,16,-8,-9,-10,-11,-12,]),'RPAR':([5,6,7,17,18,20,21,22,23,24,25,26,27,33,34,35,36,37,38,39,40,41,42,],[-7,-5,-6,-3,-4,-18,-19,-20,-13,-14,-15,-16,-17,38,39,40,41,42,-8,-9,-10,-11,-12,]),}
+_lr_action_items = {'NOT':([0,4,6,9,10,11,12,13,14,15,16,19,30,31,32,33,34,],[4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,]),'TRUE':([0,4,6,9,10,11,12,13,14,15,16,19,30,31,32,33,34,],[7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,]),'FALSE':([0,4,6,9,10,11,12,13,14,15,16,19,30,31,32,33,34,],[8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,]),'ATOM':([0,4,6,9,10,11,12,13,14,15,16,19,30,31,32,33,34,],[5,17,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,]),'LPAR':([0,4,6,9,10,11,12,13,14,15,16,19,30,31,32,33,34,],[6,19,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,]),'NEXT':([0,4,6,9,10,11,12,13,14,15,16,19,30,31,32,33,34,],[9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,]),'FUTURE':([0,4,6,9,10,11,12,13,14,15,16,19,30,31,32,33,34,],[10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,]),'GLOBALLY':([0,4,6,9,10,11,12,13,14,15,16,19,30,31,32,33,34,],[11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,]),'$end':([0,1,2,3,5,7,8,17,18,21,22,23,24,25,26,27,28,35,41,42,43,44,45,],[-22,0,-1,-2,-8,-6,-7,-3,-4,-19,-20,-21,-14,-15,-16,-17,-18,-5,-9,-10,-11,-12,-13,]),'UNTIL':([2,5,7,8,17,18,20,21,22,23,24,25,26,27,28,29,35,36,37,38,39,40,41,42,43,44,45,],[12,-8,-6,-7,-3,12,30,12,12,12,-14,-15,-16,-17,12,30,-5,-14,-15,-16,-17,12,-9,-10,-11,-12,-13,]),'AND':([2,5,7,8,17,18,20,21,22,23,24,25,26,27,28,29,35,36,37,38,39,40,41,42,43,44,45,],[13,-8,-6,-7,-3,13,31,13,13,13,-14,-15,-16,-17,13,31,-5,-14,-15,-16,-17,13,-9,-10,-11,-12,-13,]),'OR':([2,5,7,8,17,18,20,21,22,23,24,25,26,27,28,29,35,36,37,38,39,40,41,42,43,44,45,],[14,-8,-6,-7,-3,14,32,14,14,14,14,14,-16,-17,14,32,-5,14,14,-16,-17,14,-9,-10,-11,-12,-13,]),'IMPLIES':([2,5,7,8,17,18,20,21,22,23,24,25,26,27,28,29,35,36,37,38,39,40,41,42,43,44,45,],[15,-8,-6,-7,-3,15,33,15,15,15,15,15,-16,-17,15,33,-5,15,15,-16,-17,15,-9,-10,-11,-12,-13,]),'DIMPLIES':([2,5,7,8,17,18,20,21,22,23,24,25,26,27,28,29,35,36,37,38,39,40,41,42,43,44,45,],[16,-8,-6,-7,-3,16,34,16,16,16,-14,-15,-16,-17,16,34,-5,-14,-15,-16,-17,16,-9,-10,-11,-12,-13,]),'RPAR':([5,7,8,17,18,21,22,23,24,25,26,27,28,29,35,36,37,38,39,40,41,42,43,44,45,],[-8,-6,-7,-3,-4,-19,-20,-21,-14,-15,-16,-17,-18,35,-5,41,42,43,44,45,-9,-10,-11,-12,-13,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'ltl':([0,],[1,]),'expression':([0,4,8,9,10,11,12,13,14,15,16,28,29,30,31,32,],[2,18,19,20,21,22,23,24,25,26,27,33,34,35,36,37,]),'empty':([0,],[3,]),}
+_lr_goto_items = {'ltl':([0,],[1,]),'expression':([0,4,6,9,10,11,12,13,14,15,16,19,30,31,32,33,34,],[2,18,20,21,22,23,24,25,26,27,28,29,36,37,38,39,40,]),'empty':([0,],[3,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,25 +27,26 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> ltl","S'",1,None,None,None),
-  ('ltl -> expression','ltl',1,'p_ltl','ltl_parser.py',62),
-  ('ltl -> empty','ltl',1,'p_ltl','ltl_parser.py',63),
-  ('expression -> NOT ATOM','expression',2,'p_expression_not','ltl_parser.py',69),
-  ('expression -> NOT expression','expression',2,'p_expression_not','ltl_parser.py',70),
-  ('expression -> TRUE','expression',1,'p_expression','ltl_parser.py',83),
-  ('expression -> FALSE','expression',1,'p_expression','ltl_parser.py',84),
-  ('expression -> ATOM','expression',1,'p_expression','ltl_parser.py',85),
-  ('expression -> LPAR expression UNTIL expression RPAR','expression',5,'p_expression','ltl_parser.py',86),
-  ('expression -> LPAR expression AND expression RPAR','expression',5,'p_expression','ltl_parser.py',87),
-  ('expression -> LPAR expression OR expression RPAR','expression',5,'p_expression','ltl_parser.py',88),
-  ('expression -> LPAR expression IMPLIES expression RPAR','expression',5,'p_expression','ltl_parser.py',89),
-  ('expression -> LPAR expression DIMPLIES expression RPAR','expression',5,'p_expression','ltl_parser.py',90),
-  ('expression -> expression UNTIL expression','expression',3,'p_expression','ltl_parser.py',91),
-  ('expression -> expression AND expression','expression',3,'p_expression','ltl_parser.py',92),
-  ('expression -> expression OR expression','expression',3,'p_expression','ltl_parser.py',93),
-  ('expression -> expression IMPLIES expression','expression',3,'p_expression','ltl_parser.py',94),
-  ('expression -> expression DIMPLIES expression','expression',3,'p_expression','ltl_parser.py',95),
-  ('expression -> NEXT expression','expression',2,'p_expression_next','ltl_parser.py',107),
-  ('expression -> FUTURE expression','expression',2,'p_expression_future','ltl_parser.py',113),
-  ('expression -> GLOBALLY expression','expression',2,'p_expression_globally','ltl_parser.py',119),
-  ('empty -> <empty>','empty',0,'p_empty','ltl_parser.py',128),
+  ('ltl -> expression','ltl',1,'p_ltl','ltl_parser.py',63),
+  ('ltl -> empty','ltl',1,'p_ltl','ltl_parser.py',64),
+  ('expression -> NOT ATOM','expression',2,'p_expression_not','ltl_parser.py',70),
+  ('expression -> NOT expression','expression',2,'p_expression_not','ltl_parser.py',71),
+  ('expression -> NOT LPAR expression RPAR','expression',4,'p_expression_not','ltl_parser.py',72),
+  ('expression -> TRUE','expression',1,'p_expression','ltl_parser.py',88),
+  ('expression -> FALSE','expression',1,'p_expression','ltl_parser.py',89),
+  ('expression -> ATOM','expression',1,'p_expression','ltl_parser.py',90),
+  ('expression -> LPAR expression UNTIL expression RPAR','expression',5,'p_expression','ltl_parser.py',91),
+  ('expression -> LPAR expression AND expression RPAR','expression',5,'p_expression','ltl_parser.py',92),
+  ('expression -> LPAR expression OR expression RPAR','expression',5,'p_expression','ltl_parser.py',93),
+  ('expression -> LPAR expression IMPLIES expression RPAR','expression',5,'p_expression','ltl_parser.py',94),
+  ('expression -> LPAR expression DIMPLIES expression RPAR','expression',5,'p_expression','ltl_parser.py',95),
+  ('expression -> expression UNTIL expression','expression',3,'p_expression','ltl_parser.py',96),
+  ('expression -> expression AND expression','expression',3,'p_expression','ltl_parser.py',97),
+  ('expression -> expression OR expression','expression',3,'p_expression','ltl_parser.py',98),
+  ('expression -> expression IMPLIES expression','expression',3,'p_expression','ltl_parser.py',99),
+  ('expression -> expression DIMPLIES expression','expression',3,'p_expression','ltl_parser.py',100),
+  ('expression -> NEXT expression','expression',2,'p_expression_next','ltl_parser.py',112),
+  ('expression -> FUTURE expression','expression',2,'p_expression_future','ltl_parser.py',118),
+  ('expression -> GLOBALLY expression','expression',2,'p_expression_globally','ltl_parser.py',124),
+  ('empty -> <empty>','empty',0,'p_empty','ltl_parser.py',133),
 ]
