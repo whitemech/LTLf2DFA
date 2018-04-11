@@ -38,7 +38,7 @@ t_RPAR = r'\)'
 t_ignore = r' '
 
 def t_error(t):
-    print("Illegal character")
+    print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
 lexer = lex.lex()
@@ -188,6 +188,12 @@ def run(p):
         elif p[0] == 'U':
             # print('computed tree: '+ str(p))
             return 'to be implemented'
+        elif p[0] == '->':
+            # print('computed tree: '+ str(p))
+            return 'to be implemented'
+        elif p[0] == '<->':
+            # print('computed tree: '+ str(p))
+            return 'to be implemented'
     else:
         # enable if you want to see recursion
         # print('computed tree: '+ str(p))
@@ -200,42 +206,33 @@ def run(p):
 #         print(e)
 #         break
 if __name__=="__main__":
-    try:
-        print('++++++++++++++++++ TERM a becomes ++++++++++++')
-        parser.parse('a')
-        print('++++++++++++++++++ Xa becomes ++++++++++++++++')
-        parser.parse('Xa')
-        print('++++++++++++++++++ Ea becomes ++++++++++++++++')
-        parser.parse('Ea')
-        print('++++++++++++++++++ Ga becomes ++++++++++++++++')
-        parser.parse('Ga')
-        print('++++++++++++++++++ aUb becomes +++++++++++++++')
-        parser.parse('aUb')
-        print('++++++++++++++++++ a&b becomes +++++++++++++++')
-        parser.parse('a&b')
-        print('++++++++++++++++++ a|b becomes +++++++++++++++')
-        parser.parse('a|b')
-        print('++++++++++++++++++ (a) becomes +++++++++++++++')
-        parser.parse('(a)')
-        print('++++++++++++++++++ (Xa) becomes ++++++++++++++')
-        parser.parse('(Xa)')
-        print('++++++++++++++++++ (Ea) becomes ++++++++++++++')
-        parser.parse('(Ea)')
-        print('++++++++++++++++++ (Ga) becomes ++++++++++++++')
-        parser.parse('(Ga)')
-        print('++++++++++++++++++ (aUb) becomes +++++++++++++')
-        parser.parse('(aUb)')
-        print('++++++++++++++++++ (a&b) becomes +++++++++++++')
-        parser.parse('(a&b)')
-        print('++++++++++++++++++ (a|b) becomes +++++++++++++')
-        parser.parse('(a|b)')
-        print('++++++++++++++++++ ~(a|b) becomes ++++++++++++')
-        parser.parse('~(a|b)')
-        print('++++++++++++++++++ (~a|b) becomes +++++++++++++')
-        parser.parse('(~a|b)')
-        print('++++++++++++++++++ ~(a&b)|c becomes +++++++++++++')
+    try:     
+        print('++++++++++++++++++ ~(a&b)|c becomes +++++++++++')
         parser.parse('~(a&b)|c')
-
+        print('++++++++++++++++++ Ea -> Eb becomes +++++++++++')
+        parser.parse('Ea -> Eb')
+        print('++++++++++++++++++ E(a -> Eb) becomes +++++++++++')
+        parser.parse('E(a -> Eb)')
+        print('++++++++++++++++++ Ea <-> Eb becomes +++++++++++')
+        parser.parse('Ea <-> Eb')
+        print('++++++++++++++++++ G(a -> Eb) becomes +++++++++++')
+        parser.parse('G(a -> Eb)')
+        print('++++++++++++++++++ (~bUa)|G(~b) becomes +++++++++++')
+        parser.parse('(~bUa)|G(~b)')
+        print('++++++++++++++++++ G(a -> X(~aUb)) becomes +++++++++++')
+        parser.parse('G(a -> X(~aUb))')
+        print('++++++++++++++++++ G(a -> Xb) becomes +++++++++++')
+        parser.parse('G(a -> Xb)')
+        print('++++++++++++++++++ G(Xb -> a) becomes +++++++++++')
+        parser.parse('G(Xb -> a)')
+        print('++++++++++++++++++ G(a <-> Xb) becomes +++++++++++')
+        parser.parse('G(a <-> Xb)')
+        print('++++++++++++++++++ ~(Ea & Eb) becomes +++++++++++')
+        parser.parse('~(Ea & Eb)')
+        print('++++++++++++++++++ G(a -> ~(Eb)) becomes +++++++++++')
+        parser.parse('G(a -> ~(Eb))')
+        print('++++++++++++++++++ G(a -> X(~b)) becomes +++++++++++')
+        parser.parse('G(a -> X(~b))')
     except Exception as e:
         print(e)
 
