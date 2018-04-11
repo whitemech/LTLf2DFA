@@ -6,7 +6,7 @@ tokens = [
 
     'TRUE',
     'FALSE',
-    'ATOM',
+    'TERM',
     'NOT',
     'AND',
     'OR',
@@ -14,7 +14,7 @@ tokens = [
     'DIMPLIES',
     'NEXT',
     'UNTIL',
-    'FUTURE',
+    'EVENTUALLY',
     'GLOBALLY',
     'LPAR',
     'RPAR'
@@ -22,25 +22,20 @@ tokens = [
 
 t_TRUE = r'T'
 t_FALSE = r'F'
-t_ATOM = r'[a-z]+'
+t_TERM = r'[a-z]+'
 t_AND = r'\&'
 t_OR = r'\|'
 t_IMPLIES = r'\->'
 t_DIMPLIES = r'\<->'
 t_NEXT = r'X'
 t_UNTIL = r'U'
-t_FUTURE = r'\<>'
+t_EVENTUALLY = r'E'
 t_GLOBALLY = r'G'
 t_NOT = r'\~'
 t_LPAR = r'\('
 t_RPAR = r'\)'
 
 t_ignore = r' '
-
-# def t_ATOM(t):
-#     r'[a-z]+'
-#     t.type = 'ATOM'
-#     return t
 
 def t_error(t):
     print("Illegal character")
@@ -50,14 +45,15 @@ lexer = lex.lex()
 
 precedence = (
 
-    # ('left', 'NOT', 'ATOM'),
-    ('left', 'AND', 'NOT'),
-    ('left', 'OR', 'NOT'),
-    ('left', 'IMPLIES', 'NOT'),
-    ('left', 'DIMPLIES', 'NOT'),
-    ('left', 'UNTIL', 'AND'),
-    ('left', 'OR', 'IMPLIES'),
-    ('left', 'LPAR', 'RPAR')
+    # ('left', 'NOT', 'TERM'),
+    ('left', 'AND', 'OR', 'IMPLIES', 'DIMPLIES'),
+    # ('left', 'OR', 'NOT'),
+    # ('left', 'IMPLIES', 'NOT'),
+    # ('left', 'DIMPLIES', 'NOT'),
+    # ('left', 'UNTIL', 'AND'),
+    # ('left', 'OR', 'IMPLIES'),
+    # ('left', 'LPAR', 'RPAR')
+    ('right', 'NOT')
 )
 
 def p_ltl(p):
@@ -67,65 +63,85 @@ def p_ltl(p):
     '''
     print(run(p[1]))
 
-def p_expression_not(p):
-    '''
-    expression : NOT ATOM
-               | NOT expression
-               | NOT LPAR expression RPAR
-    '''
-    if p[2] == '(':
-        p[0] = (p[1], p[3])
-        print("questa è p0"+str(p[0]))
-    else:
-        p[0] = (p[1], p[2])
-
-# def p_expression_atom(p):
+# def p_expression_term(p):
 #     '''
-#     expression : ATOM
+#     expression : TERM
 #     '''
 #     p[0] = p[1]
+
+# | LPAR expression UNTIL expression RPAR
+# | LPAR expression AND expression RPAR
+# | LPAR expression OR expression RPAR
+# | LPAR expression IMPLIES expression RPAR
+# | LPAR expression DIMPLIES expression RPAR
 
 def p_expression(p):
     '''
     expression : TRUE
                | FALSE
-               | ATOM
-               | LPAR expression UNTIL expression RPAR
-               | LPAR expression AND expression RPAR
-               | LPAR expression OR expression RPAR
-               | LPAR expression IMPLIES expression RPAR
-               | LPAR expression DIMPLIES expression RPAR
+               | TERM
                | expression UNTIL expression
                | expression AND expression
                | expression OR expression
                | expression IMPLIES expression
                | expression DIMPLIES expression
-
+               | LPAR expression RPAR
     '''
+    # qua va modificato per la nuova espressione ridotta LPAR expression RPAR
+    # if p[1] == 'T' or p[1] == 'F': p[0] = (p[1],)
+    # elif len(p)<3: p[0] = p[1]
+    # elif p[1] != '(':
+    #     p[0] = (p[2], p[1], p[3])
+    # else:
+    #     p[0] = (p[3], p[2], p[4])
+
     if p[1] == 'T' or p[1] == 'F': p[0] = (p[1],)
     elif len(p)<3: p[0] = p[1]
     elif p[1] != '(':
         p[0] = (p[2], p[1], p[3])
     else:
-        p[0] = (p[3], p[2], p[4])
+        p[0] = p[2]
+
+def p_expression_not(p):
+    '''
+    expression : NOT expression
+               | NOT LPAR expression RPAR
+    '''
+    if p[2] == '(':
+        p[0] = (p[1], p[3])
+        print("questa è p0 in "+str(p[0]))
+    else:
+        p[0] = (p[1], p[2])
 
 def p_expression_next(p):
     '''
     expression : NEXT expression
+               | LPAR NEXT expression RPAR
     '''
-    p[0] = (p[1], p[2])
+    if p[1] != '(':
+        p[0] = (p[1], p[2])
+    else: p[0] = (p[2], p[3])
+    # print('questo è p0 in X '+str(p[0]))
 
-def p_expression_future(p):
+def p_expression_eventually(p):
     '''
-    expression : FUTURE expression
+    expression : EVENTUALLY expression
+               | LPAR EVENTUALLY expression RPAR
     '''
-    p[0] = (p[1], p[2])
+    if p[1] != '(':
+        p[0] = (p[1], p[2])
+    else: p[0] = (p[2], p[3])
+    # print(p[0])
 
 def p_expression_globally(p):
     '''
     expression : GLOBALLY expression
+               | LPAR GLOBALLY expression RPAR
     '''
-    p[0] = (p[1], p[2])
+    if p[1] != '(':
+        p[0] = (p[1], p[2])
+    else: p[0] = (p[2], p[3])
+    # print(p[0])
 
 def p_error(p):
     print("Syntax error")
@@ -143,29 +159,77 @@ def run(p):
         if p[0] == 'T': return 'True'
         elif p[0] == 'F': return 'False'
         elif p[0] == '&':
-            print(p)
+            print('computed tree: '+ str(p))
             a = run(p[1])
             b = run(p[2])
             return '('+a+' & '+b+')'
         elif p[0] == '|':
-            print(p)
+            print('computed tree: '+ str(p))
             a = run(p[1])
             b = run(p[2])
             return '('+a+' | '+b+')'
         elif p[0] == '~':
-            print(p)
+            print('computed tree: '+ str(p))
             a = run(p[1])
-            return '~('+a+')'
+            return '~('+str(a)+')'
+        elif p[0] == 'X':
+            print('computed tree: '+ str(p))
+            return 'to be implemented'
+        elif p[0] == 'E':
+            print('computed tree: '+ str(p))
+            return 'to be implemented'
+        elif p[0] == 'G':
+            print('computed tree: '+ str(p))
+            return 'to be implemented'
+        elif p[0] == 'U':
+            print('computed tree: '+ str(p))
+            return 'to be implemented'
     else:
+        # enable if you want to see recursion
+        # print('computed tree: '+ str(p))
         return p+'(x)'
 
-while True:
+# while True:
+#     try:
+#         s = input('>')
+#     except EOFError:
+#         break
+if __name__=="__main__":
     try:
-        s = input('>>')
-    except EOFError:
-        break
+        print('++++++++++++++++++ TERM a becomes ++++++++++++')
+        parser.parse('a')
+        print('++++++++++++++++++ Xa becomes ++++++++++++++++')
+        parser.parse('Xa')
+        print('++++++++++++++++++ Ea becomes ++++++++++++++++')
+        parser.parse('Ea')
+        print('++++++++++++++++++ Ga becomes ++++++++++++++++')
+        parser.parse('Ga')
+        print('++++++++++++++++++ aUb becomes +++++++++++++++')
+        parser.parse('aUb')
+        print('++++++++++++++++++ a&b becomes +++++++++++++++')
+        parser.parse('a&b')
+        print('++++++++++++++++++ a|b becomes +++++++++++++++')
+        parser.parse('a|b')
+        print('++++++++++++++++++ (a) becomes +++++++++++++++')
+        parser.parse('(a)')
+        print('++++++++++++++++++ (Xa) becomes ++++++++++++++')
+        parser.parse('(Xa)')
+        print('++++++++++++++++++ (Ea) becomes ++++++++++++++')
+        parser.parse('(Ea)')
+        print('++++++++++++++++++ (Ga) becomes ++++++++++++++')
+        parser.parse('(Ga)')
+        print('++++++++++++++++++ (aUb) becomes +++++++++++++')
+        parser.parse('(aUb)')
+        print('++++++++++++++++++ (a&b) becomes +++++++++++++')
+        parser.parse('(a&b)')
+        print('++++++++++++++++++ (a|b) becomes +++++++++++++')
+        parser.parse('(a|b)')
 
-    parser.parse(s)
+    except Exception as e:
+        print(e)
+
+
+
 
 
 # lexer.input("a <-> b")
