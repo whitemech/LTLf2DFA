@@ -45,14 +45,9 @@ lexer = lex.lex()
 
 precedence = (
 
-    # ('left', 'NOT', 'TERM'),
-    ('left', 'AND', 'OR', 'IMPLIES', 'DIMPLIES'),
-    # ('left', 'OR', 'NOT'),
-    # ('left', 'IMPLIES', 'NOT'),
-    # ('left', 'DIMPLIES', 'NOT'),
-    # ('left', 'UNTIL', 'AND'),
-    # ('left', 'OR', 'IMPLIES'),
-    # ('left', 'LPAR', 'RPAR')
+    ('nonassoc', 'LPAR', 'RPAR'),
+    ('left', 'AND', 'OR', 'IMPLIES', 'DIMPLIES', 'UNTIL'),
+    ('right', 'NEXT', 'EVENTUALLY', 'GLOBALLY'),
     ('right', 'NOT')
 )
 
@@ -63,30 +58,28 @@ def p_ltl(p):
     '''
     print(run(p[1]))
 
-# def p_expression_term(p):
-#     '''
-#     expression : TERM
-#     '''
-#     p[0] = p[1]
-
-# | LPAR expression UNTIL expression RPAR
-# | LPAR expression AND expression RPAR
-# | LPAR expression OR expression RPAR
-# | LPAR expression IMPLIES expression RPAR
-# | LPAR expression DIMPLIES expression RPAR
-
-def p_expression(p):
+def p_expr_binary(p):
     '''
-    expression : TRUE
-               | FALSE
-               | TERM
-               | expression UNTIL expression
-               | expression AND expression
+    expression : expression AND expression
                | expression OR expression
                | expression IMPLIES expression
                | expression DIMPLIES expression
-               | LPAR expression RPAR
+               | expression UNTIL expression
     '''
+
+    p[0] = (p[2],p[1],p[3])
+
+def p_expr_unary(p):
+    '''
+    expression : NOT expression
+               | NEXT expression
+               | EVENTUALLY expression
+               | GLOBALLY expression
+    '''
+
+    p[0] = (p[1], p[2])
+
+
     # qua va modificato per la nuova espressione ridotta LPAR expression RPAR
     # if p[1] == 'T' or p[1] == 'F': p[0] = (p[1],)
     # elif len(p)<3: p[0] = p[1]
@@ -95,56 +88,63 @@ def p_expression(p):
     # else:
     #     p[0] = (p[3], p[2], p[4])
 
-    if p[1] == 'T' or p[1] == 'F': p[0] = (p[1],)
-    elif len(p)<3: p[0] = p[1]
-    elif p[1] != '(':
-        p[0] = (p[2], p[1], p[3])
-    else:
-        p[0] = p[2]
+    # if p[1] == 'T' or p[1] == 'F': p[0] = (p[1],)
+    # elif len(p)<3: p[0] = p[1]
+    # elif p[1] != '(':
+    #     p[0] = (p[2], p[1], p[3])
+    # else:
+    #     p[0] = p[2]
 
-def p_expression_not(p):
-    '''
-    expression : NOT expression
-               | NOT LPAR expression RPAR
-    '''
-    if p[2] == '(':
-        p[0] = (p[1], p[3])
-        print("questa è p0 in "+str(p[0]))
-    else:
-        p[0] = (p[1], p[2])
+# def p_expr_not(p):
+#     '''
+#     expression : NOT expression
+#     '''
+    # if p[2] == '(':
+    #     p[0] = (p[1], p[3])
+    #     print("questa è p0 in "+str(p[0]))
+    # else:
+        # p[0] = (p[1], p[2])
 
-def p_expression_next(p):
-    '''
-    expression : NEXT expression
-               | LPAR NEXT expression RPAR
-    '''
-    if p[1] != '(':
-        p[0] = (p[1], p[2])
-    else: p[0] = (p[2], p[3])
+# def p_expression_next(p):
+#     '''
+#     expression : NEXT expression
+#     '''
+    # if p[1] != '(':
+        # p[0] = (p[1], p[2])
+    # else: p[0] = (p[2], p[3])
     # print('questo è p0 in X '+str(p[0]))
 
-def p_expression_eventually(p):
-    '''
-    expression : EVENTUALLY expression
-               | LPAR EVENTUALLY expression RPAR
-    '''
-    if p[1] != '(':
-        p[0] = (p[1], p[2])
-    else: p[0] = (p[2], p[3])
+# def p_expression_eventually(p):
+#     '''
+#     expression : EVENTUALLY expression
+#     '''
+    # if p[1] != '(':
+        # p[0] = (p[1], p[2])
+    # else: p[0] = (p[2], p[3])
     # print(p[0])
 
-def p_expression_globally(p):
-    '''
-    expression : GLOBALLY expression
-               | LPAR GLOBALLY expression RPAR
-    '''
-    if p[1] != '(':
-        p[0] = (p[1], p[2])
-    else: p[0] = (p[2], p[3])
+# def p_expression_globally(p):
+#     '''
+#     expression : GLOBALLY expression
+#     '''
+    # if p[1] != '(':
+        # p[0] = (p[1], p[2])
+    # else: p[0] = (p[2], p[3])
     # print(p[0])
 
-def p_error(p):
-    print("Syntax error")
+def p_expr_group(p):
+    '''
+    expression : LPAR expression RPAR
+    '''
+    p[0] = p[2]
+
+def p_expr_term(p):
+    '''
+    expression : TERM
+               | TRUE
+               | FALSE
+    '''
+    p[0] = p[1]
 
 def p_empty(p):
     '''
@@ -152,37 +152,41 @@ def p_empty(p):
     '''
     p[0] = None
 
+def p_error(p):
+    print("Syntax error")
+
 parser = yacc.yacc()
 
 def run(p):
     if type(p) == tuple:
+        print(p)
         if p[0] == 'T': return 'True'
         elif p[0] == 'F': return 'False'
         elif p[0] == '&':
-            print('computed tree: '+ str(p))
+            # print('computed tree: '+ str(p))
             a = run(p[1])
             b = run(p[2])
             return '('+a+' & '+b+')'
         elif p[0] == '|':
-            print('computed tree: '+ str(p))
+            # print('computed tree: '+ str(p))
             a = run(p[1])
             b = run(p[2])
             return '('+a+' | '+b+')'
         elif p[0] == '~':
-            print('computed tree: '+ str(p))
+            # print('computed tree: '+ str(p))
             a = run(p[1])
             return '~('+str(a)+')'
         elif p[0] == 'X':
-            print('computed tree: '+ str(p))
+            # print('computed tree: '+ str(p))
             return 'to be implemented'
         elif p[0] == 'E':
-            print('computed tree: '+ str(p))
+            # print('computed tree: '+ str(p))
             return 'to be implemented'
         elif p[0] == 'G':
-            print('computed tree: '+ str(p))
+            # print('computed tree: '+ str(p))
             return 'to be implemented'
         elif p[0] == 'U':
-            print('computed tree: '+ str(p))
+            # print('computed tree: '+ str(p))
             return 'to be implemented'
     else:
         # enable if you want to see recursion
@@ -192,7 +196,8 @@ def run(p):
 # while True:
 #     try:
 #         s = input('>')
-#     except EOFError:
+#     except Exception as e:
+#         print(e)
 #         break
 if __name__=="__main__":
     try:
@@ -224,6 +229,12 @@ if __name__=="__main__":
         parser.parse('(a&b)')
         print('++++++++++++++++++ (a|b) becomes +++++++++++++')
         parser.parse('(a|b)')
+        print('++++++++++++++++++ ~(a|b) becomes ++++++++++++')
+        parser.parse('~(a|b)')
+        print('++++++++++++++++++ (~a|b) becomes +++++++++++++')
+        parser.parse('(~a|b)')
+        print('++++++++++++++++++ ~(a&b)|c becomes +++++++++++++')
+        parser.parse('~(a&b)|c')
 
     except Exception as e:
         print(e)

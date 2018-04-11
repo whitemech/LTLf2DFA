@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftANDORIMPLIESDIMPLIESrightNOTAND DIMPLIES EVENTUALLY FALSE GLOBALLY IMPLIES LPAR NEXT NOT OR RPAR TERM TRUE UNTIL\n    expression : TRUE\n               | FALSE\n               | TERM\n               | expression UNTIL expression\n               | expression AND expression\n               | expression OR expression\n               | expression IMPLIES expression\n               | expression DIMPLIES expression\n               | LPAR expression RPAR\n    \n    expression : NOT expression\n               | NOT LPAR expression RPAR\n    \n    expression : NEXT expression\n               | LPAR NEXT expression RPAR\n    \n    expression : EVENTUALLY expression\n               | LPAR EVENTUALLY expression RPAR\n    \n    expression : GLOBALLY expression\n               | LPAR GLOBALLY expression RPAR\n    \n    empty :\n    '
+_lr_signature = 'nonassocLPARRPARleftANDORIMPLIESDIMPLIESUNTILrightNEXTEVENTUALLYGLOBALLYrightNOTAND DIMPLIES EVENTUALLY FALSE GLOBALLY IMPLIES LPAR NEXT NOT OR RPAR TERM TRUE UNTIL\n    ltl : expression\n        | empty\n    \n    expression : expression AND expression\n               | expression OR expression\n               | expression IMPLIES expression\n               | expression DIMPLIES expression\n               | expression UNTIL expression\n    \n    expression : NOT expression\n               | NEXT expression\n               | EVENTUALLY expression\n               | GLOBALLY expression\n    \n    expression : LPAR expression RPAR\n    \n    expression : TERM\n               | TRUE\n               | FALSE\n    \n    empty :\n    '
     
-_lr_action_items = {'TRUE':([0,5,6,7,8,9,10,11,12,13,14,16,17,18,20,],[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,]),'FALSE':([0,5,6,7,8,9,10,11,12,13,14,16,17,18,20,],[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,]),'TERM':([0,5,6,7,8,9,10,11,12,13,14,16,17,18,20,],[4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,]),'LPAR':([0,5,6,7,8,9,10,11,12,13,14,16,17,18,20,],[5,5,20,5,5,5,5,5,5,5,5,5,5,5,5,]),'NOT':([0,5,6,7,8,9,10,11,12,13,14,16,17,18,20,],[6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,]),'NEXT':([0,5,6,7,8,9,10,11,12,13,14,16,17,18,20,],[7,16,7,7,7,7,7,7,7,7,7,7,7,7,16,]),'EVENTUALLY':([0,5,6,7,8,9,10,11,12,13,14,16,17,18,20,],[8,17,8,8,8,8,8,8,8,8,8,8,8,8,17,]),'GLOBALLY':([0,5,6,7,8,9,10,11,12,13,14,16,17,18,20,],[9,18,9,9,9,9,9,9,9,9,9,9,9,9,18,]),'$end':([1,2,3,4,19,21,22,23,24,25,26,27,28,29,34,35,36,37,],[0,-1,-2,-3,-10,-12,-14,-16,-4,-5,-6,-7,-8,-9,-13,-15,-17,-9,]),'UNTIL':([1,2,3,4,15,19,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,],[10,-1,-2,-3,10,-10,10,10,10,10,-5,-6,-7,-8,-9,10,10,10,10,-13,-15,-17,-9,]),'AND':([1,2,3,4,15,19,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,],[11,-1,-2,-3,11,-10,11,11,11,11,-5,-6,-7,-8,-9,11,11,11,11,-13,-15,-17,-9,]),'OR':([1,2,3,4,15,19,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,],[12,-1,-2,-3,12,-10,12,12,12,12,-5,-6,-7,-8,-9,12,12,12,12,-13,-15,-17,-9,]),'IMPLIES':([1,2,3,4,15,19,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,],[13,-1,-2,-3,13,-10,13,13,13,13,-5,-6,-7,-8,-9,13,13,13,13,-13,-15,-17,-9,]),'DIMPLIES':([1,2,3,4,15,19,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,],[14,-1,-2,-3,14,-10,14,14,14,14,-5,-6,-7,-8,-9,14,14,14,14,-13,-15,-17,-9,]),'RPAR':([2,3,4,15,19,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,],[-1,-2,-3,29,-10,-12,-14,-16,-4,-5,-6,-7,-8,-9,34,35,36,37,-13,-15,-17,-9,]),}
+_lr_action_items = {'NOT':([0,4,5,6,7,8,12,13,14,15,16,],[4,4,4,4,4,4,4,4,4,4,4,]),'NEXT':([0,4,5,6,7,8,12,13,14,15,16,],[5,5,5,5,5,5,5,5,5,5,5,]),'EVENTUALLY':([0,4,5,6,7,8,12,13,14,15,16,],[6,6,6,6,6,6,6,6,6,6,6,]),'GLOBALLY':([0,4,5,6,7,8,12,13,14,15,16,],[7,7,7,7,7,7,7,7,7,7,7,]),'LPAR':([0,4,5,6,7,8,12,13,14,15,16,],[8,8,8,8,8,8,8,8,8,8,8,]),'TERM':([0,4,5,6,7,8,12,13,14,15,16,],[9,9,9,9,9,9,9,9,9,9,9,]),'TRUE':([0,4,5,6,7,8,12,13,14,15,16,],[10,10,10,10,10,10,10,10,10,10,10,]),'FALSE':([0,4,5,6,7,8,12,13,14,15,16,],[11,11,11,11,11,11,11,11,11,11,11,]),'$end':([0,1,2,3,9,10,11,17,18,19,20,22,23,24,25,26,27,],[-16,0,-1,-2,-13,-14,-15,-8,-9,-10,-11,-3,-4,-5,-6,-7,-12,]),'AND':([2,9,10,11,17,18,19,20,21,22,23,24,25,26,27,],[12,-13,-14,-15,-8,-9,-10,-11,12,-3,-4,-5,-6,-7,-12,]),'OR':([2,9,10,11,17,18,19,20,21,22,23,24,25,26,27,],[13,-13,-14,-15,-8,-9,-10,-11,13,-3,-4,-5,-6,-7,-12,]),'IMPLIES':([2,9,10,11,17,18,19,20,21,22,23,24,25,26,27,],[14,-13,-14,-15,-8,-9,-10,-11,14,-3,-4,-5,-6,-7,-12,]),'DIMPLIES':([2,9,10,11,17,18,19,20,21,22,23,24,25,26,27,],[15,-13,-14,-15,-8,-9,-10,-11,15,-3,-4,-5,-6,-7,-12,]),'UNTIL':([2,9,10,11,17,18,19,20,21,22,23,24,25,26,27,],[16,-13,-14,-15,-8,-9,-10,-11,16,-3,-4,-5,-6,-7,-12,]),'RPAR':([9,10,11,17,18,19,20,21,22,23,24,25,26,27,],[-13,-14,-15,-8,-9,-10,-11,27,-3,-4,-5,-6,-7,-12,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'expression':([0,5,6,7,8,9,10,11,12,13,14,16,17,18,20,],[1,15,19,21,22,23,24,25,26,27,28,30,31,32,33,]),}
+_lr_goto_items = {'ltl':([0,],[1,]),'expression':([0,4,5,6,7,8,12,13,14,15,16,],[2,17,18,19,20,21,22,23,24,25,26,]),'empty':([0,],[3,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,23 +26,21 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> expression","S'",1,None,None,None),
-  ('expression -> TRUE','expression',1,'p_expression','ltl_parser.py',80),
-  ('expression -> FALSE','expression',1,'p_expression','ltl_parser.py',81),
-  ('expression -> TERM','expression',1,'p_expression','ltl_parser.py',82),
-  ('expression -> expression UNTIL expression','expression',3,'p_expression','ltl_parser.py',83),
-  ('expression -> expression AND expression','expression',3,'p_expression','ltl_parser.py',84),
-  ('expression -> expression OR expression','expression',3,'p_expression','ltl_parser.py',85),
-  ('expression -> expression IMPLIES expression','expression',3,'p_expression','ltl_parser.py',86),
-  ('expression -> expression DIMPLIES expression','expression',3,'p_expression','ltl_parser.py',87),
-  ('expression -> LPAR expression RPAR','expression',3,'p_expression','ltl_parser.py',88),
-  ('expression -> NOT expression','expression',2,'p_expression_not','ltl_parser.py',107),
-  ('expression -> NOT LPAR expression RPAR','expression',4,'p_expression_not','ltl_parser.py',108),
-  ('expression -> NEXT expression','expression',2,'p_expression_next','ltl_parser.py',118),
-  ('expression -> LPAR NEXT expression RPAR','expression',4,'p_expression_next','ltl_parser.py',119),
-  ('expression -> EVENTUALLY expression','expression',2,'p_expression_eventually','ltl_parser.py',128),
-  ('expression -> LPAR EVENTUALLY expression RPAR','expression',4,'p_expression_eventually','ltl_parser.py',129),
-  ('expression -> GLOBALLY expression','expression',2,'p_expression_globally','ltl_parser.py',138),
-  ('expression -> LPAR GLOBALLY expression RPAR','expression',4,'p_expression_globally','ltl_parser.py',139),
+  ("S' -> ltl","S'",1,None,None,None),
+  ('ltl -> expression','ltl',1,'p_ltl','ltl_parser.py',56),
+  ('ltl -> empty','ltl',1,'p_ltl','ltl_parser.py',57),
+  ('expression -> expression AND expression','expression',3,'p_expr_binary','ltl_parser.py',63),
+  ('expression -> expression OR expression','expression',3,'p_expr_binary','ltl_parser.py',64),
+  ('expression -> expression IMPLIES expression','expression',3,'p_expr_binary','ltl_parser.py',65),
+  ('expression -> expression DIMPLIES expression','expression',3,'p_expr_binary','ltl_parser.py',66),
+  ('expression -> expression UNTIL expression','expression',3,'p_expr_binary','ltl_parser.py',67),
+  ('expression -> NOT expression','expression',2,'p_expr_unary','ltl_parser.py',74),
+  ('expression -> NEXT expression','expression',2,'p_expr_unary','ltl_parser.py',75),
+  ('expression -> EVENTUALLY expression','expression',2,'p_expr_unary','ltl_parser.py',76),
+  ('expression -> GLOBALLY expression','expression',2,'p_expr_unary','ltl_parser.py',77),
+  ('expression -> LPAR expression RPAR','expression',3,'p_expr_group','ltl_parser.py',137),
+  ('expression -> TERM','expression',1,'p_expr_term','ltl_parser.py',143),
+  ('expression -> TRUE','expression',1,'p_expr_term','ltl_parser.py',144),
+  ('expression -> FALSE','expression',1,'p_expr_term','ltl_parser.py',145),
   ('empty -> <empty>','empty',0,'p_empty','ltl_parser.py',151),
 ]
