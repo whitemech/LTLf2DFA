@@ -79,59 +79,6 @@ def p_expr_unary(p):
 
     p[0] = (p[1], p[2])
 
-
-    # qua va modificato per la nuova espressione ridotta LPAR expression RPAR
-    # if p[1] == 'T' or p[1] == 'F': p[0] = (p[1],)
-    # elif len(p)<3: p[0] = p[1]
-    # elif p[1] != '(':
-    #     p[0] = (p[2], p[1], p[3])
-    # else:
-    #     p[0] = (p[3], p[2], p[4])
-
-    # if p[1] == 'T' or p[1] == 'F': p[0] = (p[1],)
-    # elif len(p)<3: p[0] = p[1]
-    # elif p[1] != '(':
-    #     p[0] = (p[2], p[1], p[3])
-    # else:
-    #     p[0] = p[2]
-
-# def p_expr_not(p):
-#     '''
-#     expression : NOT expression
-#     '''
-    # if p[2] == '(':
-    #     p[0] = (p[1], p[3])
-    #     print("questa è p0 in "+str(p[0]))
-    # else:
-        # p[0] = (p[1], p[2])
-
-# def p_expression_next(p):
-#     '''
-#     expression : NEXT expression
-#     '''
-    # if p[1] != '(':
-        # p[0] = (p[1], p[2])
-    # else: p[0] = (p[2], p[3])
-    # print('questo è p0 in X '+str(p[0]))
-
-# def p_expression_eventually(p):
-#     '''
-#     expression : EVENTUALLY expression
-#     '''
-    # if p[1] != '(':
-        # p[0] = (p[1], p[2])
-    # else: p[0] = (p[2], p[3])
-    # print(p[0])
-
-# def p_expression_globally(p):
-#     '''
-#     expression : GLOBALLY expression
-#     '''
-    # if p[1] != '(':
-        # p[0] = (p[1], p[2])
-    # else: p[0] = (p[2], p[3])
-    # print(p[0])
-
 def p_expr_group(p):
     '''
     expression : LPAR expression RPAR
@@ -199,14 +146,26 @@ def run(p):
         # print('computed tree: '+ str(p))
         return p+'(x)'
 
+# ----------- TESTING LEXER ----------------
+# lexer.input("a <-> b")
+#
+# while True:
+#     tok = lexer.token()
+#     if not tok:
+#         break
+#     print(tok)
+
+# ----------- TESTING PARSER ----------------
 # while True:
 #     try:
 #         s = input('>')
 #     except Exception as e:
 #         print(e)
 #         break
+
+
 if __name__=="__main__":
-    try:     
+    try:
         print('++++++++++++++++++ ~(a&b)|c becomes +++++++++++')
         parser.parse('~(a&b)|c')
         print('++++++++++++++++++ Ea -> Eb becomes +++++++++++')
@@ -235,121 +194,3 @@ if __name__=="__main__":
         parser.parse('G(a -> X(~b))')
     except Exception as e:
         print(e)
-
-
-
-
-
-# lexer.input("a <-> b")
-#
-# while True:
-#     tok = lexer.token()
-#     if not tok:
-#         break
-#     print(tok)
-
-
-
-# NOT = '~'
-# AND = '&'
-# OR = '|'
-# IMPLIES = '=>'
-# EQUIV = '<=>'
-# NEXT = 'X'
-# UNTIL = 'U'
-# LPAR = '('
-# RPAR = ')'
-#
-#
-# def main():
-#     with open('ltl_formula.txt','r') as file:
-#         formula = file.read()
-#
-#         parse(formula.split())
-#
-# def parse(f):
-#
-#
-# if __name__ == "__main__":
-#     main()
-
-
-# from ast import *
-#
-# class Parser:
-#     def __init__(self):
-#         self.string = ""
-#         self.operators = ["and", "or", "not", "(", ")", "->", "<->", "X", "U"]
-#         self.constants = ["true", "false"]
-#
-#     def setString(self, string):
-#         self.string = ""
-#         for c in string:
-#             if c == "(" or c == ")":
-#                 self.string = self.string + " " + c + " "
-#             else:
-#                 self.string += c
-#
-#     def parse(self):
-#         operand_stack  = []
-#         operator_stack = []
-#
-#         e = self.string.split()
-#         e.insert(0, "(")
-#         e.append(")")
-#
-#         for el in e:
-#             if el in self.operators:
-#                 if el != ")":
-#                     operator_stack.append(el)
-#                 else:
-#                     op = operator_stack.pop()
-#                     while op != "(":
-#                         if op == "not":
-#                             v = operand_stack.pop()
-#                             exp = Not(v)
-#                             operand_stack.append(exp)
-#                         elif op == "and":
-#                             v2 = operand_stack.pop()
-#                             v1 = operand_stack.pop()
-#                             exp = And(v1, v2)
-#                             operand_stack.append(exp)
-#                         elif op == "or":
-#                             v2 = operand_stack.pop()
-#                             v1 = operand_stack.pop()
-#                             exp = Or(v1, v2)
-#                             operand_stack.append(exp)
-#                         elif op == "->":
-#                             v2 = operand_stack.pop()
-#                             v1 = operand_stack.pop()
-#                             exp = Imply(v1, v2)
-#                             operand_stack.append(exp)
-#                         elif op == "<->":
-#                             v2 = operand_stack.pop()
-#                             v1 = operand_stack.pop()
-#                             exp = DImply(v1, v2)
-#                             operand_stack.append(exp)
-#                         else:
-#                             raise Exception("Wrong operand")
-#                         op = operator_stack.pop()
-#             elif el in self.constants:
-#                 if el == "true":
-#                     operand_stack.append(TTrue())
-#                 else:
-#                     operand_stack.append(FFalse())
-#             else:
-#                 operand_stack.append(Var(el))
-#         return operand_stack.pop()
-#
-# if __name__=="__main__":
-#     p = Parser()
-#     p.setString("not((a or b) -> (a and b))")
-#     print p.parse()
-#     p.setString("(not a) or b")
-#     print p.parse()
-#     p.setString("((p -> (q and r)) and ((not q) or (not r)) and (not (not p))")
-#     print p.parse()
-#     p.setString("true -> false")
-#     print p.parse()
-#     p.setString("((not true) and a) or b")
-#     print p.parse()
