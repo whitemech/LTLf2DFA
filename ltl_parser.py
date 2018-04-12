@@ -137,8 +137,8 @@ def run(p, var):
         #     # print('computed tree: '+ str(p))
         #     return 'to be implemented'
         # elif p[0] == 'G':
-            # print('computed tree: '+ str(p))
-            return 'to be implemented'
+        #     print('computed tree: '+ str(p))
+        #     return 'to be implemented'
         elif p[0] == 'U':
             # print('computed tree: '+ str(p))
             return 'to be implemented'
