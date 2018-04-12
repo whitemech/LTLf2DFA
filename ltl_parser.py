@@ -106,10 +106,8 @@ parser = yacc.yacc()
 
 def run(p):
     if type(p) == tuple:
-        print(p)
-        if p[0] == 'T': return 'True'
-        elif p[0] == 'F': return 'False'
-        elif p[0] == '&':
+        #print(p)
+        if p[0] == '&':
             # print('computed tree: '+ str(p))
             a = run(p[1])
             b = run(p[2])
@@ -142,9 +140,15 @@ def run(p):
             # print('computed tree: '+ str(p))
             return 'to be implemented'
     else:
+        # handling non-tuple cases
+        if p[0] == 'T': return 'True'
+        elif p[0] == 'F': return 'False'
+
         # enable if you want to see recursion
         # print('computed tree: '+ str(p))
-        return p+'(x)'
+
+        # BASE CASE OF RECURSION
+        else: return p+'(x)'
 
 # ----------- TESTING LEXER ----------------
 # lexer.input("a <-> b")
@@ -166,6 +170,8 @@ def run(p):
 
 if __name__=="__main__":
     try:
+        print('++++++++++++++++++ ~(T)|F becomes +++++++++++')
+        parser.parse('~(T)|F')
         print('++++++++++++++++++ ~(a&b)|c becomes +++++++++++')
         parser.parse('~(a&b)|c')
         print('++++++++++++++++++ Ea -> Eb becomes +++++++++++')
