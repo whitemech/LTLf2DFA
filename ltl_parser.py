@@ -67,8 +67,12 @@ def p_expr_binary(p):
                | expression DIMPLIES expression
                | expression UNTIL expression
     '''
-
-    p[0] = (p[2],p[1],p[3])
+    if p[2] == '->':
+        p[0] = ('|', ('~', p[1]), p[3])
+    elif p[2] == '<->':
+        p[0] = ('&', ('|', ('~', p[1]), p[3]), ('|', ('~', p[3]), p[1]))
+    else:
+        p[0] = (p[2],p[1],p[3])
 
 def p_expr_unary(p):
     '''
@@ -180,33 +184,33 @@ def next(var):
 
 if __name__=="__main__":
     try:
-        print('++++++++++++++++++ TUg becomes ++++++++++++++++')
-        parser.parse('TUg')
-        print('++++++++++++++++++ ~(a&b)|c becomes +++++++++++')
-        parser.parse('~(a&b)|c')
-        print('++++++++++++++++++ Ea -> Eb becomes +++++++++++')
-        parser.parse('Ea -> Eb')
+        # print('++++++++++++++++++ TUg becomes ++++++++++++++++')
+        # parser.parse('TUg')
+        # print('++++++++++++++++++ ~(a&b)|c becomes +++++++++++')
+        # parser.parse('~(a&b)|c')
+        # print('++++++++++++++++++ Ea -> Eb becomes +++++++++++')
+        # parser.parse('Ea -> Eb')
         print('++++++++++++++++++ E(a -> Eb) becomes +++++++++')
         parser.parse('E(a -> Eb)')
         print('++++++++++++++++++ Ea <-> Eb becomes ++++++++++')
         parser.parse('Ea <-> Eb')
-        print('++++++++++++++++++ G(a -> Eb) becomes +++++++++')
-        parser.parse('G(a -> Eb)')
-        print('++++++++++++++++++ (~bUa)|G(~b) becomes +++++++')
-        parser.parse('(~bUa)|G(~b)')
-        print('++++++++++++++++++ G(a -> X(~aUb)) becomes ++++')
-        parser.parse('G(a -> X(~aUb))')
-        print('++++++++++++++++++ G(a -> Xb) becomes +++++++++')
-        parser.parse('G(a -> Xb)')
-        print('++++++++++++++++++ G(Xb -> a) becomes +++++++++')
-        parser.parse('G(Xb -> a)')
-        print('++++++++++++++++++ G(a <-> Xb) becomes ++++++++')
-        parser.parse('G(a <-> Xb)')
-        print('++++++++++++++++++ ~(Ea & Eb) becomes +++++++++')
-        parser.parse('~(Ea & Eb)')
-        print('++++++++++++++++++ G(a -> ~(Eb)) becomes ++++++')
-        parser.parse('G(a -> ~(Eb))')
-        print('++++++++++++++++++ G(a -> X(~b)) becomes ++++++')
-        parser.parse('G(a -> X(~b))')
+        # print('++++++++++++++++++ G(a -> Eb) becomes +++++++++')
+        # parser.parse('G(a -> Eb)')
+        # print('++++++++++++++++++ (~bUa)|G(~b) becomes +++++++')
+        # parser.parse('(~bUa)|G(~b)')
+        # print('++++++++++++++++++ G(a -> X(~aUb)) becomes ++++')
+        # parser.parse('G(a -> X(~aUb))')
+        # print('++++++++++++++++++ G(a -> Xb) becomes +++++++++')
+        # parser.parse('G(a -> Xb)')
+        # print('++++++++++++++++++ G(Xb -> a) becomes +++++++++')
+        # parser.parse('G(Xb -> a)')
+        # print('++++++++++++++++++ G(a <-> Xb) becomes ++++++++')
+        # parser.parse('G(a <-> Xb)')
+        # print('++++++++++++++++++ ~(Ea & Eb) becomes +++++++++')
+        # parser.parse('~(Ea & Eb)')
+        # print('++++++++++++++++++ G(a -> ~(Eb)) becomes ++++++')
+        # parser.parse('G(a -> ~(Eb))')
+        # print('++++++++++++++++++ G(a -> X(~b)) becomes ++++++')
+        # parser.parse('G(a -> X(~b))')
     except Exception as e:
         print(e)
