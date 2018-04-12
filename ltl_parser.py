@@ -113,9 +113,12 @@ def p_error(p):
 
 parser = yacc.yacc()
 
+# symbols: ∃ , ∀
+
 def run(p, var):
     if type(p) == tuple:
-        print(p)
+        #enable this print to see the tree pruning
+        # print(p)
         if p[0] == '&':
             # print('computed tree: '+ str(p))
             a = run(p[1], var)
@@ -132,22 +135,16 @@ def run(p, var):
             return '~('+ a +')'
         elif p[0] == 'X':
             # print('computed tree: '+ str(p))
-            return 'to be implemented'
+            new_var = next(var)
+            a = run(p[1],new_var)
+            return '( '+ '∃'+new_var+'.succ('+var+','+new_var+') & '+ a +' )'
         elif p[0] == 'U':
             # print('computed tree: '+ str(p))
-            return 'to be implemented'
-        # elif p[0] == 'E':
-        #     # print('computed tree: '+ str(p))
-        #     return 'to be implemented'
-        # elif p[0] == 'G':
-        #     print('computed tree: '+ str(p))
-        #     return 'to be implemented'
-        # elif p[0] == '->':
-        #     # print('computed tree: '+ str(p))
-        #     return 'to be implemented'
-        # elif p[0] == '<->':
-        #     # print('computed tree: '+ str(p))
-        #     return 'to be implemented'
+            new_var = next(var)
+            new_new_var = next(new_var)
+            a = run(p[2],new_var)
+            b = run(p[1],new_new_var)
+            return '( '+ '∃'+new_var+'.'+var+' ≤ '+new_var+' ≤ Last & '+ a +' & ∀'+new_new_var+'.'+var+' ≤ '+new_new_var+' < '+new_var+' -> '+b+' )'
     else:
         # handling non-tuple cases
         if p[0] == 'T': return 'True'
@@ -184,33 +181,33 @@ def next(var):
 
 if __name__=="__main__":
     try:
-        # print('++++++++++++++++++ TUg becomes ++++++++++++++++')
-        # parser.parse('TUg')
-        # print('++++++++++++++++++ ~(a&b)|c becomes +++++++++++')
-        # parser.parse('~(a&b)|c')
-        # print('++++++++++++++++++ Ea -> Eb becomes +++++++++++')
-        # parser.parse('Ea -> Eb')
+        print('++++++++++++++++++ aUb becomes ++++++++++++++++')
+        parser.parse('aUb')
+        print('++++++++++++++++++ ~(a&b)|c becomes +++++++++++')
+        parser.parse('~(a&b)|c')
+        print('++++++++++++++++++ Ea -> Eb becomes +++++++++++')
+        parser.parse('Ea -> Eb')
         print('++++++++++++++++++ E(a -> Eb) becomes +++++++++')
         parser.parse('E(a -> Eb)')
         print('++++++++++++++++++ Ea <-> Eb becomes ++++++++++')
         parser.parse('Ea <-> Eb')
-        # print('++++++++++++++++++ G(a -> Eb) becomes +++++++++')
-        # parser.parse('G(a -> Eb)')
-        # print('++++++++++++++++++ (~bUa)|G(~b) becomes +++++++')
-        # parser.parse('(~bUa)|G(~b)')
-        # print('++++++++++++++++++ G(a -> X(~aUb)) becomes ++++')
-        # parser.parse('G(a -> X(~aUb))')
-        # print('++++++++++++++++++ G(a -> Xb) becomes +++++++++')
-        # parser.parse('G(a -> Xb)')
-        # print('++++++++++++++++++ G(Xb -> a) becomes +++++++++')
-        # parser.parse('G(Xb -> a)')
-        # print('++++++++++++++++++ G(a <-> Xb) becomes ++++++++')
-        # parser.parse('G(a <-> Xb)')
-        # print('++++++++++++++++++ ~(Ea & Eb) becomes +++++++++')
-        # parser.parse('~(Ea & Eb)')
-        # print('++++++++++++++++++ G(a -> ~(Eb)) becomes ++++++')
-        # parser.parse('G(a -> ~(Eb))')
-        # print('++++++++++++++++++ G(a -> X(~b)) becomes ++++++')
-        # parser.parse('G(a -> X(~b))')
+        print('++++++++++++++++++ G(a -> Eb) becomes +++++++++')
+        parser.parse('G(a -> Eb)')
+        print('++++++++++++++++++ (~bUa)|G(~b) becomes +++++++')
+        parser.parse('(~bUa)|G(~b)')
+        print('++++++++++++++++++ G(a -> X(~aUb)) becomes ++++')
+        parser.parse('G(a -> X(~aUb))')
+        print('++++++++++++++++++ G(a -> Xb) becomes +++++++++')
+        parser.parse('G(a -> Xb)')
+        print('++++++++++++++++++ G(Xb -> a) becomes +++++++++')
+        parser.parse('G(Xb -> a)')
+        print('++++++++++++++++++ G(a <-> Xb) becomes ++++++++')
+        parser.parse('G(a <-> Xb)')
+        print('++++++++++++++++++ ~(Ea & Eb) becomes +++++++++')
+        parser.parse('~(Ea & Eb)')
+        print('++++++++++++++++++ G(a -> ~(Eb)) becomes ++++++')
+        parser.parse('G(a -> ~(Eb))')
+        print('++++++++++++++++++ G(a -> X(~b)) becomes ++++++')
+        parser.parse('G(a -> X(~b))')
     except Exception as e:
         print(e)
