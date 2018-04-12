@@ -133,21 +133,21 @@ def run(p, var):
         elif p[0] == 'X':
             # print('computed tree: '+ str(p))
             return 'to be implemented'
+        elif p[0] == 'U':
+            # print('computed tree: '+ str(p))
+            return 'to be implemented'
         # elif p[0] == 'E':
         #     # print('computed tree: '+ str(p))
         #     return 'to be implemented'
         # elif p[0] == 'G':
         #     print('computed tree: '+ str(p))
         #     return 'to be implemented'
-        elif p[0] == 'U':
-            # print('computed tree: '+ str(p))
-            return 'to be implemented'
-        elif p[0] == '->':
-            # print('computed tree: '+ str(p))
-            return 'to be implemented'
-        elif p[0] == '<->':
-            # print('computed tree: '+ str(p))
-            return 'to be implemented'
+        # elif p[0] == '->':
+        #     # print('computed tree: '+ str(p))
+        #     return 'to be implemented'
+        # elif p[0] == '<->':
+        #     # print('computed tree: '+ str(p))
+        #     return 'to be implemented'
     else:
         # handling non-tuple cases
         if p[0] == 'T': return 'True'
