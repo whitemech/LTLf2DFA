@@ -56,7 +56,8 @@ def p_ltl(p):
     ltl : expression
         | empty
     '''
-    print(run(p[1]))
+    init_variable = 'v_1'
+    print( run(p[1],init_variable) )
 
 def p_expr_binary(p):
     '''
@@ -108,30 +109,30 @@ def p_error(p):
 
 parser = yacc.yacc()
 
-def run(p):
+def run(p, var):
     if type(p) == tuple:
         print(p)
         if p[0] == '&':
             # print('computed tree: '+ str(p))
-            a = run(p[1])
-            b = run(p[2])
+            a = run(p[1], var)
+            b = run(p[2], var)
             return '('+a+' & '+b+')'
         elif p[0] == '|':
             # print('computed tree: '+ str(p))
-            a = run(p[1])
-            b = run(p[2])
+            a = run(p[1], var)
+            b = run(p[2], var)
             return '('+a+' | '+b+')'
         elif p[0] == '~':
             # print('computed tree: '+ str(p))
-            a = run(p[1])
-            return '~('+str(a)+')'
+            a = run(p[1], var)
+            return '~('+ a +')'
         elif p[0] == 'X':
             # print('computed tree: '+ str(p))
             return 'to be implemented'
-        elif p[0] == 'E':
-            # print('computed tree: '+ str(p))
-            return 'to be implemented'
-        elif p[0] == 'G':
+        # elif p[0] == 'E':
+        #     # print('computed tree: '+ str(p))
+        #     return 'to be implemented'
+        # elif p[0] == 'G':
             # print('computed tree: '+ str(p))
             return 'to be implemented'
         elif p[0] == 'U':
@@ -152,7 +153,12 @@ def run(p):
         # print('computed tree: '+ str(p))
 
         # BASE CASE OF RECURSION
-        else: return p+'(x)'
+        else: return p + '('+ var +')'
+
+def next(var):
+    s = var.split('_')
+    s[1] = str(int(s[1])+1)
+    return '_'.join(s)
 
 # ----------- TESTING LEXER ----------------
 # lexer.input("a <-> b")
@@ -174,7 +180,7 @@ def run(p):
 
 if __name__=="__main__":
     try:
-        print('++++++++++++++++++ TUg becomes +++++++++++++')
+        print('++++++++++++++++++ TUg becomes ++++++++++++++++')
         parser.parse('TUg')
         print('++++++++++++++++++ ~(a&b)|c becomes +++++++++++')
         parser.parse('~(a&b)|c')
