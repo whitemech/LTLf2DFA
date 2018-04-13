@@ -35,7 +35,7 @@ t_NOT = r'\~'
 t_LPAR = r'\('
 t_RPAR = r'\)'
 
-t_ignore = r' '
+t_ignore = r' '+'\n'
 
 def t_error(t):
     print("Illegal character '%s'" % t.value[0])
@@ -57,7 +57,12 @@ def p_ltl(p):
         | empty
     '''
     init_variable = 'v_1'
-    print( run(p[1],init_variable) )
+    result = run(p[1],init_variable)
+    try:
+        with open('fol_out.txt','w') as output:
+            output.write(result)
+    except FileNotFoundError as e:
+        print(e)
 
 def p_expr_binary(p):
     '''
@@ -113,7 +118,7 @@ def p_error(p):
 
 parser = yacc.yacc()
 
-# symbols: ∃ , ∀
+# quantifiers: ∃ , ∀
 
 def run(p, var):
     if type(p) == tuple:
@@ -181,33 +186,41 @@ def next(var):
 
 if __name__=="__main__":
     try:
-        print('++++++++++++++++++ aUb becomes ++++++++++++++++')
-        parser.parse('aUb')
-        print('++++++++++++++++++ ~(a&b)|c becomes +++++++++++')
-        parser.parse('~(a&b)|c')
-        print('++++++++++++++++++ Ea -> Eb becomes +++++++++++')
-        parser.parse('Ea -> Eb')
-        print('++++++++++++++++++ E(a -> Eb) becomes +++++++++')
-        parser.parse('E(a -> Eb)')
-        print('++++++++++++++++++ Ea <-> Eb becomes ++++++++++')
-        parser.parse('Ea <-> Eb')
-        print('++++++++++++++++++ G(a -> Eb) becomes +++++++++')
-        parser.parse('G(a -> Eb)')
-        print('++++++++++++++++++ (~bUa)|G(~b) becomes +++++++')
-        parser.parse('(~bUa)|G(~b)')
-        print('++++++++++++++++++ G(a -> X(~aUb)) becomes ++++')
-        parser.parse('G(a -> X(~aUb))')
-        print('++++++++++++++++++ G(a -> Xb) becomes +++++++++')
-        parser.parse('G(a -> Xb)')
-        print('++++++++++++++++++ G(Xb -> a) becomes +++++++++')
-        parser.parse('G(Xb -> a)')
-        print('++++++++++++++++++ G(a <-> Xb) becomes ++++++++')
-        parser.parse('G(a <-> Xb)')
-        print('++++++++++++++++++ ~(Ea & Eb) becomes +++++++++')
-        parser.parse('~(Ea & Eb)')
-        print('++++++++++++++++++ G(a -> ~(Eb)) becomes ++++++')
-        parser.parse('G(a -> ~(Eb))')
-        print('++++++++++++++++++ G(a -> X(~b)) becomes ++++++')
-        parser.parse('G(a -> X(~b))')
-    except Exception as e:
+        with open('ltl_in.txt','r') as input:
+            for line in input:
+                parser.parse(line)
+    except FileNotFoundError as e:
         print(e)
+
+    #
+    # try:
+    #     print('++++++++++++++++++ aUb becomes ++++++++++++++++')
+    #     parser.parse('aUb')
+    #     print('++++++++++++++++++ ~(a&b)|c becomes +++++++++++')
+    #     parser.parse('~(a&b)|c')
+    #     print('++++++++++++++++++ Ea -> Eb becomes +++++++++++')
+    #     parser.parse('Ea -> Eb')
+    #     print('++++++++++++++++++ E(a -> Eb) becomes +++++++++')
+    #     parser.parse('E(a -> Eb)')
+    #     print('++++++++++++++++++ Ea <-> Eb becomes ++++++++++')
+    #     parser.parse('Ea <-> Eb')
+    #     print('++++++++++++++++++ G(a -> Eb) becomes +++++++++')
+    #     parser.parse('G(a -> Eb)')
+    #     print('++++++++++++++++++ (~bUa)|G(~b) becomes +++++++')
+    #     parser.parse('(~bUa)|G(~b)')
+    #     print('++++++++++++++++++ G(a -> X(~aUb)) becomes ++++')
+    #     parser.parse('G(a -> X(~aUb))')
+    #     print('++++++++++++++++++ G(a -> Xb) becomes +++++++++')
+    #     parser.parse('G(a -> Xb)')
+    #     print('++++++++++++++++++ G(Xb -> a) becomes +++++++++')
+    #     parser.parse('G(Xb -> a)')
+    #     print('++++++++++++++++++ G(a <-> Xb) becomes ++++++++')
+    #     parser.parse('G(a <-> Xb)')
+    #     print('++++++++++++++++++ ~(Ea & Eb) becomes +++++++++')
+    #     parser.parse('~(Ea & Eb)')
+    #     print('++++++++++++++++++ G(a -> ~(Eb)) becomes ++++++')
+    #     parser.parse('G(a -> ~(Eb))')
+    #     print('++++++++++++++++++ G(a -> X(~b)) becomes ++++++')
+    #     parser.parse('G(a -> X(~b))')
+    # except Exception as e:
+    #     print(e)
