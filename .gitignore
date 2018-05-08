@@ -6,6 +6,10 @@
 .AppleDouble
 .LSOverride
 
+# input and output files
+ltl_in.txt
+fol_out.txt
+
 # Icon must end with two \r
 Icon
 
