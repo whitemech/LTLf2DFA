@@ -149,7 +149,11 @@ def run(p, var):
             new_new_var = next(new_var)
             a = run(p[2],new_var)
             b = run(p[1],new_new_var)
-            return '( '+ '∃'+new_var+'.'+var+' ≤ '+new_var+' ≤ Last & '+ a +' & ∀'+new_new_var+'.'+var+' ≤ '+new_new_var+' < '+new_var+' -> '+b+' )'
+
+            if b == 'True':
+                return '( '+ '∃'+new_var+'.'+var+' ≤ '+new_var+' ≤ Last & '+ a +' )'
+            else:    
+                return '( '+ '∃'+new_var+'.'+var+' ≤ '+new_var+' ≤ Last & '+ a +' & ∀'+new_new_var+'.'+var+' ≤ '+new_new_var+' < '+new_var+' -> '+b+' )'
     else:
         # handling non-tuple cases
         if p[0] == 'T': return 'True'
