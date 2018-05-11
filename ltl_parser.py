@@ -61,6 +61,7 @@ def p_ltl(p):
     try:
         with open('fol_out.txt','w') as output:
             output.write(result)
+        output.close()    
     except FileNotFoundError as e:
         print(e)
 
@@ -152,7 +153,7 @@ def run(p, var):
 
             if b == 'True':
                 return '( '+ '∃'+new_var+'.'+var+' ≤ '+new_var+' ≤ Last & '+ a +' )'
-            else:    
+            else:
                 return '( '+ '∃'+new_var+'.'+var+' ≤ '+new_var+' ≤ Last & '+ a +' & ∀'+new_new_var+'.'+var+' ≤ '+new_new_var+' < '+new_var+' -> '+b+' )'
     else:
         # handling non-tuple cases
@@ -193,6 +194,7 @@ if __name__=="__main__":
         with open('ltl_in.txt','r') as input:
             for line in input:
                 parser.parse(line)
+        input.close()
     except FileNotFoundError as e:
         print(e)
 
