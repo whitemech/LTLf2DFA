@@ -131,8 +131,10 @@ def run(p, var):
             b = run(p[2], var)
             if a == 'False' or b == 'False':
                 return 'False'
-            else:
-                return '('+a+' & '+b+')'
+            elif a == 'True':
+                if b == 'True': return 'True'
+            elif b == 'True': return a
+            else: return '('+a+' & '+b+')'
         elif p[0] == '|':
             # print('computed tree: '+ str(p))
             a = run(p[1], var)
@@ -164,8 +166,9 @@ def run(p, var):
             a = run(p[2],new_var)
             b = run(p[1],new_new_var)
 
-            if b == 'True':
-                return '( '+ '∃'+new_var+'.'+var+' ≤ '+new_var+' ≤ Last & '+ a +' )'
+            if b == 'True': return '( '+ '∃'+new_var+'.'+var+' ≤ '+new_var+' ≤ Last & '+ a +' )'
+            elif a ==  'True': return '( '+ '∃'+new_var+'.'+var+' ≤ '+new_var+' ≤ Last & ∀'+new_new_var+'.'+var+' ≤ '+new_new_var+' < '+new_var+' -> '+b+' )'
+            elif a == 'False': return 'False'
             else:
                 return '( '+ '∃'+new_var+'.'+var+' ≤ '+new_var+' ≤ Last & '+ a +' & ∀'+new_new_var+'.'+var+' ≤ '+new_new_var+' < '+new_var+' -> '+b+' )'
     else:
