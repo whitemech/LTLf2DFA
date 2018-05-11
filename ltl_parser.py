@@ -61,7 +61,7 @@ def p_ltl(p):
     try:
         with open('fol_out.txt','w') as output:
             output.write(result)
-        output.close()    
+        output.close()
     except FileNotFoundError as e:
         print(e)
 
@@ -129,16 +129,29 @@ def run(p, var):
             # print('computed tree: '+ str(p))
             a = run(p[1], var)
             b = run(p[2], var)
-            return '('+a+' & '+b+')'
+            if a == 'False' or b == 'False':
+                return 'False'
+            else:
+                return '('+a+' & '+b+')'
         elif p[0] == '|':
             # print('computed tree: '+ str(p))
             a = run(p[1], var)
             b = run(p[2], var)
-            return '('+a+' | '+b+')'
+
+            if a == 'True' or b == 'True':
+                return 'True'
+            elif a == 'False':
+                if b == 'True': return 'True'
+                elif b == 'False': return 'False'
+                else: return b
+            elif b == 'False': return a
+            else: return '('+a+' | '+b+')'
         elif p[0] == '~':
             # print('computed tree: '+ str(p))
             a = run(p[1], var)
-            return '~('+ a +')'
+            if a == 'True': return 'False'
+            elif a == 'False': return 'True'
+            else: return '~('+ a +')'
         elif p[0] == 'X':
             # print('computed tree: '+ str(p))
             new_var = next(var)
