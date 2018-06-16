@@ -56,8 +56,8 @@ def p_ltl(p):
     ltl : expression
         | empty
     '''
-    init_variable = 'v_1'
-    result = run(p[1],init_variable)
+    init_variable = 'v_0'
+    result = run(p[1], init_variable)
     try:
         with open('fol_out.txt','w') as output:
             output.write(result)
@@ -119,16 +119,21 @@ def p_error(p):
 
 parser = yacc.yacc()
 
-# quantifiers: ∃ , ∀
+# quantifiers: ∃ (exists), ∀ (forall)
 
 def run(p, var):
     if type(p) == tuple:
         #enable this print to see the tree pruning
         # print(p)
+        # print(var)
         if p[0] == '&':
             # print('computed tree: '+ str(p))
-            a = run(p[1], var)
-            b = run(p[2], var)
+            if var == 'v_0':
+                a = run(p[1], '0')
+                b = run(p[2], '0')
+            else:
+                a = run(p[1], var)
+                b = run(p[2], var)
             if a == 'False' or b == 'False':
                 return 'False'
             elif a == 'True':
@@ -137,9 +142,12 @@ def run(p, var):
             else: return '('+a+' & '+b+')'
         elif p[0] == '|':
             # print('computed tree: '+ str(p))
-            a = run(p[1], var)
-            b = run(p[2], var)
-
+            if var == 'v_0':
+                a = run(p[1], '0')
+                b = run(p[2], '0')
+            else:
+                a = run(p[1], var)
+                b = run(p[2], var)
             if a == 'True' or b == 'True':
                 return 'True'
             elif a == 'False':
@@ -150,7 +158,8 @@ def run(p, var):
             else: return '('+a+' | '+b+')'
         elif p[0] == '~':
             # print('computed tree: '+ str(p))
-            a = run(p[1], var)
+            if var == 'v_0': a = run(p[1], '0')
+            else: a = run(p[1], var)
             if a == 'True': return 'False'
             elif a == 'False': return 'True'
             else: return '~('+ a +')'
@@ -158,7 +167,10 @@ def run(p, var):
             # print('computed tree: '+ str(p))
             new_var = next(var)
             a = run(p[1],new_var)
-            return '( '+ '∃'+new_var+'.succ('+var+','+new_var+') & '+ a +' )'
+            if var == 'v_0':
+                return '('+ 'ex1 '+new_var+': '+ new_var +' = 1 '+ '& '+ a +')'
+            else:
+                return '('+ 'ex1 '+new_var+': '+ new_var +' = '+ var + ' + 1 '+ '& '+ a +')'
         elif p[0] == 'U':
             # print('computed tree: '+ str(p))
             new_var = next(var)
@@ -166,11 +178,16 @@ def run(p, var):
             a = run(p[2],new_var)
             b = run(p[1],new_new_var)
 
-            if b == 'True': return '( '+ '∃'+new_var+'.'+var+' ≤ '+new_var+' ≤ Last & '+ a +' )'
-            elif a ==  'True': return '( '+ '∃'+new_var+'.'+var+' ≤ '+new_var+' ≤ Last & ∀'+new_new_var+'.'+var+' ≤ '+new_new_var+' < '+new_var+' -> '+b+' )'
-            elif a == 'False': return 'False'
+            if var == 'v_0':
+                if b == 'True': return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & '+ a +' )'
+                elif a ==  'True': return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & forall1 '+new_new_var+': '+var+' <= '+new_new_var+' & '+new_new_var+' < '+new_var+' => '+b+' )'
+                elif a == 'False': return 'False'
+                else: return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & '+ a +' & forall1 '+new_new_var+': '+var+' <= '+new_new_var+' & '+new_new_var+' < '+new_var+' => '+b+' )'
             else:
-                return '( '+ '∃'+new_var+'.'+var+' ≤ '+new_var+' ≤ Last & '+ a +' & ∀'+new_new_var+'.'+var+' ≤ '+new_new_var+' < '+new_var+' -> '+b+' )'
+                if b == 'True': return '( '+ 'ex1 '+new_var+': '+var+' <= '+new_var+' & '+new_var+' <= max($) & '+ a +' )'
+                elif a ==  'True': return '( '+ 'ex1 '+new_var+': '+var+' <= '+new_var+' & '+new_var+' <= max($) & forall1 '+new_new_var+': '+var+' <= '+new_new_var+' & '+new_new_var+' < '+new_var+' => '+b+' )'
+                elif a == 'False': return 'False'
+                else: return '( '+ 'ex1 '+new_var+': '+var+' <= '+new_var+' & '+new_var+' <= max($) & '+ a +' & forall1 '+new_new_var+': '+var+' <= '+new_new_var+' & '+new_new_var+' < '+new_var+' => '+b+' )'
     else:
         # handling non-tuple cases
         if p[0] == 'T': return 'True'
@@ -180,12 +197,14 @@ def run(p, var):
         # print('computed tree: '+ str(p))
 
         # BASE CASE OF RECURSION
-        else: return p + '('+ var +')'
+        else: return var + ' in ' + p
 
 def next(var):
-    s = var.split('_')
-    s[1] = str(int(s[1])+1)
-    return '_'.join(s)
+    if var == '0': return 'v_1'
+    else:
+        s = var.split('_')
+        s[1] = str(int(s[1])+1)
+        return '_'.join(s)
 
 # ----------- TESTING LEXER ----------------
 # lexer.input("a <-> b")
