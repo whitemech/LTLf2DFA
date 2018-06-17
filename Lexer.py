@@ -8,7 +8,11 @@ class Lexer(object):
         'X':        'NEXT',
         'U':        'UNTIL',
         'E':        'EVENTUALLY',
-        'G':        'GLOBALLY'
+        'G':        'GLOBALLY',
+        'P':        'PASTNEXT', #PREVIOUS
+        'S':        'PASTUNTIL', #SINCE
+        'O':        'PASTEVENTUALLY', #ONCE
+        'H':        'PASTGLOBALLY'
     }
     # List of token names.   This is always required
     tokens = (
@@ -30,13 +34,19 @@ class Lexer(object):
     t_OR = r'\|'
     t_IMPLIES = r'\->'
     t_DIMPLIES = r'\<->'
+    t_NOT = r'\~'
+    t_LPAR = r'\('
+    t_RPAR = r'\)'
+    # FUTURE OPERATORS
     t_NEXT = r'X'
     t_UNTIL = r'U'
     t_EVENTUALLY = r'E'
     t_GLOBALLY = r'G'
-    t_NOT = r'\~'
-    t_LPAR = r'\('
-    t_RPAR = r'\)'
+    # PAST OPERATOR
+    t_PASTNEXT = r'P'
+    t_PASTUNTIL = r'S'
+    t_PASTEVENTUALLY = r'O'
+    t_PASTGLOBALLY = r'H'
 
     t_ignore = r' '+'\n'
 
@@ -52,8 +62,8 @@ class Lexer(object):
     # Build the lexer
     def build(self,**kwargs):
         self.lexer = lex.lex(module=self, **kwargs)
-#
-#     # Test it output
+
+    # Test it output
 #     def test(self,data):
 #         self.lexer.input(data)
 #         while True:
@@ -65,4 +75,4 @@ class Lexer(object):
 # # Build the lexer and try it out
 # m = Lexer()
 # m.build()           # Build the lexer
-# m.test("G(a -> Xb)")     # Test it
+# m.test("P(a -> bSc)")     # Test it
