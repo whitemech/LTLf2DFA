@@ -74,6 +74,31 @@ class Translator:
                     elif a ==  'True': return '( '+ 'ex1 '+new_var+': '+var+' <= '+new_var+' & '+new_var+' <= max($) & forall1 '+new_new_var+': '+var+' <= '+new_new_var+' & '+new_new_var+' < '+new_var+' => '+b+' )'
                     elif a == 'False': return 'False'
                     else: return '( '+ 'ex1 '+new_var+': '+var+' <= '+new_var+' & '+new_var+' <= max($) & '+ a +' & forall1 '+new_new_var+': '+var+' <= '+new_new_var+' & '+new_new_var+' < '+new_var+' => '+b+' )'
+            elif p[0] == 'Y':
+                # print('computed tree: '+ str(p))
+                new_var = self.next(var)
+                a = self.translate(p[1],new_var)
+                if var == 'v_0':
+                    return '('+ 'ex1 '+new_var+': '+ new_var +' = max($) - 1 '+ '& '+new_var+' > 0 & '+ a +')'
+                else:
+                    return '('+ 'ex1 '+new_var+': '+ new_var +' = '+ var + ' - 1 '+ '& '+new_var+' > 0 & '+ a +')'
+            elif p[0] == 'S':
+                # print('computed tree: '+ str(p))
+                new_var = self.next(var)
+                new_new_var = self.next(new_var)
+                a = self.translate(p[2],new_var)
+                b = self.translate(p[1],new_new_var)
+
+                if var == 'v_0':
+                    if b == 'True': return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & '+ a +' )'
+                    elif a ==  'True': return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & forall1 '+new_new_var+': '+new_var+' < '+new_new_var+' & '+new_new_var+' <= max($) => '+b+' )'
+                    elif a == 'False': return 'False'
+                    else: return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & '+ a +' & forall1 '+new_new_var+': '+new_var+' < '+new_new_var+' & '+new_new_var+' <= max($) => '+b+' )'
+                else:
+                    if b == 'True': return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & '+ a +' )'
+                    elif a ==  'True': return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= '+var+' & forall1 '+new_new_var+': '+new_var+' < '+new_new_var+' & '+new_new_var+' <= '+var+' => '+b+' )'
+                    elif a == 'False': return 'False'
+                    else: return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= '+var+' & '+ a +' & forall1 '+new_new_var+': '+new_var+' < '+new_new_var+' & '+new_new_var+' <= '+var+' => '+b+' )'
         else:
             # handling non-tuple cases
             if p[0] == 'T': return 'True'
