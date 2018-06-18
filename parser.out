@@ -10,38 +10,46 @@ Rule 4     expression -> expression OR expression
 Rule 5     expression -> expression IMPLIES expression
 Rule 6     expression -> expression DIMPLIES expression
 Rule 7     expression -> expression UNTIL expression
-Rule 8     expression -> NOT expression
-Rule 9     expression -> NEXT expression
-Rule 10    expression -> EVENTUALLY expression
-Rule 11    expression -> GLOBALLY expression
-Rule 12    expression -> LPAR expression RPAR
-Rule 13    expression -> TERM
-Rule 14    expression -> TRUE
-Rule 15    expression -> FALSE
-Rule 16    empty -> <empty>
+Rule 8     expression -> expression PASTUNTIL expression
+Rule 9     expression -> NOT expression
+Rule 10    expression -> NEXT expression
+Rule 11    expression -> EVENTUALLY expression
+Rule 12    expression -> GLOBALLY expression
+Rule 13    expression -> PASTNEXT expression
+Rule 14    expression -> PASTEVENTUALLY expression
+Rule 15    expression -> PASTGLOBALLY expression
+Rule 16    expression -> LPAR expression RPAR
+Rule 17    expression -> TERM
+Rule 18    expression -> TRUE
+Rule 19    expression -> FALSE
+Rule 20    empty -> <empty>
 
 Terminals, with rules where they appear
 
 AND                  : 3
 DIMPLIES             : 6
-EVENTUALLY           : 10
-FALSE                : 15
-GLOBALLY             : 11
+EVENTUALLY           : 11
+FALSE                : 19
+GLOBALLY             : 12
 IMPLIES              : 5
-LPAR                 : 12
-NEXT                 : 9
-NOT                  : 8
+LPAR                 : 16
+NEXT                 : 10
+NOT                  : 9
 OR                   : 4
-RPAR                 : 12
-TERM                 : 13
-TRUE                 : 14
+PASTEVENTUALLY       : 14
+PASTGLOBALLY         : 15
+PASTNEXT             : 13
+PASTUNTIL            : 8
+RPAR                 : 16
+TERM                 : 17
+TRUE                 : 18
 UNTIL                : 7
 error                : 
 
 Nonterminals, with rules where they appear
 
 empty                : 2
-expression           : 1 3 3 4 4 5 5 6 6 7 7 8 9 10 11 12
+expression           : 1 3 3 4 4 5 5 6 6 7 7 8 8 9 10 11 12 13 14 15 16
 ltl                  : 0
 
 Parsing method: LALR
@@ -56,25 +64,32 @@ state 0
     (5) expression -> . expression IMPLIES expression
     (6) expression -> . expression DIMPLIES expression
     (7) expression -> . expression UNTIL expression
-    (8) expression -> . NOT expression
-    (9) expression -> . NEXT expression
-    (10) expression -> . EVENTUALLY expression
-    (11) expression -> . GLOBALLY expression
-    (12) expression -> . LPAR expression RPAR
-    (13) expression -> . TERM
-    (14) expression -> . TRUE
-    (15) expression -> . FALSE
-    (16) empty -> .
+    (8) expression -> . expression PASTUNTIL expression
+    (9) expression -> . NOT expression
+    (10) expression -> . NEXT expression
+    (11) expression -> . EVENTUALLY expression
+    (12) expression -> . GLOBALLY expression
+    (13) expression -> . PASTNEXT expression
+    (14) expression -> . PASTEVENTUALLY expression
+    (15) expression -> . PASTGLOBALLY expression
+    (16) expression -> . LPAR expression RPAR
+    (17) expression -> . TERM
+    (18) expression -> . TRUE
+    (19) expression -> . FALSE
+    (20) empty -> .
 
     NOT             shift and go to state 4
     NEXT            shift and go to state 5
     EVENTUALLY      shift and go to state 6
     GLOBALLY        shift and go to state 7
-    LPAR            shift and go to state 8
-    TERM            shift and go to state 9
-    TRUE            shift and go to state 10
-    FALSE           shift and go to state 11
-    $end            reduce using rule 16 (empty -> .)
+    PASTNEXT        shift and go to state 8
+    PASTEVENTUALLY  shift and go to state 9
+    PASTGLOBALLY    shift and go to state 10
+    LPAR            shift and go to state 11
+    TERM            shift and go to state 12
+    TRUE            shift and go to state 13
+    FALSE           shift and go to state 14
+    $end            reduce using rule 20 (empty -> .)
 
     ltl                            shift and go to state 1
     expression                     shift and go to state 2
@@ -94,13 +109,15 @@ state 2
     (5) expression -> expression . IMPLIES expression
     (6) expression -> expression . DIMPLIES expression
     (7) expression -> expression . UNTIL expression
+    (8) expression -> expression . PASTUNTIL expression
 
     $end            reduce using rule 1 (ltl -> expression .)
-    AND             shift and go to state 12
-    OR              shift and go to state 13
-    IMPLIES         shift and go to state 14
-    DIMPLIES        shift and go to state 15
-    UNTIL           shift and go to state 16
+    AND             shift and go to state 15
+    OR              shift and go to state 16
+    IMPLIES         shift and go to state 17
+    DIMPLIES        shift and go to state 18
+    UNTIL           shift and go to state 19
+    PASTUNTIL       shift and go to state 20
 
 
 state 3
@@ -112,184 +129,327 @@ state 3
 
 state 4
 
-    (8) expression -> NOT . expression
+    (9) expression -> NOT . expression
     (3) expression -> . expression AND expression
     (4) expression -> . expression OR expression
     (5) expression -> . expression IMPLIES expression
     (6) expression -> . expression DIMPLIES expression
     (7) expression -> . expression UNTIL expression
-    (8) expression -> . NOT expression
-    (9) expression -> . NEXT expression
-    (10) expression -> . EVENTUALLY expression
-    (11) expression -> . GLOBALLY expression
-    (12) expression -> . LPAR expression RPAR
-    (13) expression -> . TERM
-    (14) expression -> . TRUE
-    (15) expression -> . FALSE
+    (8) expression -> . expression PASTUNTIL expression
+    (9) expression -> . NOT expression
+    (10) expression -> . NEXT expression
+    (11) expression -> . EVENTUALLY expression
+    (12) expression -> . GLOBALLY expression
+    (13) expression -> . PASTNEXT expression
+    (14) expression -> . PASTEVENTUALLY expression
+    (15) expression -> . PASTGLOBALLY expression
+    (16) expression -> . LPAR expression RPAR
+    (17) expression -> . TERM
+    (18) expression -> . TRUE
+    (19) expression -> . FALSE
 
     NOT             shift and go to state 4
     NEXT            shift and go to state 5
     EVENTUALLY      shift and go to state 6
     GLOBALLY        shift and go to state 7
-    LPAR            shift and go to state 8
-    TERM            shift and go to state 9
-    TRUE            shift and go to state 10
-    FALSE           shift and go to state 11
-
-    expression                     shift and go to state 17
-
-state 5
-
-    (9) expression -> NEXT . expression
-    (3) expression -> . expression AND expression
-    (4) expression -> . expression OR expression
-    (5) expression -> . expression IMPLIES expression
-    (6) expression -> . expression DIMPLIES expression
-    (7) expression -> . expression UNTIL expression
-    (8) expression -> . NOT expression
-    (9) expression -> . NEXT expression
-    (10) expression -> . EVENTUALLY expression
-    (11) expression -> . GLOBALLY expression
-    (12) expression -> . LPAR expression RPAR
-    (13) expression -> . TERM
-    (14) expression -> . TRUE
-    (15) expression -> . FALSE
-
-    NOT             shift and go to state 4
-    NEXT            shift and go to state 5
-    EVENTUALLY      shift and go to state 6
-    GLOBALLY        shift and go to state 7
-    LPAR            shift and go to state 8
-    TERM            shift and go to state 9
-    TRUE            shift and go to state 10
-    FALSE           shift and go to state 11
-
-    expression                     shift and go to state 18
-
-state 6
-
-    (10) expression -> EVENTUALLY . expression
-    (3) expression -> . expression AND expression
-    (4) expression -> . expression OR expression
-    (5) expression -> . expression IMPLIES expression
-    (6) expression -> . expression DIMPLIES expression
-    (7) expression -> . expression UNTIL expression
-    (8) expression -> . NOT expression
-    (9) expression -> . NEXT expression
-    (10) expression -> . EVENTUALLY expression
-    (11) expression -> . GLOBALLY expression
-    (12) expression -> . LPAR expression RPAR
-    (13) expression -> . TERM
-    (14) expression -> . TRUE
-    (15) expression -> . FALSE
-
-    NOT             shift and go to state 4
-    NEXT            shift and go to state 5
-    EVENTUALLY      shift and go to state 6
-    GLOBALLY        shift and go to state 7
-    LPAR            shift and go to state 8
-    TERM            shift and go to state 9
-    TRUE            shift and go to state 10
-    FALSE           shift and go to state 11
-
-    expression                     shift and go to state 19
-
-state 7
-
-    (11) expression -> GLOBALLY . expression
-    (3) expression -> . expression AND expression
-    (4) expression -> . expression OR expression
-    (5) expression -> . expression IMPLIES expression
-    (6) expression -> . expression DIMPLIES expression
-    (7) expression -> . expression UNTIL expression
-    (8) expression -> . NOT expression
-    (9) expression -> . NEXT expression
-    (10) expression -> . EVENTUALLY expression
-    (11) expression -> . GLOBALLY expression
-    (12) expression -> . LPAR expression RPAR
-    (13) expression -> . TERM
-    (14) expression -> . TRUE
-    (15) expression -> . FALSE
-
-    NOT             shift and go to state 4
-    NEXT            shift and go to state 5
-    EVENTUALLY      shift and go to state 6
-    GLOBALLY        shift and go to state 7
-    LPAR            shift and go to state 8
-    TERM            shift and go to state 9
-    TRUE            shift and go to state 10
-    FALSE           shift and go to state 11
-
-    expression                     shift and go to state 20
-
-state 8
-
-    (12) expression -> LPAR . expression RPAR
-    (3) expression -> . expression AND expression
-    (4) expression -> . expression OR expression
-    (5) expression -> . expression IMPLIES expression
-    (6) expression -> . expression DIMPLIES expression
-    (7) expression -> . expression UNTIL expression
-    (8) expression -> . NOT expression
-    (9) expression -> . NEXT expression
-    (10) expression -> . EVENTUALLY expression
-    (11) expression -> . GLOBALLY expression
-    (12) expression -> . LPAR expression RPAR
-    (13) expression -> . TERM
-    (14) expression -> . TRUE
-    (15) expression -> . FALSE
-
-    NOT             shift and go to state 4
-    NEXT            shift and go to state 5
-    EVENTUALLY      shift and go to state 6
-    GLOBALLY        shift and go to state 7
-    LPAR            shift and go to state 8
-    TERM            shift and go to state 9
-    TRUE            shift and go to state 10
-    FALSE           shift and go to state 11
+    PASTNEXT        shift and go to state 8
+    PASTEVENTUALLY  shift and go to state 9
+    PASTGLOBALLY    shift and go to state 10
+    LPAR            shift and go to state 11
+    TERM            shift and go to state 12
+    TRUE            shift and go to state 13
+    FALSE           shift and go to state 14
 
     expression                     shift and go to state 21
 
+state 5
+
+    (10) expression -> NEXT . expression
+    (3) expression -> . expression AND expression
+    (4) expression -> . expression OR expression
+    (5) expression -> . expression IMPLIES expression
+    (6) expression -> . expression DIMPLIES expression
+    (7) expression -> . expression UNTIL expression
+    (8) expression -> . expression PASTUNTIL expression
+    (9) expression -> . NOT expression
+    (10) expression -> . NEXT expression
+    (11) expression -> . EVENTUALLY expression
+    (12) expression -> . GLOBALLY expression
+    (13) expression -> . PASTNEXT expression
+    (14) expression -> . PASTEVENTUALLY expression
+    (15) expression -> . PASTGLOBALLY expression
+    (16) expression -> . LPAR expression RPAR
+    (17) expression -> . TERM
+    (18) expression -> . TRUE
+    (19) expression -> . FALSE
+
+    NOT             shift and go to state 4
+    NEXT            shift and go to state 5
+    EVENTUALLY      shift and go to state 6
+    GLOBALLY        shift and go to state 7
+    PASTNEXT        shift and go to state 8
+    PASTEVENTUALLY  shift and go to state 9
+    PASTGLOBALLY    shift and go to state 10
+    LPAR            shift and go to state 11
+    TERM            shift and go to state 12
+    TRUE            shift and go to state 13
+    FALSE           shift and go to state 14
+
+    expression                     shift and go to state 22
+
+state 6
+
+    (11) expression -> EVENTUALLY . expression
+    (3) expression -> . expression AND expression
+    (4) expression -> . expression OR expression
+    (5) expression -> . expression IMPLIES expression
+    (6) expression -> . expression DIMPLIES expression
+    (7) expression -> . expression UNTIL expression
+    (8) expression -> . expression PASTUNTIL expression
+    (9) expression -> . NOT expression
+    (10) expression -> . NEXT expression
+    (11) expression -> . EVENTUALLY expression
+    (12) expression -> . GLOBALLY expression
+    (13) expression -> . PASTNEXT expression
+    (14) expression -> . PASTEVENTUALLY expression
+    (15) expression -> . PASTGLOBALLY expression
+    (16) expression -> . LPAR expression RPAR
+    (17) expression -> . TERM
+    (18) expression -> . TRUE
+    (19) expression -> . FALSE
+
+    NOT             shift and go to state 4
+    NEXT            shift and go to state 5
+    EVENTUALLY      shift and go to state 6
+    GLOBALLY        shift and go to state 7
+    PASTNEXT        shift and go to state 8
+    PASTEVENTUALLY  shift and go to state 9
+    PASTGLOBALLY    shift and go to state 10
+    LPAR            shift and go to state 11
+    TERM            shift and go to state 12
+    TRUE            shift and go to state 13
+    FALSE           shift and go to state 14
+
+    expression                     shift and go to state 23
+
+state 7
+
+    (12) expression -> GLOBALLY . expression
+    (3) expression -> . expression AND expression
+    (4) expression -> . expression OR expression
+    (5) expression -> . expression IMPLIES expression
+    (6) expression -> . expression DIMPLIES expression
+    (7) expression -> . expression UNTIL expression
+    (8) expression -> . expression PASTUNTIL expression
+    (9) expression -> . NOT expression
+    (10) expression -> . NEXT expression
+    (11) expression -> . EVENTUALLY expression
+    (12) expression -> . GLOBALLY expression
+    (13) expression -> . PASTNEXT expression
+    (14) expression -> . PASTEVENTUALLY expression
+    (15) expression -> . PASTGLOBALLY expression
+    (16) expression -> . LPAR expression RPAR
+    (17) expression -> . TERM
+    (18) expression -> . TRUE
+    (19) expression -> . FALSE
+
+    NOT             shift and go to state 4
+    NEXT            shift and go to state 5
+    EVENTUALLY      shift and go to state 6
+    GLOBALLY        shift and go to state 7
+    PASTNEXT        shift and go to state 8
+    PASTEVENTUALLY  shift and go to state 9
+    PASTGLOBALLY    shift and go to state 10
+    LPAR            shift and go to state 11
+    TERM            shift and go to state 12
+    TRUE            shift and go to state 13
+    FALSE           shift and go to state 14
+
+    expression                     shift and go to state 24
+
+state 8
+
+    (13) expression -> PASTNEXT . expression
+    (3) expression -> . expression AND expression
+    (4) expression -> . expression OR expression
+    (5) expression -> . expression IMPLIES expression
+    (6) expression -> . expression DIMPLIES expression
+    (7) expression -> . expression UNTIL expression
+    (8) expression -> . expression PASTUNTIL expression
+    (9) expression -> . NOT expression
+    (10) expression -> . NEXT expression
+    (11) expression -> . EVENTUALLY expression
+    (12) expression -> . GLOBALLY expression
+    (13) expression -> . PASTNEXT expression
+    (14) expression -> . PASTEVENTUALLY expression
+    (15) expression -> . PASTGLOBALLY expression
+    (16) expression -> . LPAR expression RPAR
+    (17) expression -> . TERM
+    (18) expression -> . TRUE
+    (19) expression -> . FALSE
+
+    NOT             shift and go to state 4
+    NEXT            shift and go to state 5
+    EVENTUALLY      shift and go to state 6
+    GLOBALLY        shift and go to state 7
+    PASTNEXT        shift and go to state 8
+    PASTEVENTUALLY  shift and go to state 9
+    PASTGLOBALLY    shift and go to state 10
+    LPAR            shift and go to state 11
+    TERM            shift and go to state 12
+    TRUE            shift and go to state 13
+    FALSE           shift and go to state 14
+
+    expression                     shift and go to state 25
+
 state 9
 
-    (13) expression -> TERM .
+    (14) expression -> PASTEVENTUALLY . expression
+    (3) expression -> . expression AND expression
+    (4) expression -> . expression OR expression
+    (5) expression -> . expression IMPLIES expression
+    (6) expression -> . expression DIMPLIES expression
+    (7) expression -> . expression UNTIL expression
+    (8) expression -> . expression PASTUNTIL expression
+    (9) expression -> . NOT expression
+    (10) expression -> . NEXT expression
+    (11) expression -> . EVENTUALLY expression
+    (12) expression -> . GLOBALLY expression
+    (13) expression -> . PASTNEXT expression
+    (14) expression -> . PASTEVENTUALLY expression
+    (15) expression -> . PASTGLOBALLY expression
+    (16) expression -> . LPAR expression RPAR
+    (17) expression -> . TERM
+    (18) expression -> . TRUE
+    (19) expression -> . FALSE
 
-    AND             reduce using rule 13 (expression -> TERM .)
-    OR              reduce using rule 13 (expression -> TERM .)
-    IMPLIES         reduce using rule 13 (expression -> TERM .)
-    DIMPLIES        reduce using rule 13 (expression -> TERM .)
-    UNTIL           reduce using rule 13 (expression -> TERM .)
-    $end            reduce using rule 13 (expression -> TERM .)
-    RPAR            reduce using rule 13 (expression -> TERM .)
+    NOT             shift and go to state 4
+    NEXT            shift and go to state 5
+    EVENTUALLY      shift and go to state 6
+    GLOBALLY        shift and go to state 7
+    PASTNEXT        shift and go to state 8
+    PASTEVENTUALLY  shift and go to state 9
+    PASTGLOBALLY    shift and go to state 10
+    LPAR            shift and go to state 11
+    TERM            shift and go to state 12
+    TRUE            shift and go to state 13
+    FALSE           shift and go to state 14
 
+    expression                     shift and go to state 26
 
 state 10
 
-    (14) expression -> TRUE .
+    (15) expression -> PASTGLOBALLY . expression
+    (3) expression -> . expression AND expression
+    (4) expression -> . expression OR expression
+    (5) expression -> . expression IMPLIES expression
+    (6) expression -> . expression DIMPLIES expression
+    (7) expression -> . expression UNTIL expression
+    (8) expression -> . expression PASTUNTIL expression
+    (9) expression -> . NOT expression
+    (10) expression -> . NEXT expression
+    (11) expression -> . EVENTUALLY expression
+    (12) expression -> . GLOBALLY expression
+    (13) expression -> . PASTNEXT expression
+    (14) expression -> . PASTEVENTUALLY expression
+    (15) expression -> . PASTGLOBALLY expression
+    (16) expression -> . LPAR expression RPAR
+    (17) expression -> . TERM
+    (18) expression -> . TRUE
+    (19) expression -> . FALSE
 
-    AND             reduce using rule 14 (expression -> TRUE .)
-    OR              reduce using rule 14 (expression -> TRUE .)
-    IMPLIES         reduce using rule 14 (expression -> TRUE .)
-    DIMPLIES        reduce using rule 14 (expression -> TRUE .)
-    UNTIL           reduce using rule 14 (expression -> TRUE .)
-    $end            reduce using rule 14 (expression -> TRUE .)
-    RPAR            reduce using rule 14 (expression -> TRUE .)
+    NOT             shift and go to state 4
+    NEXT            shift and go to state 5
+    EVENTUALLY      shift and go to state 6
+    GLOBALLY        shift and go to state 7
+    PASTNEXT        shift and go to state 8
+    PASTEVENTUALLY  shift and go to state 9
+    PASTGLOBALLY    shift and go to state 10
+    LPAR            shift and go to state 11
+    TERM            shift and go to state 12
+    TRUE            shift and go to state 13
+    FALSE           shift and go to state 14
 
+    expression                     shift and go to state 27
 
 state 11
 
-    (15) expression -> FALSE .
+    (16) expression -> LPAR . expression RPAR
+    (3) expression -> . expression AND expression
+    (4) expression -> . expression OR expression
+    (5) expression -> . expression IMPLIES expression
+    (6) expression -> . expression DIMPLIES expression
+    (7) expression -> . expression UNTIL expression
+    (8) expression -> . expression PASTUNTIL expression
+    (9) expression -> . NOT expression
+    (10) expression -> . NEXT expression
+    (11) expression -> . EVENTUALLY expression
+    (12) expression -> . GLOBALLY expression
+    (13) expression -> . PASTNEXT expression
+    (14) expression -> . PASTEVENTUALLY expression
+    (15) expression -> . PASTGLOBALLY expression
+    (16) expression -> . LPAR expression RPAR
+    (17) expression -> . TERM
+    (18) expression -> . TRUE
+    (19) expression -> . FALSE
 
-    AND             reduce using rule 15 (expression -> FALSE .)
-    OR              reduce using rule 15 (expression -> FALSE .)
-    IMPLIES         reduce using rule 15 (expression -> FALSE .)
-    DIMPLIES        reduce using rule 15 (expression -> FALSE .)
-    UNTIL           reduce using rule 15 (expression -> FALSE .)
-    $end            reduce using rule 15 (expression -> FALSE .)
-    RPAR            reduce using rule 15 (expression -> FALSE .)
+    NOT             shift and go to state 4
+    NEXT            shift and go to state 5
+    EVENTUALLY      shift and go to state 6
+    GLOBALLY        shift and go to state 7
+    PASTNEXT        shift and go to state 8
+    PASTEVENTUALLY  shift and go to state 9
+    PASTGLOBALLY    shift and go to state 10
+    LPAR            shift and go to state 11
+    TERM            shift and go to state 12
+    TRUE            shift and go to state 13
+    FALSE           shift and go to state 14
 
+    expression                     shift and go to state 28
 
 state 12
+
+    (17) expression -> TERM .
+
+    AND             reduce using rule 17 (expression -> TERM .)
+    OR              reduce using rule 17 (expression -> TERM .)
+    IMPLIES         reduce using rule 17 (expression -> TERM .)
+    DIMPLIES        reduce using rule 17 (expression -> TERM .)
+    UNTIL           reduce using rule 17 (expression -> TERM .)
+    PASTUNTIL       reduce using rule 17 (expression -> TERM .)
+    $end            reduce using rule 17 (expression -> TERM .)
+    RPAR            reduce using rule 17 (expression -> TERM .)
+
+
+state 13
+
+    (18) expression -> TRUE .
+
+    AND             reduce using rule 18 (expression -> TRUE .)
+    OR              reduce using rule 18 (expression -> TRUE .)
+    IMPLIES         reduce using rule 18 (expression -> TRUE .)
+    DIMPLIES        reduce using rule 18 (expression -> TRUE .)
+    UNTIL           reduce using rule 18 (expression -> TRUE .)
+    PASTUNTIL       reduce using rule 18 (expression -> TRUE .)
+    $end            reduce using rule 18 (expression -> TRUE .)
+    RPAR            reduce using rule 18 (expression -> TRUE .)
+
+
+state 14
+
+    (19) expression -> FALSE .
+
+    AND             reduce using rule 19 (expression -> FALSE .)
+    OR              reduce using rule 19 (expression -> FALSE .)
+    IMPLIES         reduce using rule 19 (expression -> FALSE .)
+    DIMPLIES        reduce using rule 19 (expression -> FALSE .)
+    UNTIL           reduce using rule 19 (expression -> FALSE .)
+    PASTUNTIL       reduce using rule 19 (expression -> FALSE .)
+    $end            reduce using rule 19 (expression -> FALSE .)
+    RPAR            reduce using rule 19 (expression -> FALSE .)
+
+
+state 15
 
     (3) expression -> expression AND . expression
     (3) expression -> . expression AND expression
@@ -297,27 +457,34 @@ state 12
     (5) expression -> . expression IMPLIES expression
     (6) expression -> . expression DIMPLIES expression
     (7) expression -> . expression UNTIL expression
-    (8) expression -> . NOT expression
-    (9) expression -> . NEXT expression
-    (10) expression -> . EVENTUALLY expression
-    (11) expression -> . GLOBALLY expression
-    (12) expression -> . LPAR expression RPAR
-    (13) expression -> . TERM
-    (14) expression -> . TRUE
-    (15) expression -> . FALSE
+    (8) expression -> . expression PASTUNTIL expression
+    (9) expression -> . NOT expression
+    (10) expression -> . NEXT expression
+    (11) expression -> . EVENTUALLY expression
+    (12) expression -> . GLOBALLY expression
+    (13) expression -> . PASTNEXT expression
+    (14) expression -> . PASTEVENTUALLY expression
+    (15) expression -> . PASTGLOBALLY expression
+    (16) expression -> . LPAR expression RPAR
+    (17) expression -> . TERM
+    (18) expression -> . TRUE
+    (19) expression -> . FALSE
 
     NOT             shift and go to state 4
     NEXT            shift and go to state 5
     EVENTUALLY      shift and go to state 6
     GLOBALLY        shift and go to state 7
-    LPAR            shift and go to state 8
-    TERM            shift and go to state 9
-    TRUE            shift and go to state 10
-    FALSE           shift and go to state 11
+    PASTNEXT        shift and go to state 8
+    PASTEVENTUALLY  shift and go to state 9
+    PASTGLOBALLY    shift and go to state 10
+    LPAR            shift and go to state 11
+    TERM            shift and go to state 12
+    TRUE            shift and go to state 13
+    FALSE           shift and go to state 14
 
-    expression                     shift and go to state 22
+    expression                     shift and go to state 29
 
-state 13
+state 16
 
     (4) expression -> expression OR . expression
     (3) expression -> . expression AND expression
@@ -325,27 +492,34 @@ state 13
     (5) expression -> . expression IMPLIES expression
     (6) expression -> . expression DIMPLIES expression
     (7) expression -> . expression UNTIL expression
-    (8) expression -> . NOT expression
-    (9) expression -> . NEXT expression
-    (10) expression -> . EVENTUALLY expression
-    (11) expression -> . GLOBALLY expression
-    (12) expression -> . LPAR expression RPAR
-    (13) expression -> . TERM
-    (14) expression -> . TRUE
-    (15) expression -> . FALSE
+    (8) expression -> . expression PASTUNTIL expression
+    (9) expression -> . NOT expression
+    (10) expression -> . NEXT expression
+    (11) expression -> . EVENTUALLY expression
+    (12) expression -> . GLOBALLY expression
+    (13) expression -> . PASTNEXT expression
+    (14) expression -> . PASTEVENTUALLY expression
+    (15) expression -> . PASTGLOBALLY expression
+    (16) expression -> . LPAR expression RPAR
+    (17) expression -> . TERM
+    (18) expression -> . TRUE
+    (19) expression -> . FALSE
 
     NOT             shift and go to state 4
     NEXT            shift and go to state 5
     EVENTUALLY      shift and go to state 6
     GLOBALLY        shift and go to state 7
-    LPAR            shift and go to state 8
-    TERM            shift and go to state 9
-    TRUE            shift and go to state 10
-    FALSE           shift and go to state 11
+    PASTNEXT        shift and go to state 8
+    PASTEVENTUALLY  shift and go to state 9
+    PASTGLOBALLY    shift and go to state 10
+    LPAR            shift and go to state 11
+    TERM            shift and go to state 12
+    TRUE            shift and go to state 13
+    FALSE           shift and go to state 14
 
-    expression                     shift and go to state 23
+    expression                     shift and go to state 30
 
-state 14
+state 17
 
     (5) expression -> expression IMPLIES . expression
     (3) expression -> . expression AND expression
@@ -353,27 +527,34 @@ state 14
     (5) expression -> . expression IMPLIES expression
     (6) expression -> . expression DIMPLIES expression
     (7) expression -> . expression UNTIL expression
-    (8) expression -> . NOT expression
-    (9) expression -> . NEXT expression
-    (10) expression -> . EVENTUALLY expression
-    (11) expression -> . GLOBALLY expression
-    (12) expression -> . LPAR expression RPAR
-    (13) expression -> . TERM
-    (14) expression -> . TRUE
-    (15) expression -> . FALSE
+    (8) expression -> . expression PASTUNTIL expression
+    (9) expression -> . NOT expression
+    (10) expression -> . NEXT expression
+    (11) expression -> . EVENTUALLY expression
+    (12) expression -> . GLOBALLY expression
+    (13) expression -> . PASTNEXT expression
+    (14) expression -> . PASTEVENTUALLY expression
+    (15) expression -> . PASTGLOBALLY expression
+    (16) expression -> . LPAR expression RPAR
+    (17) expression -> . TERM
+    (18) expression -> . TRUE
+    (19) expression -> . FALSE
 
     NOT             shift and go to state 4
     NEXT            shift and go to state 5
     EVENTUALLY      shift and go to state 6
     GLOBALLY        shift and go to state 7
-    LPAR            shift and go to state 8
-    TERM            shift and go to state 9
-    TRUE            shift and go to state 10
-    FALSE           shift and go to state 11
+    PASTNEXT        shift and go to state 8
+    PASTEVENTUALLY  shift and go to state 9
+    PASTGLOBALLY    shift and go to state 10
+    LPAR            shift and go to state 11
+    TERM            shift and go to state 12
+    TRUE            shift and go to state 13
+    FALSE           shift and go to state 14
 
-    expression                     shift and go to state 24
+    expression                     shift and go to state 31
 
-state 15
+state 18
 
     (6) expression -> expression DIMPLIES . expression
     (3) expression -> . expression AND expression
@@ -381,27 +562,34 @@ state 15
     (5) expression -> . expression IMPLIES expression
     (6) expression -> . expression DIMPLIES expression
     (7) expression -> . expression UNTIL expression
-    (8) expression -> . NOT expression
-    (9) expression -> . NEXT expression
-    (10) expression -> . EVENTUALLY expression
-    (11) expression -> . GLOBALLY expression
-    (12) expression -> . LPAR expression RPAR
-    (13) expression -> . TERM
-    (14) expression -> . TRUE
-    (15) expression -> . FALSE
+    (8) expression -> . expression PASTUNTIL expression
+    (9) expression -> . NOT expression
+    (10) expression -> . NEXT expression
+    (11) expression -> . EVENTUALLY expression
+    (12) expression -> . GLOBALLY expression
+    (13) expression -> . PASTNEXT expression
+    (14) expression -> . PASTEVENTUALLY expression
+    (15) expression -> . PASTGLOBALLY expression
+    (16) expression -> . LPAR expression RPAR
+    (17) expression -> . TERM
+    (18) expression -> . TRUE
+    (19) expression -> . FALSE
 
     NOT             shift and go to state 4
     NEXT            shift and go to state 5
     EVENTUALLY      shift and go to state 6
     GLOBALLY        shift and go to state 7
-    LPAR            shift and go to state 8
-    TERM            shift and go to state 9
-    TRUE            shift and go to state 10
-    FALSE           shift and go to state 11
+    PASTNEXT        shift and go to state 8
+    PASTEVENTUALLY  shift and go to state 9
+    PASTGLOBALLY    shift and go to state 10
+    LPAR            shift and go to state 11
+    TERM            shift and go to state 12
+    TRUE            shift and go to state 13
+    FALSE           shift and go to state 14
 
-    expression                     shift and go to state 25
+    expression                     shift and go to state 32
 
-state 16
+state 19
 
     (7) expression -> expression UNTIL . expression
     (3) expression -> . expression AND expression
@@ -409,140 +597,319 @@ state 16
     (5) expression -> . expression IMPLIES expression
     (6) expression -> . expression DIMPLIES expression
     (7) expression -> . expression UNTIL expression
-    (8) expression -> . NOT expression
-    (9) expression -> . NEXT expression
-    (10) expression -> . EVENTUALLY expression
-    (11) expression -> . GLOBALLY expression
-    (12) expression -> . LPAR expression RPAR
-    (13) expression -> . TERM
-    (14) expression -> . TRUE
-    (15) expression -> . FALSE
+    (8) expression -> . expression PASTUNTIL expression
+    (9) expression -> . NOT expression
+    (10) expression -> . NEXT expression
+    (11) expression -> . EVENTUALLY expression
+    (12) expression -> . GLOBALLY expression
+    (13) expression -> . PASTNEXT expression
+    (14) expression -> . PASTEVENTUALLY expression
+    (15) expression -> . PASTGLOBALLY expression
+    (16) expression -> . LPAR expression RPAR
+    (17) expression -> . TERM
+    (18) expression -> . TRUE
+    (19) expression -> . FALSE
 
     NOT             shift and go to state 4
     NEXT            shift and go to state 5
     EVENTUALLY      shift and go to state 6
     GLOBALLY        shift and go to state 7
-    LPAR            shift and go to state 8
-    TERM            shift and go to state 9
-    TRUE            shift and go to state 10
-    FALSE           shift and go to state 11
+    PASTNEXT        shift and go to state 8
+    PASTEVENTUALLY  shift and go to state 9
+    PASTGLOBALLY    shift and go to state 10
+    LPAR            shift and go to state 11
+    TERM            shift and go to state 12
+    TRUE            shift and go to state 13
+    FALSE           shift and go to state 14
 
-    expression                     shift and go to state 26
-
-state 17
-
-    (8) expression -> NOT expression .
-    (3) expression -> expression . AND expression
-    (4) expression -> expression . OR expression
-    (5) expression -> expression . IMPLIES expression
-    (6) expression -> expression . DIMPLIES expression
-    (7) expression -> expression . UNTIL expression
-
-    AND             reduce using rule 8 (expression -> NOT expression .)
-    OR              reduce using rule 8 (expression -> NOT expression .)
-    IMPLIES         reduce using rule 8 (expression -> NOT expression .)
-    DIMPLIES        reduce using rule 8 (expression -> NOT expression .)
-    UNTIL           reduce using rule 8 (expression -> NOT expression .)
-    $end            reduce using rule 8 (expression -> NOT expression .)
-    RPAR            reduce using rule 8 (expression -> NOT expression .)
-
-  ! AND             [ shift and go to state 12 ]
-  ! OR              [ shift and go to state 13 ]
-  ! IMPLIES         [ shift and go to state 14 ]
-  ! DIMPLIES        [ shift and go to state 15 ]
-  ! UNTIL           [ shift and go to state 16 ]
-
-
-state 18
-
-    (9) expression -> NEXT expression .
-    (3) expression -> expression . AND expression
-    (4) expression -> expression . OR expression
-    (5) expression -> expression . IMPLIES expression
-    (6) expression -> expression . DIMPLIES expression
-    (7) expression -> expression . UNTIL expression
-
-    AND             reduce using rule 9 (expression -> NEXT expression .)
-    OR              reduce using rule 9 (expression -> NEXT expression .)
-    IMPLIES         reduce using rule 9 (expression -> NEXT expression .)
-    DIMPLIES        reduce using rule 9 (expression -> NEXT expression .)
-    UNTIL           reduce using rule 9 (expression -> NEXT expression .)
-    $end            reduce using rule 9 (expression -> NEXT expression .)
-    RPAR            reduce using rule 9 (expression -> NEXT expression .)
-
-  ! AND             [ shift and go to state 12 ]
-  ! OR              [ shift and go to state 13 ]
-  ! IMPLIES         [ shift and go to state 14 ]
-  ! DIMPLIES        [ shift and go to state 15 ]
-  ! UNTIL           [ shift and go to state 16 ]
-
-
-state 19
-
-    (10) expression -> EVENTUALLY expression .
-    (3) expression -> expression . AND expression
-    (4) expression -> expression . OR expression
-    (5) expression -> expression . IMPLIES expression
-    (6) expression -> expression . DIMPLIES expression
-    (7) expression -> expression . UNTIL expression
-
-    AND             reduce using rule 10 (expression -> EVENTUALLY expression .)
-    OR              reduce using rule 10 (expression -> EVENTUALLY expression .)
-    IMPLIES         reduce using rule 10 (expression -> EVENTUALLY expression .)
-    DIMPLIES        reduce using rule 10 (expression -> EVENTUALLY expression .)
-    UNTIL           reduce using rule 10 (expression -> EVENTUALLY expression .)
-    $end            reduce using rule 10 (expression -> EVENTUALLY expression .)
-    RPAR            reduce using rule 10 (expression -> EVENTUALLY expression .)
-
-  ! AND             [ shift and go to state 12 ]
-  ! OR              [ shift and go to state 13 ]
-  ! IMPLIES         [ shift and go to state 14 ]
-  ! DIMPLIES        [ shift and go to state 15 ]
-  ! UNTIL           [ shift and go to state 16 ]
-
+    expression                     shift and go to state 33
 
 state 20
 
-    (11) expression -> GLOBALLY expression .
-    (3) expression -> expression . AND expression
-    (4) expression -> expression . OR expression
-    (5) expression -> expression . IMPLIES expression
-    (6) expression -> expression . DIMPLIES expression
-    (7) expression -> expression . UNTIL expression
+    (8) expression -> expression PASTUNTIL . expression
+    (3) expression -> . expression AND expression
+    (4) expression -> . expression OR expression
+    (5) expression -> . expression IMPLIES expression
+    (6) expression -> . expression DIMPLIES expression
+    (7) expression -> . expression UNTIL expression
+    (8) expression -> . expression PASTUNTIL expression
+    (9) expression -> . NOT expression
+    (10) expression -> . NEXT expression
+    (11) expression -> . EVENTUALLY expression
+    (12) expression -> . GLOBALLY expression
+    (13) expression -> . PASTNEXT expression
+    (14) expression -> . PASTEVENTUALLY expression
+    (15) expression -> . PASTGLOBALLY expression
+    (16) expression -> . LPAR expression RPAR
+    (17) expression -> . TERM
+    (18) expression -> . TRUE
+    (19) expression -> . FALSE
 
-    AND             reduce using rule 11 (expression -> GLOBALLY expression .)
-    OR              reduce using rule 11 (expression -> GLOBALLY expression .)
-    IMPLIES         reduce using rule 11 (expression -> GLOBALLY expression .)
-    DIMPLIES        reduce using rule 11 (expression -> GLOBALLY expression .)
-    UNTIL           reduce using rule 11 (expression -> GLOBALLY expression .)
-    $end            reduce using rule 11 (expression -> GLOBALLY expression .)
-    RPAR            reduce using rule 11 (expression -> GLOBALLY expression .)
+    NOT             shift and go to state 4
+    NEXT            shift and go to state 5
+    EVENTUALLY      shift and go to state 6
+    GLOBALLY        shift and go to state 7
+    PASTNEXT        shift and go to state 8
+    PASTEVENTUALLY  shift and go to state 9
+    PASTGLOBALLY    shift and go to state 10
+    LPAR            shift and go to state 11
+    TERM            shift and go to state 12
+    TRUE            shift and go to state 13
+    FALSE           shift and go to state 14
 
-  ! AND             [ shift and go to state 12 ]
-  ! OR              [ shift and go to state 13 ]
-  ! IMPLIES         [ shift and go to state 14 ]
-  ! DIMPLIES        [ shift and go to state 15 ]
-  ! UNTIL           [ shift and go to state 16 ]
-
+    expression                     shift and go to state 34
 
 state 21
 
-    (12) expression -> LPAR expression . RPAR
+    (9) expression -> NOT expression .
     (3) expression -> expression . AND expression
     (4) expression -> expression . OR expression
     (5) expression -> expression . IMPLIES expression
     (6) expression -> expression . DIMPLIES expression
     (7) expression -> expression . UNTIL expression
+    (8) expression -> expression . PASTUNTIL expression
 
-    RPAR            shift and go to state 27
-    AND             shift and go to state 12
-    OR              shift and go to state 13
-    IMPLIES         shift and go to state 14
-    DIMPLIES        shift and go to state 15
-    UNTIL           shift and go to state 16
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for IMPLIES resolved as shift
+  ! shift/reduce conflict for DIMPLIES resolved as shift
+  ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for PASTUNTIL resolved as shift
+    $end            reduce using rule 9 (expression -> NOT expression .)
+    RPAR            reduce using rule 9 (expression -> NOT expression .)
+    AND             shift and go to state 15
+    OR              shift and go to state 16
+    IMPLIES         shift and go to state 17
+    DIMPLIES        shift and go to state 18
+    UNTIL           shift and go to state 19
+    PASTUNTIL       shift and go to state 20
+
+  ! AND             [ reduce using rule 9 (expression -> NOT expression .) ]
+  ! OR              [ reduce using rule 9 (expression -> NOT expression .) ]
+  ! IMPLIES         [ reduce using rule 9 (expression -> NOT expression .) ]
+  ! DIMPLIES        [ reduce using rule 9 (expression -> NOT expression .) ]
+  ! UNTIL           [ reduce using rule 9 (expression -> NOT expression .) ]
+  ! PASTUNTIL       [ reduce using rule 9 (expression -> NOT expression .) ]
 
 
 state 22
+
+    (10) expression -> NEXT expression .
+    (3) expression -> expression . AND expression
+    (4) expression -> expression . OR expression
+    (5) expression -> expression . IMPLIES expression
+    (6) expression -> expression . DIMPLIES expression
+    (7) expression -> expression . UNTIL expression
+    (8) expression -> expression . PASTUNTIL expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for IMPLIES resolved as shift
+  ! shift/reduce conflict for DIMPLIES resolved as shift
+  ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for PASTUNTIL resolved as shift
+    $end            reduce using rule 10 (expression -> NEXT expression .)
+    RPAR            reduce using rule 10 (expression -> NEXT expression .)
+    AND             shift and go to state 15
+    OR              shift and go to state 16
+    IMPLIES         shift and go to state 17
+    DIMPLIES        shift and go to state 18
+    UNTIL           shift and go to state 19
+    PASTUNTIL       shift and go to state 20
+
+  ! AND             [ reduce using rule 10 (expression -> NEXT expression .) ]
+  ! OR              [ reduce using rule 10 (expression -> NEXT expression .) ]
+  ! IMPLIES         [ reduce using rule 10 (expression -> NEXT expression .) ]
+  ! DIMPLIES        [ reduce using rule 10 (expression -> NEXT expression .) ]
+  ! UNTIL           [ reduce using rule 10 (expression -> NEXT expression .) ]
+  ! PASTUNTIL       [ reduce using rule 10 (expression -> NEXT expression .) ]
+
+
+state 23
+
+    (11) expression -> EVENTUALLY expression .
+    (3) expression -> expression . AND expression
+    (4) expression -> expression . OR expression
+    (5) expression -> expression . IMPLIES expression
+    (6) expression -> expression . DIMPLIES expression
+    (7) expression -> expression . UNTIL expression
+    (8) expression -> expression . PASTUNTIL expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for IMPLIES resolved as shift
+  ! shift/reduce conflict for DIMPLIES resolved as shift
+  ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for PASTUNTIL resolved as shift
+    $end            reduce using rule 11 (expression -> EVENTUALLY expression .)
+    RPAR            reduce using rule 11 (expression -> EVENTUALLY expression .)
+    AND             shift and go to state 15
+    OR              shift and go to state 16
+    IMPLIES         shift and go to state 17
+    DIMPLIES        shift and go to state 18
+    UNTIL           shift and go to state 19
+    PASTUNTIL       shift and go to state 20
+
+  ! AND             [ reduce using rule 11 (expression -> EVENTUALLY expression .) ]
+  ! OR              [ reduce using rule 11 (expression -> EVENTUALLY expression .) ]
+  ! IMPLIES         [ reduce using rule 11 (expression -> EVENTUALLY expression .) ]
+  ! DIMPLIES        [ reduce using rule 11 (expression -> EVENTUALLY expression .) ]
+  ! UNTIL           [ reduce using rule 11 (expression -> EVENTUALLY expression .) ]
+  ! PASTUNTIL       [ reduce using rule 11 (expression -> EVENTUALLY expression .) ]
+
+
+state 24
+
+    (12) expression -> GLOBALLY expression .
+    (3) expression -> expression . AND expression
+    (4) expression -> expression . OR expression
+    (5) expression -> expression . IMPLIES expression
+    (6) expression -> expression . DIMPLIES expression
+    (7) expression -> expression . UNTIL expression
+    (8) expression -> expression . PASTUNTIL expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for IMPLIES resolved as shift
+  ! shift/reduce conflict for DIMPLIES resolved as shift
+  ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for PASTUNTIL resolved as shift
+    $end            reduce using rule 12 (expression -> GLOBALLY expression .)
+    RPAR            reduce using rule 12 (expression -> GLOBALLY expression .)
+    AND             shift and go to state 15
+    OR              shift and go to state 16
+    IMPLIES         shift and go to state 17
+    DIMPLIES        shift and go to state 18
+    UNTIL           shift and go to state 19
+    PASTUNTIL       shift and go to state 20
+
+  ! AND             [ reduce using rule 12 (expression -> GLOBALLY expression .) ]
+  ! OR              [ reduce using rule 12 (expression -> GLOBALLY expression .) ]
+  ! IMPLIES         [ reduce using rule 12 (expression -> GLOBALLY expression .) ]
+  ! DIMPLIES        [ reduce using rule 12 (expression -> GLOBALLY expression .) ]
+  ! UNTIL           [ reduce using rule 12 (expression -> GLOBALLY expression .) ]
+  ! PASTUNTIL       [ reduce using rule 12 (expression -> GLOBALLY expression .) ]
+
+
+state 25
+
+    (13) expression -> PASTNEXT expression .
+    (3) expression -> expression . AND expression
+    (4) expression -> expression . OR expression
+    (5) expression -> expression . IMPLIES expression
+    (6) expression -> expression . DIMPLIES expression
+    (7) expression -> expression . UNTIL expression
+    (8) expression -> expression . PASTUNTIL expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for IMPLIES resolved as shift
+  ! shift/reduce conflict for DIMPLIES resolved as shift
+  ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for PASTUNTIL resolved as shift
+    $end            reduce using rule 13 (expression -> PASTNEXT expression .)
+    RPAR            reduce using rule 13 (expression -> PASTNEXT expression .)
+    AND             shift and go to state 15
+    OR              shift and go to state 16
+    IMPLIES         shift and go to state 17
+    DIMPLIES        shift and go to state 18
+    UNTIL           shift and go to state 19
+    PASTUNTIL       shift and go to state 20
+
+  ! AND             [ reduce using rule 13 (expression -> PASTNEXT expression .) ]
+  ! OR              [ reduce using rule 13 (expression -> PASTNEXT expression .) ]
+  ! IMPLIES         [ reduce using rule 13 (expression -> PASTNEXT expression .) ]
+  ! DIMPLIES        [ reduce using rule 13 (expression -> PASTNEXT expression .) ]
+  ! UNTIL           [ reduce using rule 13 (expression -> PASTNEXT expression .) ]
+  ! PASTUNTIL       [ reduce using rule 13 (expression -> PASTNEXT expression .) ]
+
+
+state 26
+
+    (14) expression -> PASTEVENTUALLY expression .
+    (3) expression -> expression . AND expression
+    (4) expression -> expression . OR expression
+    (5) expression -> expression . IMPLIES expression
+    (6) expression -> expression . DIMPLIES expression
+    (7) expression -> expression . UNTIL expression
+    (8) expression -> expression . PASTUNTIL expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for IMPLIES resolved as shift
+  ! shift/reduce conflict for DIMPLIES resolved as shift
+  ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for PASTUNTIL resolved as shift
+    $end            reduce using rule 14 (expression -> PASTEVENTUALLY expression .)
+    RPAR            reduce using rule 14 (expression -> PASTEVENTUALLY expression .)
+    AND             shift and go to state 15
+    OR              shift and go to state 16
+    IMPLIES         shift and go to state 17
+    DIMPLIES        shift and go to state 18
+    UNTIL           shift and go to state 19
+    PASTUNTIL       shift and go to state 20
+
+  ! AND             [ reduce using rule 14 (expression -> PASTEVENTUALLY expression .) ]
+  ! OR              [ reduce using rule 14 (expression -> PASTEVENTUALLY expression .) ]
+  ! IMPLIES         [ reduce using rule 14 (expression -> PASTEVENTUALLY expression .) ]
+  ! DIMPLIES        [ reduce using rule 14 (expression -> PASTEVENTUALLY expression .) ]
+  ! UNTIL           [ reduce using rule 14 (expression -> PASTEVENTUALLY expression .) ]
+  ! PASTUNTIL       [ reduce using rule 14 (expression -> PASTEVENTUALLY expression .) ]
+
+
+state 27
+
+    (15) expression -> PASTGLOBALLY expression .
+    (3) expression -> expression . AND expression
+    (4) expression -> expression . OR expression
+    (5) expression -> expression . IMPLIES expression
+    (6) expression -> expression . DIMPLIES expression
+    (7) expression -> expression . UNTIL expression
+    (8) expression -> expression . PASTUNTIL expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for IMPLIES resolved as shift
+  ! shift/reduce conflict for DIMPLIES resolved as shift
+  ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for PASTUNTIL resolved as shift
+    $end            reduce using rule 15 (expression -> PASTGLOBALLY expression .)
+    RPAR            reduce using rule 15 (expression -> PASTGLOBALLY expression .)
+    AND             shift and go to state 15
+    OR              shift and go to state 16
+    IMPLIES         shift and go to state 17
+    DIMPLIES        shift and go to state 18
+    UNTIL           shift and go to state 19
+    PASTUNTIL       shift and go to state 20
+
+  ! AND             [ reduce using rule 15 (expression -> PASTGLOBALLY expression .) ]
+  ! OR              [ reduce using rule 15 (expression -> PASTGLOBALLY expression .) ]
+  ! IMPLIES         [ reduce using rule 15 (expression -> PASTGLOBALLY expression .) ]
+  ! DIMPLIES        [ reduce using rule 15 (expression -> PASTGLOBALLY expression .) ]
+  ! UNTIL           [ reduce using rule 15 (expression -> PASTGLOBALLY expression .) ]
+  ! PASTUNTIL       [ reduce using rule 15 (expression -> PASTGLOBALLY expression .) ]
+
+
+state 28
+
+    (16) expression -> LPAR expression . RPAR
+    (3) expression -> expression . AND expression
+    (4) expression -> expression . OR expression
+    (5) expression -> expression . IMPLIES expression
+    (6) expression -> expression . DIMPLIES expression
+    (7) expression -> expression . UNTIL expression
+    (8) expression -> expression . PASTUNTIL expression
+
+    RPAR            shift and go to state 35
+    AND             shift and go to state 15
+    OR              shift and go to state 16
+    IMPLIES         shift and go to state 17
+    DIMPLIES        shift and go to state 18
+    UNTIL           shift and go to state 19
+    PASTUNTIL       shift and go to state 20
+
+
+state 29
 
     (3) expression -> expression AND expression .
     (3) expression -> expression . AND expression
@@ -550,23 +917,32 @@ state 22
     (5) expression -> expression . IMPLIES expression
     (6) expression -> expression . DIMPLIES expression
     (7) expression -> expression . UNTIL expression
+    (8) expression -> expression . PASTUNTIL expression
 
-    AND             reduce using rule 3 (expression -> expression AND expression .)
-    OR              reduce using rule 3 (expression -> expression AND expression .)
-    IMPLIES         reduce using rule 3 (expression -> expression AND expression .)
-    DIMPLIES        reduce using rule 3 (expression -> expression AND expression .)
-    UNTIL           reduce using rule 3 (expression -> expression AND expression .)
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for IMPLIES resolved as shift
+  ! shift/reduce conflict for DIMPLIES resolved as shift
+  ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for PASTUNTIL resolved as shift
     $end            reduce using rule 3 (expression -> expression AND expression .)
     RPAR            reduce using rule 3 (expression -> expression AND expression .)
+    AND             shift and go to state 15
+    OR              shift and go to state 16
+    IMPLIES         shift and go to state 17
+    DIMPLIES        shift and go to state 18
+    UNTIL           shift and go to state 19
+    PASTUNTIL       shift and go to state 20
 
-  ! AND             [ shift and go to state 12 ]
-  ! OR              [ shift and go to state 13 ]
-  ! IMPLIES         [ shift and go to state 14 ]
-  ! DIMPLIES        [ shift and go to state 15 ]
-  ! UNTIL           [ shift and go to state 16 ]
+  ! AND             [ reduce using rule 3 (expression -> expression AND expression .) ]
+  ! OR              [ reduce using rule 3 (expression -> expression AND expression .) ]
+  ! IMPLIES         [ reduce using rule 3 (expression -> expression AND expression .) ]
+  ! DIMPLIES        [ reduce using rule 3 (expression -> expression AND expression .) ]
+  ! UNTIL           [ reduce using rule 3 (expression -> expression AND expression .) ]
+  ! PASTUNTIL       [ reduce using rule 3 (expression -> expression AND expression .) ]
 
 
-state 23
+state 30
 
     (4) expression -> expression OR expression .
     (3) expression -> expression . AND expression
@@ -574,23 +950,32 @@ state 23
     (5) expression -> expression . IMPLIES expression
     (6) expression -> expression . DIMPLIES expression
     (7) expression -> expression . UNTIL expression
+    (8) expression -> expression . PASTUNTIL expression
 
-    AND             reduce using rule 4 (expression -> expression OR expression .)
-    OR              reduce using rule 4 (expression -> expression OR expression .)
-    IMPLIES         reduce using rule 4 (expression -> expression OR expression .)
-    DIMPLIES        reduce using rule 4 (expression -> expression OR expression .)
-    UNTIL           reduce using rule 4 (expression -> expression OR expression .)
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for IMPLIES resolved as shift
+  ! shift/reduce conflict for DIMPLIES resolved as shift
+  ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for PASTUNTIL resolved as shift
     $end            reduce using rule 4 (expression -> expression OR expression .)
     RPAR            reduce using rule 4 (expression -> expression OR expression .)
+    AND             shift and go to state 15
+    OR              shift and go to state 16
+    IMPLIES         shift and go to state 17
+    DIMPLIES        shift and go to state 18
+    UNTIL           shift and go to state 19
+    PASTUNTIL       shift and go to state 20
 
-  ! AND             [ shift and go to state 12 ]
-  ! OR              [ shift and go to state 13 ]
-  ! IMPLIES         [ shift and go to state 14 ]
-  ! DIMPLIES        [ shift and go to state 15 ]
-  ! UNTIL           [ shift and go to state 16 ]
+  ! AND             [ reduce using rule 4 (expression -> expression OR expression .) ]
+  ! OR              [ reduce using rule 4 (expression -> expression OR expression .) ]
+  ! IMPLIES         [ reduce using rule 4 (expression -> expression OR expression .) ]
+  ! DIMPLIES        [ reduce using rule 4 (expression -> expression OR expression .) ]
+  ! UNTIL           [ reduce using rule 4 (expression -> expression OR expression .) ]
+  ! PASTUNTIL       [ reduce using rule 4 (expression -> expression OR expression .) ]
 
 
-state 24
+state 31
 
     (5) expression -> expression IMPLIES expression .
     (3) expression -> expression . AND expression
@@ -598,23 +983,32 @@ state 24
     (5) expression -> expression . IMPLIES expression
     (6) expression -> expression . DIMPLIES expression
     (7) expression -> expression . UNTIL expression
+    (8) expression -> expression . PASTUNTIL expression
 
-    AND             reduce using rule 5 (expression -> expression IMPLIES expression .)
-    OR              reduce using rule 5 (expression -> expression IMPLIES expression .)
-    IMPLIES         reduce using rule 5 (expression -> expression IMPLIES expression .)
-    DIMPLIES        reduce using rule 5 (expression -> expression IMPLIES expression .)
-    UNTIL           reduce using rule 5 (expression -> expression IMPLIES expression .)
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for IMPLIES resolved as shift
+  ! shift/reduce conflict for DIMPLIES resolved as shift
+  ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for PASTUNTIL resolved as shift
     $end            reduce using rule 5 (expression -> expression IMPLIES expression .)
     RPAR            reduce using rule 5 (expression -> expression IMPLIES expression .)
+    AND             shift and go to state 15
+    OR              shift and go to state 16
+    IMPLIES         shift and go to state 17
+    DIMPLIES        shift and go to state 18
+    UNTIL           shift and go to state 19
+    PASTUNTIL       shift and go to state 20
 
-  ! AND             [ shift and go to state 12 ]
-  ! OR              [ shift and go to state 13 ]
-  ! IMPLIES         [ shift and go to state 14 ]
-  ! DIMPLIES        [ shift and go to state 15 ]
-  ! UNTIL           [ shift and go to state 16 ]
+  ! AND             [ reduce using rule 5 (expression -> expression IMPLIES expression .) ]
+  ! OR              [ reduce using rule 5 (expression -> expression IMPLIES expression .) ]
+  ! IMPLIES         [ reduce using rule 5 (expression -> expression IMPLIES expression .) ]
+  ! DIMPLIES        [ reduce using rule 5 (expression -> expression IMPLIES expression .) ]
+  ! UNTIL           [ reduce using rule 5 (expression -> expression IMPLIES expression .) ]
+  ! PASTUNTIL       [ reduce using rule 5 (expression -> expression IMPLIES expression .) ]
 
 
-state 25
+state 32
 
     (6) expression -> expression DIMPLIES expression .
     (3) expression -> expression . AND expression
@@ -622,23 +1016,32 @@ state 25
     (5) expression -> expression . IMPLIES expression
     (6) expression -> expression . DIMPLIES expression
     (7) expression -> expression . UNTIL expression
+    (8) expression -> expression . PASTUNTIL expression
 
-    AND             reduce using rule 6 (expression -> expression DIMPLIES expression .)
-    OR              reduce using rule 6 (expression -> expression DIMPLIES expression .)
-    IMPLIES         reduce using rule 6 (expression -> expression DIMPLIES expression .)
-    DIMPLIES        reduce using rule 6 (expression -> expression DIMPLIES expression .)
-    UNTIL           reduce using rule 6 (expression -> expression DIMPLIES expression .)
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for IMPLIES resolved as shift
+  ! shift/reduce conflict for DIMPLIES resolved as shift
+  ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for PASTUNTIL resolved as shift
     $end            reduce using rule 6 (expression -> expression DIMPLIES expression .)
     RPAR            reduce using rule 6 (expression -> expression DIMPLIES expression .)
+    AND             shift and go to state 15
+    OR              shift and go to state 16
+    IMPLIES         shift and go to state 17
+    DIMPLIES        shift and go to state 18
+    UNTIL           shift and go to state 19
+    PASTUNTIL       shift and go to state 20
 
-  ! AND             [ shift and go to state 12 ]
-  ! OR              [ shift and go to state 13 ]
-  ! IMPLIES         [ shift and go to state 14 ]
-  ! DIMPLIES        [ shift and go to state 15 ]
-  ! UNTIL           [ shift and go to state 16 ]
+  ! AND             [ reduce using rule 6 (expression -> expression DIMPLIES expression .) ]
+  ! OR              [ reduce using rule 6 (expression -> expression DIMPLIES expression .) ]
+  ! IMPLIES         [ reduce using rule 6 (expression -> expression DIMPLIES expression .) ]
+  ! DIMPLIES        [ reduce using rule 6 (expression -> expression DIMPLIES expression .) ]
+  ! UNTIL           [ reduce using rule 6 (expression -> expression DIMPLIES expression .) ]
+  ! PASTUNTIL       [ reduce using rule 6 (expression -> expression DIMPLIES expression .) ]
 
 
-state 26
+state 33
 
     (7) expression -> expression UNTIL expression .
     (3) expression -> expression . AND expression
@@ -646,31 +1049,155 @@ state 26
     (5) expression -> expression . IMPLIES expression
     (6) expression -> expression . DIMPLIES expression
     (7) expression -> expression . UNTIL expression
+    (8) expression -> expression . PASTUNTIL expression
 
-    AND             reduce using rule 7 (expression -> expression UNTIL expression .)
-    OR              reduce using rule 7 (expression -> expression UNTIL expression .)
-    IMPLIES         reduce using rule 7 (expression -> expression UNTIL expression .)
-    DIMPLIES        reduce using rule 7 (expression -> expression UNTIL expression .)
-    UNTIL           reduce using rule 7 (expression -> expression UNTIL expression .)
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for IMPLIES resolved as shift
+  ! shift/reduce conflict for DIMPLIES resolved as shift
+  ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for PASTUNTIL resolved as shift
     $end            reduce using rule 7 (expression -> expression UNTIL expression .)
     RPAR            reduce using rule 7 (expression -> expression UNTIL expression .)
+    AND             shift and go to state 15
+    OR              shift and go to state 16
+    IMPLIES         shift and go to state 17
+    DIMPLIES        shift and go to state 18
+    UNTIL           shift and go to state 19
+    PASTUNTIL       shift and go to state 20
 
-  ! AND             [ shift and go to state 12 ]
-  ! OR              [ shift and go to state 13 ]
-  ! IMPLIES         [ shift and go to state 14 ]
-  ! DIMPLIES        [ shift and go to state 15 ]
-  ! UNTIL           [ shift and go to state 16 ]
+  ! AND             [ reduce using rule 7 (expression -> expression UNTIL expression .) ]
+  ! OR              [ reduce using rule 7 (expression -> expression UNTIL expression .) ]
+  ! IMPLIES         [ reduce using rule 7 (expression -> expression UNTIL expression .) ]
+  ! DIMPLIES        [ reduce using rule 7 (expression -> expression UNTIL expression .) ]
+  ! UNTIL           [ reduce using rule 7 (expression -> expression UNTIL expression .) ]
+  ! PASTUNTIL       [ reduce using rule 7 (expression -> expression UNTIL expression .) ]
 
 
-state 27
+state 34
 
-    (12) expression -> LPAR expression RPAR .
+    (8) expression -> expression PASTUNTIL expression .
+    (3) expression -> expression . AND expression
+    (4) expression -> expression . OR expression
+    (5) expression -> expression . IMPLIES expression
+    (6) expression -> expression . DIMPLIES expression
+    (7) expression -> expression . UNTIL expression
+    (8) expression -> expression . PASTUNTIL expression
 
-    AND             reduce using rule 12 (expression -> LPAR expression RPAR .)
-    OR              reduce using rule 12 (expression -> LPAR expression RPAR .)
-    IMPLIES         reduce using rule 12 (expression -> LPAR expression RPAR .)
-    DIMPLIES        reduce using rule 12 (expression -> LPAR expression RPAR .)
-    UNTIL           reduce using rule 12 (expression -> LPAR expression RPAR .)
-    $end            reduce using rule 12 (expression -> LPAR expression RPAR .)
-    RPAR            reduce using rule 12 (expression -> LPAR expression RPAR .)
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for IMPLIES resolved as shift
+  ! shift/reduce conflict for DIMPLIES resolved as shift
+  ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for PASTUNTIL resolved as shift
+    $end            reduce using rule 8 (expression -> expression PASTUNTIL expression .)
+    RPAR            reduce using rule 8 (expression -> expression PASTUNTIL expression .)
+    AND             shift and go to state 15
+    OR              shift and go to state 16
+    IMPLIES         shift and go to state 17
+    DIMPLIES        shift and go to state 18
+    UNTIL           shift and go to state 19
+    PASTUNTIL       shift and go to state 20
 
+  ! AND             [ reduce using rule 8 (expression -> expression PASTUNTIL expression .) ]
+  ! OR              [ reduce using rule 8 (expression -> expression PASTUNTIL expression .) ]
+  ! IMPLIES         [ reduce using rule 8 (expression -> expression PASTUNTIL expression .) ]
+  ! DIMPLIES        [ reduce using rule 8 (expression -> expression PASTUNTIL expression .) ]
+  ! UNTIL           [ reduce using rule 8 (expression -> expression PASTUNTIL expression .) ]
+  ! PASTUNTIL       [ reduce using rule 8 (expression -> expression PASTUNTIL expression .) ]
+
+
+state 35
+
+    (16) expression -> LPAR expression RPAR .
+
+    AND             reduce using rule 16 (expression -> LPAR expression RPAR .)
+    OR              reduce using rule 16 (expression -> LPAR expression RPAR .)
+    IMPLIES         reduce using rule 16 (expression -> LPAR expression RPAR .)
+    DIMPLIES        reduce using rule 16 (expression -> LPAR expression RPAR .)
+    UNTIL           reduce using rule 16 (expression -> LPAR expression RPAR .)
+    PASTUNTIL       reduce using rule 16 (expression -> LPAR expression RPAR .)
+    $end            reduce using rule 16 (expression -> LPAR expression RPAR .)
+    RPAR            reduce using rule 16 (expression -> LPAR expression RPAR .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for AND in state 21 resolved as shift
+WARNING: shift/reduce conflict for OR in state 21 resolved as shift
+WARNING: shift/reduce conflict for IMPLIES in state 21 resolved as shift
+WARNING: shift/reduce conflict for DIMPLIES in state 21 resolved as shift
+WARNING: shift/reduce conflict for UNTIL in state 21 resolved as shift
+WARNING: shift/reduce conflict for PASTUNTIL in state 21 resolved as shift
+WARNING: shift/reduce conflict for AND in state 22 resolved as shift
+WARNING: shift/reduce conflict for OR in state 22 resolved as shift
+WARNING: shift/reduce conflict for IMPLIES in state 22 resolved as shift
+WARNING: shift/reduce conflict for DIMPLIES in state 22 resolved as shift
+WARNING: shift/reduce conflict for UNTIL in state 22 resolved as shift
+WARNING: shift/reduce conflict for PASTUNTIL in state 22 resolved as shift
+WARNING: shift/reduce conflict for AND in state 23 resolved as shift
+WARNING: shift/reduce conflict for OR in state 23 resolved as shift
+WARNING: shift/reduce conflict for IMPLIES in state 23 resolved as shift
+WARNING: shift/reduce conflict for DIMPLIES in state 23 resolved as shift
+WARNING: shift/reduce conflict for UNTIL in state 23 resolved as shift
+WARNING: shift/reduce conflict for PASTUNTIL in state 23 resolved as shift
+WARNING: shift/reduce conflict for AND in state 24 resolved as shift
+WARNING: shift/reduce conflict for OR in state 24 resolved as shift
+WARNING: shift/reduce conflict for IMPLIES in state 24 resolved as shift
+WARNING: shift/reduce conflict for DIMPLIES in state 24 resolved as shift
+WARNING: shift/reduce conflict for UNTIL in state 24 resolved as shift
+WARNING: shift/reduce conflict for PASTUNTIL in state 24 resolved as shift
+WARNING: shift/reduce conflict for AND in state 25 resolved as shift
+WARNING: shift/reduce conflict for OR in state 25 resolved as shift
+WARNING: shift/reduce conflict for IMPLIES in state 25 resolved as shift
+WARNING: shift/reduce conflict for DIMPLIES in state 25 resolved as shift
+WARNING: shift/reduce conflict for UNTIL in state 25 resolved as shift
+WARNING: shift/reduce conflict for PASTUNTIL in state 25 resolved as shift
+WARNING: shift/reduce conflict for AND in state 26 resolved as shift
+WARNING: shift/reduce conflict for OR in state 26 resolved as shift
+WARNING: shift/reduce conflict for IMPLIES in state 26 resolved as shift
+WARNING: shift/reduce conflict for DIMPLIES in state 26 resolved as shift
+WARNING: shift/reduce conflict for UNTIL in state 26 resolved as shift
+WARNING: shift/reduce conflict for PASTUNTIL in state 26 resolved as shift
+WARNING: shift/reduce conflict for AND in state 27 resolved as shift
+WARNING: shift/reduce conflict for OR in state 27 resolved as shift
+WARNING: shift/reduce conflict for IMPLIES in state 27 resolved as shift
+WARNING: shift/reduce conflict for DIMPLIES in state 27 resolved as shift
+WARNING: shift/reduce conflict for UNTIL in state 27 resolved as shift
+WARNING: shift/reduce conflict for PASTUNTIL in state 27 resolved as shift
+WARNING: shift/reduce conflict for AND in state 29 resolved as shift
+WARNING: shift/reduce conflict for OR in state 29 resolved as shift
+WARNING: shift/reduce conflict for IMPLIES in state 29 resolved as shift
+WARNING: shift/reduce conflict for DIMPLIES in state 29 resolved as shift
+WARNING: shift/reduce conflict for UNTIL in state 29 resolved as shift
+WARNING: shift/reduce conflict for PASTUNTIL in state 29 resolved as shift
+WARNING: shift/reduce conflict for AND in state 30 resolved as shift
+WARNING: shift/reduce conflict for OR in state 30 resolved as shift
+WARNING: shift/reduce conflict for IMPLIES in state 30 resolved as shift
+WARNING: shift/reduce conflict for DIMPLIES in state 30 resolved as shift
+WARNING: shift/reduce conflict for UNTIL in state 30 resolved as shift
+WARNING: shift/reduce conflict for PASTUNTIL in state 30 resolved as shift
+WARNING: shift/reduce conflict for AND in state 31 resolved as shift
+WARNING: shift/reduce conflict for OR in state 31 resolved as shift
+WARNING: shift/reduce conflict for IMPLIES in state 31 resolved as shift
+WARNING: shift/reduce conflict for DIMPLIES in state 31 resolved as shift
+WARNING: shift/reduce conflict for UNTIL in state 31 resolved as shift
+WARNING: shift/reduce conflict for PASTUNTIL in state 31 resolved as shift
+WARNING: shift/reduce conflict for AND in state 32 resolved as shift
+WARNING: shift/reduce conflict for OR in state 32 resolved as shift
+WARNING: shift/reduce conflict for IMPLIES in state 32 resolved as shift
+WARNING: shift/reduce conflict for DIMPLIES in state 32 resolved as shift
+WARNING: shift/reduce conflict for UNTIL in state 32 resolved as shift
+WARNING: shift/reduce conflict for PASTUNTIL in state 32 resolved as shift
+WARNING: shift/reduce conflict for AND in state 33 resolved as shift
+WARNING: shift/reduce conflict for OR in state 33 resolved as shift
+WARNING: shift/reduce conflict for IMPLIES in state 33 resolved as shift
+WARNING: shift/reduce conflict for DIMPLIES in state 33 resolved as shift
+WARNING: shift/reduce conflict for UNTIL in state 33 resolved as shift
+WARNING: shift/reduce conflict for PASTUNTIL in state 33 resolved as shift
+WARNING: shift/reduce conflict for AND in state 34 resolved as shift
+WARNING: shift/reduce conflict for OR in state 34 resolved as shift
+WARNING: shift/reduce conflict for IMPLIES in state 34 resolved as shift
+WARNING: shift/reduce conflict for DIMPLIES in state 34 resolved as shift
+WARNING: shift/reduce conflict for UNTIL in state 34 resolved as shift
+WARNING: shift/reduce conflict for PASTUNTIL in state 34 resolved as shift
