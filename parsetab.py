@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'AND DIMPLIES EVENTUALLY FALSE GLOBALLY IMPLIES LPAR NEXT NOT OR PASTEVENTUALLY PASTGLOBALLY PASTNEXT PASTUNTIL RPAR TERM TRUE UNTIL\n        ltl : expression\n            | empty\n        \n        expression : expression AND expression\n                   | expression OR expression\n                   | expression IMPLIES expression\n                   | expression DIMPLIES expression\n                   | expression UNTIL expression\n                   | expression PASTUNTIL expression\n        \n        expression : NOT expression\n                   | NEXT expression\n                   | EVENTUALLY expression\n                   | GLOBALLY expression\n                   | PASTNEXT expression\n                   | PASTEVENTUALLY expression\n                   | PASTGLOBALLY expression\n        \n        expression : LPAR expression RPAR\n        \n        expression : TERM\n                   | TRUE\n                   | FALSE\n        \n        empty :\n        '
+_lr_signature = 'AND DIMPLIES EVENTUALLY FALSE GLOBALLY IMPLIES LPAR NEXT NOT OR PASTEVENTUALLY PASTGLOBALLY PASTNEXT PASTUNTIL RPAR TERM TRUE UNTIL\n        formula : formula AND formula\n                | formula OR formula\n                | formula IMPLIES formula\n                | formula DIMPLIES formula\n                | formula UNTIL formula\n                | formula PASTUNTIL formula\n                | NEXT formula\n                | EVENTUALLY formula\n                | GLOBALLY formula\n                | PASTNEXT formula\n                | PASTEVENTUALLY formula\n                | PASTGLOBALLY formula\n                | NOT formula\n                | TRUE\n                | FALSE\n                | TERM\n        \n        formula : LPAR formula RPAR\n        '
     
-_lr_action_items = {'NOT':([0,4,5,6,7,8,9,10,11,15,16,17,18,19,20,],[4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,]),'NEXT':([0,4,5,6,7,8,9,10,11,15,16,17,18,19,20,],[5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,]),'EVENTUALLY':([0,4,5,6,7,8,9,10,11,15,16,17,18,19,20,],[6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,]),'GLOBALLY':([0,4,5,6,7,8,9,10,11,15,16,17,18,19,20,],[7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,]),'PASTNEXT':([0,4,5,6,7,8,9,10,11,15,16,17,18,19,20,],[8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,]),'PASTEVENTUALLY':([0,4,5,6,7,8,9,10,11,15,16,17,18,19,20,],[9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,]),'PASTGLOBALLY':([0,4,5,6,7,8,9,10,11,15,16,17,18,19,20,],[10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,]),'LPAR':([0,4,5,6,7,8,9,10,11,15,16,17,18,19,20,],[11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,]),'TERM':([0,4,5,6,7,8,9,10,11,15,16,17,18,19,20,],[12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,]),'TRUE':([0,4,5,6,7,8,9,10,11,15,16,17,18,19,20,],[13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,]),'FALSE':([0,4,5,6,7,8,9,10,11,15,16,17,18,19,20,],[14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,]),'$end':([0,1,2,3,12,13,14,21,22,23,24,25,26,27,29,30,31,32,33,34,35,],[-20,0,-1,-2,-17,-18,-19,-9,-10,-11,-12,-13,-14,-15,-3,-4,-5,-6,-7,-8,-16,]),'AND':([2,12,13,14,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,],[15,-17,-18,-19,15,15,15,15,15,15,15,15,15,15,15,15,15,15,-16,]),'OR':([2,12,13,14,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,],[16,-17,-18,-19,16,16,16,16,16,16,16,16,16,16,16,16,16,16,-16,]),'IMPLIES':([2,12,13,14,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,],[17,-17,-18,-19,17,17,17,17,17,17,17,17,17,17,17,17,17,17,-16,]),'DIMPLIES':([2,12,13,14,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,],[18,-17,-18,-19,18,18,18,18,18,18,18,18,18,18,18,18,18,18,-16,]),'UNTIL':([2,12,13,14,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,],[19,-17,-18,-19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,-16,]),'PASTUNTIL':([2,12,13,14,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,],[20,-17,-18,-19,20,20,20,20,20,20,20,20,20,20,20,20,20,20,-16,]),'RPAR':([12,13,14,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,],[-17,-18,-19,-9,-10,-11,-12,-13,-14,-15,35,-3,-4,-5,-6,-7,-8,-16,]),}
+_lr_action_items = {'NEXT':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,]),'EVENTUALLY':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,]),'GLOBALLY':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,]),'PASTNEXT':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,]),'PASTEVENTUALLY':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,]),'PASTGLOBALLY':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,]),'NOT':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,]),'TRUE':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,]),'FALSE':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,]),'TERM':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,]),'LPAR':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,]),'$end':([1,9,10,11,19,20,21,22,23,24,25,27,28,29,30,31,32,33,],[0,-14,-15,-16,-7,-8,-9,-10,-11,-12,-13,-1,-2,-3,-4,-5,-6,-17,]),'AND':([1,9,10,11,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[13,-14,-15,-16,13,13,13,13,13,13,13,13,13,13,13,13,13,13,-17,]),'OR':([1,9,10,11,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[14,-14,-15,-16,14,14,14,14,14,14,14,14,14,14,14,14,14,14,-17,]),'IMPLIES':([1,9,10,11,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[15,-14,-15,-16,15,15,15,15,15,15,15,15,15,15,15,15,15,15,-17,]),'DIMPLIES':([1,9,10,11,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[16,-14,-15,-16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,-17,]),'UNTIL':([1,9,10,11,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[17,-14,-15,-16,17,17,17,17,17,17,17,17,17,17,17,17,17,17,-17,]),'PASTUNTIL':([1,9,10,11,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[18,-14,-15,-16,18,18,18,18,18,18,18,18,18,18,18,18,18,18,-17,]),'RPAR':([9,10,11,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[-14,-15,-16,-7,-8,-9,-10,-11,-12,-13,33,-1,-2,-3,-4,-5,-6,-17,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'ltl':([0,],[1,]),'expression':([0,4,5,6,7,8,9,10,11,15,16,17,18,19,20,],[2,21,22,23,24,25,26,27,28,29,30,31,32,33,34,]),'empty':([0,],[3,]),}
+_lr_goto_items = {'formula':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[1,19,20,21,22,23,24,25,26,27,28,29,30,31,32,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,25 +26,22 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> ltl","S'",1,None,None,None),
-  ('ltl -> expression','ltl',1,'p_ltl','Parser.py',22),
-  ('ltl -> empty','ltl',1,'p_ltl','Parser.py',23),
-  ('expression -> expression AND expression','expression',3,'p_expr_binary','Parser.py',28),
-  ('expression -> expression OR expression','expression',3,'p_expr_binary','Parser.py',29),
-  ('expression -> expression IMPLIES expression','expression',3,'p_expr_binary','Parser.py',30),
-  ('expression -> expression DIMPLIES expression','expression',3,'p_expr_binary','Parser.py',31),
-  ('expression -> expression UNTIL expression','expression',3,'p_expr_binary','Parser.py',32),
-  ('expression -> expression PASTUNTIL expression','expression',3,'p_expr_binary','Parser.py',33),
-  ('expression -> NOT expression','expression',2,'p_expr_unary','Parser.py',44),
-  ('expression -> NEXT expression','expression',2,'p_expr_unary','Parser.py',45),
-  ('expression -> EVENTUALLY expression','expression',2,'p_expr_unary','Parser.py',46),
-  ('expression -> GLOBALLY expression','expression',2,'p_expr_unary','Parser.py',47),
-  ('expression -> PASTNEXT expression','expression',2,'p_expr_unary','Parser.py',48),
-  ('expression -> PASTEVENTUALLY expression','expression',2,'p_expr_unary','Parser.py',49),
-  ('expression -> PASTGLOBALLY expression','expression',2,'p_expr_unary','Parser.py',50),
-  ('expression -> LPAR expression RPAR','expression',3,'p_expr_group','Parser.py',65),
-  ('expression -> TERM','expression',1,'p_expr_term','Parser.py',71),
-  ('expression -> TRUE','expression',1,'p_expr_term','Parser.py',72),
-  ('expression -> FALSE','expression',1,'p_expr_term','Parser.py',73),
-  ('empty -> <empty>','empty',0,'p_empty','Parser.py',79),
+  ("S' -> formula","S'",1,None,None,None),
+  ('formula -> formula AND formula','formula',3,'p_formula','Parser.py',26),
+  ('formula -> formula OR formula','formula',3,'p_formula','Parser.py',27),
+  ('formula -> formula IMPLIES formula','formula',3,'p_formula','Parser.py',28),
+  ('formula -> formula DIMPLIES formula','formula',3,'p_formula','Parser.py',29),
+  ('formula -> formula UNTIL formula','formula',3,'p_formula','Parser.py',30),
+  ('formula -> formula PASTUNTIL formula','formula',3,'p_formula','Parser.py',31),
+  ('formula -> NEXT formula','formula',2,'p_formula','Parser.py',32),
+  ('formula -> EVENTUALLY formula','formula',2,'p_formula','Parser.py',33),
+  ('formula -> GLOBALLY formula','formula',2,'p_formula','Parser.py',34),
+  ('formula -> PASTNEXT formula','formula',2,'p_formula','Parser.py',35),
+  ('formula -> PASTEVENTUALLY formula','formula',2,'p_formula','Parser.py',36),
+  ('formula -> PASTGLOBALLY formula','formula',2,'p_formula','Parser.py',37),
+  ('formula -> NOT formula','formula',2,'p_formula','Parser.py',38),
+  ('formula -> TRUE','formula',1,'p_formula','Parser.py',39),
+  ('formula -> FALSE','formula',1,'p_formula','Parser.py',40),
+  ('formula -> TERM','formula',1,'p_formula','Parser.py',41),
+  ('formula -> LPAR formula RPAR','formula',3,'p_expr_group','Parser.py',68),
 ]

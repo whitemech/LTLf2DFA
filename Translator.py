@@ -1,11 +1,44 @@
+from Parser import MyParser
+
 class Translator:
 
     def __init__(self):
-        self.header = "m2l-str;\n"
+        self.headerMona = "m2l-str;\n"
+        self.formula_to_be_parsed = ""
+        self.parsed_formula = ""
+        self.translated_formula = ""
+
+    def get_parsed_formula(self):
+        return self.parsed_formula
+
+    def get_translated_formula(self):
+        return self.translated_formula
+
+    def formula_parser(self):
+        parser = MyParser()
+        self.parsed_formula = parser(self.formula_to_be_parsed)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def __call__(self, tree_formula):
         init_variable = 'v_0'
-        return self.translate(tree_formula, init_variable)
+        self.translated_formula = self.translate(tree_formula, init_variable)
+
+
 
     def translate(self, p, var):
         if type(p) == tuple:
@@ -116,3 +149,5 @@ class Translator:
             s = var.split('_')
             s[1] = str(int(s[1])+1)
             return '_'.join(s)
+
+    # def buildMonaProgram(self, translated_formula)
