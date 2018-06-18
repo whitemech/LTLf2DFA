@@ -1,6 +1,6 @@
 import ply.lex as lex
 
-class Lexer(object):
+class MyLexer(object):
 
     reserved = {
         'true':     'TRUE',
@@ -52,7 +52,7 @@ class Lexer(object):
 
     def t_TERM(self, t):
         r'[a-z]+'
-        t.type = Lexer.reserved.get(t.value, 'TERM')
+        t.type = MyLexer.reserved.get(t.value, 'TERM')
         return t  # Check for reserved words
 
     def t_error(self, t):
