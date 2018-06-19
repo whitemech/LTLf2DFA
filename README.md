@@ -1,37 +1,44 @@
-# LTLf2FOL
+# LTL<sub>f</sub>2DFA
 [![ciaio](https://img.shields.io/badge/python-3.6-blue.svg)]()
 
-LTLf2FOL is a simple python script that translates an LTLf formula to a FOL formula.
+LTL<sub>f</sub>2DFA is a simple tool that processes an LTL<sub>f</sub> formula (with past or future operators) and generates the corresponding minimized DFA (Deterministic Finite state Automaton) using [MONA](http://www.brics.dk/mona/).
+This tool is written in Python 3.6.
 
 ## Getting Started
 
-### Prerequisites
+### Requirements
 
-This script is based on `ply 3.11` library which is an implementation of Lex and Yacc for Python.
+This tool is based on `ply 3.11` and `graphviz` libraries. You may install them.
+
+- [ply 3.11](https://pypi.org/project/ply/)
+- [Graphviz](http://graphviz.org)
+<!---
+The former is an implementation of Lex and Yacc for Python (used for parsing purposes) while the latter is a.
 
 Install it by typing the following (I strongly suggest you to use a virtual environment):
 
 ```
 pip install ply
 ```
+--->
 
 ## How To Use It
 
-- Download the LTLf2FOL.zip repository or clone it locally:
+- Download the LTL<sub>f</sub>2DFA.zip repository or clone it locally:
 ```
-git clone https://github.com/Francesco17/LTLf2FOL.git
+git clone https://github.com/Francesco17/LTLf2DFA.git
 ```
 - Unzip it
-- Type an LTLf formula in the `ltl_in.txt` file
+- Type an LTL<sub>f</sub> formula in a text file and save it
 - Enter the folder with the terminal and run the program
 ```
-python3 ltl_parser.py
+python3 main.py [-h] path/to/file/containing/formula.txt
 ```
-- The translation will be in the `fol_out.txt` file.
+- You will get the DFA automaton in .dot format within the current folder.
 
 ## Syntax
 
-The syntax employed by this parser is the following:
+The syntax accepted by LTL<sub>f</sub>2DFA is the following:
 
 |    OPERATOR   | SYMBOL |
 |:-------------:|:------:|
@@ -46,19 +53,26 @@ The syntax employed by this parser is the following:
 |     UNTIL     |    U   |
 |   EVENTUALLY  |    E   |
 |    GLOBALLY   |    G   |
+| YESTERDAY (*) |    Y   |
+|    SINCE (*)  |    S   |
+|    ONCE (*)   |    O   |
+|  GLOBALLY (*) |    H   |
+
+(*) are PAST operators.
 
 Also parentheses `(` and `)` can be used.
 
+**NOTE**: LTL<sub>f</sub>2DFA accepts ONLY separated formulas, i.e. formula that has only past, only future or none operators.
+
 ## Examples
-If you would like to try it, you can find some examples in `examples.txt` used as a test.
-
-## Built With
-
-- [ply 3.11](https://pypi.org/project/ply/)
+Type the following, where `path/to/file/containing/formula.txt` is a text file containing the LTL<sub>f</sub> formula.
+```
+python3 main.py [-h] path/to/file/containing/formula.txt
+```
 
 ## Author
 
-- [Francesco Fuggitti](https://www.linkedin.com/in/francesco-fuggitti-b78336131/)
+[Francesco Fuggitti](https://www.linkedin.com/in/francesco-fuggitti-b78336131/)
 
 ## License
 
