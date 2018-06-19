@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'nonassocLPARRPARleftANDORIMPLIESDIMPLIESUNTILrightNEXTEVENTUALLYGLOBALLYrightNOTAND DIMPLIES EVENTUALLY FALSE GLOBALLY IMPLIES LPAR NEXT NOT OR RPAR TERM TRUE UNTIL\n    ltl : expression\n        | empty\n    \n    expression : expression AND expression\n               | expression OR expression\n               | expression IMPLIES expression\n               | expression DIMPLIES expression\n               | expression UNTIL expression\n    \n    expression : NOT expression\n               | NEXT expression\n               | EVENTUALLY expression\n               | GLOBALLY expression\n    \n    expression : LPAR expression RPAR\n    \n    expression : TERM\n               | TRUE\n               | FALSE\n    \n    empty :\n    '
+_lr_signature = 'AND DIMPLIES EVENTUALLY FALSE GLOBALLY IMPLIES LPAR NEXT NOT OR PASTEVENTUALLY PASTGLOBALLY PASTNEXT PASTUNTIL RPAR TERM TRUE UNTIL\n        formula : formula AND formula\n                | formula OR formula\n                | formula IMPLIES formula\n                | formula DIMPLIES formula\n                | formula UNTIL formula\n                | formula PASTUNTIL formula\n                | NEXT formula\n                | EVENTUALLY formula\n                | GLOBALLY formula\n                | PASTNEXT formula\n                | PASTEVENTUALLY formula\n                | PASTGLOBALLY formula\n                | NOT formula\n                | TRUE\n                | FALSE\n                | TERM\n        \n        formula : LPAR formula RPAR\n        '
     
-_lr_action_items = {'NOT':([0,4,5,6,7,8,12,13,14,15,16,],[4,4,4,4,4,4,4,4,4,4,4,]),'NEXT':([0,4,5,6,7,8,12,13,14,15,16,],[5,5,5,5,5,5,5,5,5,5,5,]),'EVENTUALLY':([0,4,5,6,7,8,12,13,14,15,16,],[6,6,6,6,6,6,6,6,6,6,6,]),'GLOBALLY':([0,4,5,6,7,8,12,13,14,15,16,],[7,7,7,7,7,7,7,7,7,7,7,]),'LPAR':([0,4,5,6,7,8,12,13,14,15,16,],[8,8,8,8,8,8,8,8,8,8,8,]),'TERM':([0,4,5,6,7,8,12,13,14,15,16,],[9,9,9,9,9,9,9,9,9,9,9,]),'TRUE':([0,4,5,6,7,8,12,13,14,15,16,],[10,10,10,10,10,10,10,10,10,10,10,]),'FALSE':([0,4,5,6,7,8,12,13,14,15,16,],[11,11,11,11,11,11,11,11,11,11,11,]),'$end':([0,1,2,3,9,10,11,17,18,19,20,22,23,24,25,26,27,],[-16,0,-1,-2,-13,-14,-15,-8,-9,-10,-11,-3,-4,-5,-6,-7,-12,]),'AND':([2,9,10,11,17,18,19,20,21,22,23,24,25,26,27,],[12,-13,-14,-15,-8,-9,-10,-11,12,-3,-4,-5,-6,-7,-12,]),'OR':([2,9,10,11,17,18,19,20,21,22,23,24,25,26,27,],[13,-13,-14,-15,-8,-9,-10,-11,13,-3,-4,-5,-6,-7,-12,]),'IMPLIES':([2,9,10,11,17,18,19,20,21,22,23,24,25,26,27,],[14,-13,-14,-15,-8,-9,-10,-11,14,-3,-4,-5,-6,-7,-12,]),'DIMPLIES':([2,9,10,11,17,18,19,20,21,22,23,24,25,26,27,],[15,-13,-14,-15,-8,-9,-10,-11,15,-3,-4,-5,-6,-7,-12,]),'UNTIL':([2,9,10,11,17,18,19,20,21,22,23,24,25,26,27,],[16,-13,-14,-15,-8,-9,-10,-11,16,-3,-4,-5,-6,-7,-12,]),'RPAR':([9,10,11,17,18,19,20,21,22,23,24,25,26,27,],[-13,-14,-15,-8,-9,-10,-11,27,-3,-4,-5,-6,-7,-12,]),}
+_lr_action_items = {'NEXT':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,]),'EVENTUALLY':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,]),'GLOBALLY':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,]),'PASTNEXT':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,]),'PASTEVENTUALLY':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,]),'PASTGLOBALLY':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,]),'NOT':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,]),'TRUE':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,]),'FALSE':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,]),'TERM':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,]),'LPAR':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,]),'$end':([1,9,10,11,19,20,21,22,23,24,25,27,28,29,30,31,32,33,],[0,-14,-15,-16,-7,-8,-9,-10,-11,-12,-13,-1,-2,-3,-4,-5,-6,-17,]),'AND':([1,9,10,11,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[13,-14,-15,-16,13,13,13,13,13,13,13,13,13,13,13,13,13,13,-17,]),'OR':([1,9,10,11,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[14,-14,-15,-16,14,14,14,14,14,14,14,14,14,14,14,14,14,14,-17,]),'IMPLIES':([1,9,10,11,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[15,-14,-15,-16,15,15,15,15,15,15,15,15,15,15,15,15,15,15,-17,]),'DIMPLIES':([1,9,10,11,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[16,-14,-15,-16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,-17,]),'UNTIL':([1,9,10,11,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[17,-14,-15,-16,17,17,17,17,17,17,17,17,17,17,17,17,17,17,-17,]),'PASTUNTIL':([1,9,10,11,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[18,-14,-15,-16,18,18,18,18,18,18,18,18,18,18,18,18,18,18,-17,]),'RPAR':([9,10,11,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[-14,-15,-16,-7,-8,-9,-10,-11,-12,-13,33,-1,-2,-3,-4,-5,-6,-17,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'ltl':([0,],[1,]),'expression':([0,4,5,6,7,8,12,13,14,15,16,],[2,17,18,19,20,21,22,23,24,25,26,]),'empty':([0,],[3,]),}
+_lr_goto_items = {'formula':([0,2,3,4,5,6,7,8,12,13,14,15,16,17,18,],[1,19,20,21,22,23,24,25,26,27,28,29,30,31,32,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,21 +26,22 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> ltl","S'",1,None,None,None),
-  ('ltl -> expression','ltl',1,'p_ltl','ltl_parser.py',56),
-  ('ltl -> empty','ltl',1,'p_ltl','ltl_parser.py',57),
-  ('expression -> expression AND expression','expression',3,'p_expr_binary','ltl_parser.py',63),
-  ('expression -> expression OR expression','expression',3,'p_expr_binary','ltl_parser.py',64),
-  ('expression -> expression IMPLIES expression','expression',3,'p_expr_binary','ltl_parser.py',65),
-  ('expression -> expression DIMPLIES expression','expression',3,'p_expr_binary','ltl_parser.py',66),
-  ('expression -> expression UNTIL expression','expression',3,'p_expr_binary','ltl_parser.py',67),
-  ('expression -> NOT expression','expression',2,'p_expr_unary','ltl_parser.py',74),
-  ('expression -> NEXT expression','expression',2,'p_expr_unary','ltl_parser.py',75),
-  ('expression -> EVENTUALLY expression','expression',2,'p_expr_unary','ltl_parser.py',76),
-  ('expression -> GLOBALLY expression','expression',2,'p_expr_unary','ltl_parser.py',77),
-  ('expression -> LPAR expression RPAR','expression',3,'p_expr_group','ltl_parser.py',137),
-  ('expression -> TERM','expression',1,'p_expr_term','ltl_parser.py',143),
-  ('expression -> TRUE','expression',1,'p_expr_term','ltl_parser.py',144),
-  ('expression -> FALSE','expression',1,'p_expr_term','ltl_parser.py',145),
-  ('empty -> <empty>','empty',0,'p_empty','ltl_parser.py',151),
+  ("S' -> formula","S'",1,None,None,None),
+  ('formula -> formula AND formula','formula',3,'p_formula','Parser.py',26),
+  ('formula -> formula OR formula','formula',3,'p_formula','Parser.py',27),
+  ('formula -> formula IMPLIES formula','formula',3,'p_formula','Parser.py',28),
+  ('formula -> formula DIMPLIES formula','formula',3,'p_formula','Parser.py',29),
+  ('formula -> formula UNTIL formula','formula',3,'p_formula','Parser.py',30),
+  ('formula -> formula PASTUNTIL formula','formula',3,'p_formula','Parser.py',31),
+  ('formula -> NEXT formula','formula',2,'p_formula','Parser.py',32),
+  ('formula -> EVENTUALLY formula','formula',2,'p_formula','Parser.py',33),
+  ('formula -> GLOBALLY formula','formula',2,'p_formula','Parser.py',34),
+  ('formula -> PASTNEXT formula','formula',2,'p_formula','Parser.py',35),
+  ('formula -> PASTEVENTUALLY formula','formula',2,'p_formula','Parser.py',36),
+  ('formula -> PASTGLOBALLY formula','formula',2,'p_formula','Parser.py',37),
+  ('formula -> NOT formula','formula',2,'p_formula','Parser.py',38),
+  ('formula -> TRUE','formula',1,'p_formula','Parser.py',39),
+  ('formula -> FALSE','formula',1,'p_formula','Parser.py',40),
+  ('formula -> TERM','formula',1,'p_formula','Parser.py',41),
+  ('formula -> LPAR formula RPAR','formula',3,'p_expr_group','Parser.py',68),
 ]
