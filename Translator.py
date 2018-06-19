@@ -19,6 +19,7 @@ class Translator:
 
     def formula_parser(self):
         if self.formulaType in {1,2,3}:
+            self.compute_alphabet()
             parser = MyParser()
             self.parsed_formula = parser(self.formula_to_be_parsed)
         else: raise ValueError('Ooops! You typed a formula with mixed past/future operators')
@@ -91,6 +92,15 @@ class Translator:
             raise ValueError
         else:
             return self.headerMona + 'var2 ' + ", ".join(self.alphabet) + ';\n' + self.translated_formula + self.compute_declare_assumption()
+
+    def createMonafile(self, name):
+        program = self.buildMonaProgram()
+        try:
+            with open('./'+name+'.mona', 'w+') as file:
+                file.write(program)
+                file.close()
+        except IOError:
+            print('Problem with the opening of the file!')
 
 def translate_bis(formula_tree, var):
     if type(formula_tree) == tuple:
