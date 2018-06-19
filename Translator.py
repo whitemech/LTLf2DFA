@@ -19,22 +19,37 @@ class Translator:
         self.parsed_formula = parser(self.formula_to_be_parsed)
 
     def tuple_to_string(self):
-        return '_'.join(str(self.parsed_formula))
+        return '_'.join(str(self.formula_to_be_parsed))
 
-    # def search_for_mixed_operators(self):
-    #     parsed_formula_str = self.tuple_to_string()
-    #     temp = parsed_formula_str.split('_')
-    #     print(temp)
-    #     past_operators = []
-    #     future_operators = []
-    #     for char in temp:
-    #         if char.isalpha():
-    #             if char in {'X','E','G','U'}:
-    #                 past_operators.append(char)
-    #             elif char in {'Y','O','H','S'}:
-    #                 future_operators.append(char)
-    #         else: continue
-    #     if past_operators
+    '''
+    0: formula is mixed
+    1: formula is only future
+    2: formula is only past
+    3: formula is only present
+    '''
+    def search_mixed_formula(self):
+        formula_to_check_str = self.tuple_to_string()
+        separated_formula = formula_to_check_str.split('_')
+        print(separated_formula)
+
+        past_operators = []
+        future_operators = []
+        for character in separated_formula:
+            if character.isupper():
+                if character == 'T': continue
+                elif character == 'F': continue
+                elif character in {'X','E','G','U'}: future_operators.append(character)
+                elif character in {'Y','O','H','S'}: past_operators.append(character)
+                else: continue
+            else: continue
+
+        if not past_operators and future_operators:
+            return 1
+        elif past_operators and not future_operators:
+            return 2
+        elif not past_operators and not future_operators:
+            return 3
+        else: return 0
 
     def translate(self):
         self.translated_formula = translate_bis(self.parsed_formula, var='v_0')
