@@ -1,11 +1,13 @@
 from Parser import MyParser
+import itertools as it
 
 class Translator:
 
-    def __init__(self):
+    def __init__(self, formula):
         self.headerMona = "m2l-str;\n"
-        self.variables = ""
-        self.formula_to_be_parsed = ""
+        self.alphabet = []
+        self.formula_to_be_parsed = formula
+        self.formulaType = self.search_mixed_formula()
         self.parsed_formula = ""
         self.translated_formula = ""
 
@@ -16,8 +18,7 @@ class Translator:
         return self.translated_formula
 
     def formula_parser(self):
-        cod = self.search_mixed_formula()
-        if cod in {1,2,3}:
+        if self.formulaType in {1,2,3}:
             parser = MyParser()
             self.parsed_formula = parser(self.formula_to_be_parsed)
         else: raise ValueError('Ooops! You typed a formula with mixed past/future operators')
@@ -26,7 +27,7 @@ class Translator:
         return '_'.join(str(self.formula_to_be_parsed))
 
     '''
-    search_mixed_formula possible outputs:
+    search_mixed_formula() possible outputs:
     0: formula is mixed
     1: formula is only future
     2: formula is only past
@@ -55,22 +56,41 @@ class Translator:
             return 3
         else: return 0
 
-    def compute_variables(self):
+    def compute_alphabet(self):
         formula_to_check_str = self.tuple_to_string()
         separated_formula = formula_to_check_str.split('_')
 
-        variables = []
         for character in separated_formula:
             if character.islower():
-                variables.append(character.upper())
+                self.alphabet.append(character.upper())
             else: continue
 
-        self.variables = "var2 "+",".join(variables)+";"
+    def compute_declare_assumption(self):
+        pairs = list(it.combinations(self.alphabet, 2))
+
+        first_assumption = "~(ex1 y: 0<=y & y<=max($) & ~("
+        for symbol in self.alphabet:
+            if symbol == self.alphabet[-1]: first_assumption += 'y in '+ symbol +'))'
+            else : first_assumption += 'y in '+ symbol +' | '
+
+        if pairs:
+            second_assumption = "~(ex1 y: 0<=y & y<=max($) & ~("
+            for pair in pairs:
+                if pair == pairs[-1]: second_assumption += '(y notin '+ pair[0]+' | y notin '+pair[1]+ ')));'
+                else: second_assumption += '(y notin '+ pair[0]+' | y notin '+pair[1]+ ') & '
+
+            return first_assumption +' & '+ second_assumption
+        else:
+            return first_assumption +';'
 
     def translate(self):
-        self.translated_formula = translate_bis(self.parsed_formula, var='v_0')
+        self.translated_formula = translate_bis(self.parsed_formula, var='v_0')+";\n"
 
-    # def buildMonaProgram(self, translated_formula):
+    def buildMonaProgram(self):
+        if not self.alphabet and not self.translated_formula:
+            raise ValueError
+        else:
+            return self.headerMona + 'var2 ' + ", ".join(self.alphabet) + ';\n' + self.translated_formula + self.compute_declare_assumption()
 
 def translate_bis(formula_tree, var):
     if type(formula_tree) == tuple:
@@ -174,7 +194,11 @@ def translate_bis(formula_tree, var):
         # print('computed tree: '+ str(self.parsed_formula))
 
         # BASE CASE OF RECURSION
-        else: return var + ' in ' + formula_tree
+        else:
+            if formula_tree.isalpha():
+                return var + ' in ' + formula_tree.upper()
+            else:
+                return var + ' in ' + formula_tree
 
 def _next(var):
     if var == '0': return 'v_1'
