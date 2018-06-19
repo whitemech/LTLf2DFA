@@ -4,6 +4,7 @@ class Translator:
 
     def __init__(self):
         self.headerMona = "m2l-str;\n"
+        self.variables = ""
         self.formula_to_be_parsed = ""
         self.parsed_formula = ""
         self.translated_formula = ""
@@ -25,6 +26,7 @@ class Translator:
         return '_'.join(str(self.formula_to_be_parsed))
 
     '''
+    search_mixed_formula possible outputs:
     0: formula is mixed
     1: formula is only future
     2: formula is only past
@@ -33,7 +35,7 @@ class Translator:
     def search_mixed_formula(self):
         formula_to_check_str = self.tuple_to_string()
         separated_formula = formula_to_check_str.split('_')
-        
+
         past_operators = []
         future_operators = []
         for character in separated_formula:
@@ -52,6 +54,18 @@ class Translator:
         elif not past_operators and not future_operators:
             return 3
         else: return 0
+
+    def compute_variables(self):
+        formula_to_check_str = self.tuple_to_string()
+        separated_formula = formula_to_check_str.split('_')
+
+        variables = []
+        for character in separated_formula:
+            if character.islower():
+                variables.append(character.upper())
+            else: continue
+
+        self.variables = "var2 "+",".join(variables)+";"
 
     def translate(self):
         self.translated_formula = translate_bis(self.parsed_formula, var='v_0')
