@@ -56,7 +56,7 @@ class MyLexer(object):
         return t  # Check for reserved words
 
     def t_error(self, t):
-        print("Illegal character '%s'" % t.value[0])
+        print("Illegal character '%s' in the input formula" % t.value[0])
         t.lexer.skip(1)
 
     # Build the lexer
