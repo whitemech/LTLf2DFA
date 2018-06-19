@@ -15,8 +15,11 @@ class Translator:
         return self.translated_formula
 
     def formula_parser(self):
-        parser = MyParser()
-        self.parsed_formula = parser(self.formula_to_be_parsed)
+        cod = self.search_mixed_formula()
+        if cod in {1,2,3}:
+            parser = MyParser()
+            self.parsed_formula = parser(self.formula_to_be_parsed)
+        else: raise ValueError('Ooops! You typed a formula with mixed past/future operators')
 
     def tuple_to_string(self):
         return '_'.join(str(self.formula_to_be_parsed))
@@ -30,8 +33,7 @@ class Translator:
     def search_mixed_formula(self):
         formula_to_check_str = self.tuple_to_string()
         separated_formula = formula_to_check_str.split('_')
-        print(separated_formula)
-
+        
         past_operators = []
         future_operators = []
         for character in separated_formula:
