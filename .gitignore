@@ -15,6 +15,7 @@ __pycache__/
 ltl_in.txt
 fol_out.txt
 *.mona
+*.dot
 
 # Icon must end with two \r
 Icon
