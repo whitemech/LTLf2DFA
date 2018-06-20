@@ -69,12 +69,12 @@ class Translator:
     def compute_declare_assumption(self):
         pairs = list(it.combinations(self.alphabet, 2))
 
-        first_assumption = "~(ex1 y: 0<=y & y<=max($) & ~("
-        for symbol in self.alphabet:
-            if symbol == self.alphabet[-1]: first_assumption += 'y in '+ symbol +'))'
-            else : first_assumption += 'y in '+ symbol +' | '
-
         if pairs:
+            first_assumption = "~(ex1 y: 0<=y & y<=max($) & ~("
+            for symbol in self.alphabet:
+                if symbol == self.alphabet[-1]: first_assumption += 'y in '+ symbol +'))'
+                else : first_assumption += 'y in '+ symbol +' | '
+
             second_assumption = "~(ex1 y: 0<=y & y<=max($) & ~("
             for pair in pairs:
                 if pair == pairs[-1]: second_assumption += '(y notin '+ pair[0]+' | y notin '+pair[1]+ ')));'
@@ -82,7 +82,7 @@ class Translator:
 
             return first_assumption +' & '+ second_assumption
         else:
-            return first_assumption +';'
+            return None
 
     def translate(self):
         self.translated_formula = translate_bis(self.parsed_formula, var='v_0')+";\n"

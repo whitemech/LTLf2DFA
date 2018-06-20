@@ -12,8 +12,7 @@ __pycache__/
 .LSOverride
 
 # input and output files
-ltl_in.txt
-fol_out.txt
+*.txt
 *.mona
 *.dot
 
