@@ -93,10 +93,10 @@ class Translator:
         else:
             return self.headerMona + 'var2 ' + ", ".join(self.alphabet) + ';\n' + self.translated_formula + self.compute_declare_assumption()
 
-    def createMonafile(self, name):
+    def createMonafile(self):
         program = self.buildMonaProgram()
         try:
-            with open('./'+name+'.mona', 'w+') as file:
+            with open('./automa.mona', 'w+') as file:
                 file.write(program)
                 file.close()
         except IOError:
