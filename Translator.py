@@ -177,7 +177,7 @@ def translate_bis(formula_tree, var):
             new_var = _next(var)
             a = translate_bis(formula_tree[1],new_var)
             if var == 'v_0':
-                return '('+ 'ex1 '+new_var+': '+ new_var +' = max($) - 1 '+ '& '+new_var+' > 0 & '+ a +')'
+                return '('+ 'ex1 '+new_var+': '+ new_var +' = max($) - 1 '+ '& max($) > 0 & '+ a +')'
             else:
                 return '('+ 'ex1 '+new_var+': '+ new_var +' = '+ var + ' - 1 '+ '& '+new_var+' > 0 & '+ a +')'
         elif formula_tree[0] == 'S':
