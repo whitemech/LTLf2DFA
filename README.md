@@ -8,7 +8,7 @@ This tool is written in Python 3.6.
 
 ### Requirements
 
-This tool is based on `ply 3.11` and `graphviz` libraries. You may install them.
+This tool is based on `ply 3.11` and `graphviz` libraries. You should install them.
 
 - [ply 3.11](https://pypi.org/project/ply/)
 - [Graphviz](http://graphviz.org)
@@ -62,7 +62,7 @@ The syntax accepted by LTL<sub>f</sub>2DFA is the following:
 
 Also parentheses `(` and `)` can be used.
 
-**NOTE**: LTL<sub>f</sub>2DFA accepts ONLY separated formulas, i.e. formula that has only past, only future or none operators.
+**NOTE**: LTL<sub>f</sub>2DFA accepts ONLY separated formulas, i.e. formulas that have only past, only future or none operators.
 
 ## Examples
 Type the following, where `path/to/file/containing/formula.txt` is a text file containing the LTL<sub>f</sub> formula.
