@@ -91,7 +91,9 @@ class Translator:
         if not self.alphabet and not self.translated_formula:
             raise ValueError
         else:
-            return self.headerMona + 'var2 ' + ", ".join(self.alphabet) + ';\n' + self.translated_formula + self.compute_declare_assumption()
+            if self.compute_declare_assumption() is None:
+                return self.headerMona + 'var2 ' + ", ".join(self.alphabet) + ';\n' + self.translated_formula
+            else: return self.headerMona + 'var2 ' + ", ".join(self.alphabet) + ';\n' + self.translated_formula + self.compute_declare_assumption()
 
     def createMonafile(self):
         program = self.buildMonaProgram()
