@@ -29,7 +29,12 @@ git clone https://github.com/Francesco17/LTLf2DFA.git
 - Type an LTL<sub>f</sub> formula in a text file and save it
 - Enter the folder with the terminal and run the program
 ```
-python3 main.py [-h] path/to/file/containing/formula.txt
+python3 main.py [-d] "formula"
+```
+**Flags**:
+```
+-h, --help     show this help message and exit
+-d, --declare  Compute DECLARE assumption for the formula. -- OPTIONAL
 ```
 - You will get the DFA automaton in .dot format within the current folder.
 
