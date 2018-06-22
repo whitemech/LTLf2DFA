@@ -15,6 +15,7 @@ __pycache__/
 *.txt
 *.mona
 *.dot
+.idea/
 
 # Icon must end with two \r
 Icon

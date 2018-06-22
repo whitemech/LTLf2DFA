@@ -55,7 +55,8 @@ class Translator:
             return 2
         elif not past_operators and not future_operators:
             return 3
-        else: return 0
+        else:
+            return 0
 
     def compute_alphabet(self):
         formula_to_check_str = self.tuple_to_string()
@@ -87,16 +88,19 @@ class Translator:
     def translate(self):
         self.translated_formula = translate_bis(self.parsed_formula, var='v_0')+";\n"
 
-    def buildMonaProgram(self):
+    def buildMonaProgram(self, flag_for_declare):
         if not self.alphabet and not self.translated_formula:
             raise ValueError
         else:
-            if self.compute_declare_assumption() is None:
+            if flag_for_declare:
+                if self.compute_declare_assumption() is None:
+                    return self.headerMona + 'var2 ' + ", ".join(self.alphabet) + ';\n' + self.translated_formula
+                else: return self.headerMona + 'var2 ' + ", ".join(self.alphabet) + ';\n' + self.translated_formula + self.compute_declare_assumption()
+            else:
                 return self.headerMona + 'var2 ' + ", ".join(self.alphabet) + ';\n' + self.translated_formula
-            else: return self.headerMona + 'var2 ' + ", ".join(self.alphabet) + ';\n' + self.translated_formula + self.compute_declare_assumption()
 
-    def createMonafile(self):
-        program = self.buildMonaProgram()
+    def createMonafile(self, flag):
+        program = self.buildMonaProgram(flag)
         try:
             with open('./automa.mona', 'w+') as file:
                 file.write(program)
