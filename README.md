@@ -26,14 +26,13 @@ You should install them apart from `pyparsing`, which is automatically installed
 git clone https://github.com/Francesco17/LTLf2DFA.git
 ```
 - Unzip it
-- Type an LTL<sub>f</sub> formula in a text file and save it
 - Enter the folder with the terminal and run the program
 ```
-python3 main.py [-d] "formula"
+python3 main.py [-h] [-d] "formula"
 ```
 **Flags**:
 ```
--h, --help     show this help message and exit
+-h, --help     Show help message and exit
 -d, --declare  Compute DECLARE assumption for the formula. -- OPTIONAL
 ```
 - You will get the DFA automaton in .dot format within the current folder.
