@@ -212,7 +212,10 @@ def translate_bis(formula_tree, var):
         # BASE CASE OF RECURSION
         else:
             if formula_tree.isalpha():
-                return var + ' in ' + formula_tree.upper()
+                if var == 'v_0':
+                    return '0 in '+ formula_tree.upper()
+                else:
+                    return var + ' in ' + formula_tree.upper()
             else:
                 return var + ' in ' + formula_tree
 
