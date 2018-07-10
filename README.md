@@ -10,7 +10,9 @@ It is tested on Linux Ubuntu 16.04.
 
 ### Requirements
 
-This tool is based on the following libraries:
+This tool uses MONA for the generation of the DFA. Hence, you should first install all MONA dependencies following the instructions [here](http://www.brics.dk/mona/download.html).
+
+This tool is also based on the following libraries:
 
 - [ply 3.11](https://pypi.org/project/ply/)
 - [graphviz 0.8.3](http://graphviz.org)
