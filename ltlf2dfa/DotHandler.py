@@ -31,7 +31,7 @@ class DotHandler:
     def output_dot(self):
         try:
             if self.delete_intermediate_automaton():
-                with open("./automa.dot", 'w') as f:
+                with open("./automa.dot", 'w+') as f:
                     f.write(self.new_digraph.to_string())
                     f.close()
             else:

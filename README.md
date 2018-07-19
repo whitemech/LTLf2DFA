@@ -56,7 +56,7 @@ translator = Translator(formula)
 translator.formula_parser()
 translator.translate()
 translator.createMonafile(declare_flag) #it creates automa.mona file
-translator.invoke_mona("inter-automa.mona") #it returns an intermediate automa.dot file
+translator.invoke_mona("automa.mona") #it returns an intermediate automa.dot file
 
 dotHandler = DotHandler("inter-automa.dot")
 dotHandler.modify_dot()
