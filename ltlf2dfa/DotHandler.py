@@ -21,10 +21,20 @@ class DotHandler:
             print('[ERROR] - No file DOT exists')
             exit()
 
+    def delete_intermediate_automaton(self):
+        if os.path.isfile("./inter-automa.dot"):
+            os.remove("./inter-automa.dot")
+            return True
+        else:
+            return False
+
     def output_dot(self):
         try:
-            with open("automa.dot", 'w+') as f:
-                f.write(self.new_digraph.to_string())
-                f.close()
+            if self.delete_intermediate_automaton():
+                with open("./automa.dot", 'w') as f:
+                    f.write(self.new_digraph.to_string())
+                    f.close()
+            else:
+                raise IOError('[ERROR] - Something wrong occurred in the elimination of inter-automa.dot file.')
         except IOError:
             print('[ERROR] - Problem with the opening of the file automa.dot!')
