@@ -111,7 +111,7 @@ class Translator:
             print('Problem with the opening of the file!')
 
     def invoke_mona(self, mona_program):
-        if os.access("mona", os.X_OK):  # check if mona is executable
+        if os.access("ltlf2dfa/mona", os.X_OK):  # check if mona is executable
             subprocess.call('./mona -u -gw automa.mona > ./inter-automa.dot', shell=True)
         else:
             print('[ERROR] - MONA tool does not exist or it is not executable...')
