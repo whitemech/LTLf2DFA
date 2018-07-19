@@ -1,5 +1,7 @@
-from Parser import MyParser
+from ltlf2dfa.Parser import MyParser
 import itertools as it
+import subprocess
+import os
 
 class Translator:
 
@@ -107,6 +109,13 @@ class Translator:
                 file.close()
         except IOError:
             print('Problem with the opening of the file!')
+
+    def invoke_mona(self, mona_program):
+        if os.access("mona", os.X_OK):  # check if mona is executable
+            subprocess.call('./mona -u -gw automa.mona > ./automa.dot', shell=True)
+        else:
+            print('[ERROR] - MONA tool does not exist or it is not executable...')
+            exit()
 
 def translate_bis(formula_tree, var):
     if type(formula_tree) == tuple:
