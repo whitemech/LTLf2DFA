@@ -19,26 +19,49 @@ This tool is also based on the following libraries:
 - [pydot 1.2.4](https://pypi.org/project/pydot/)
 - [pyparsing 2.2.0](https://pypi.org/project/pyparsing/)
 
-You should install them apart from `pyparsing`, which is automatically installed by `pydot`
+They are automatically added while installing LTL<sub>f</sub>2DFA.
 
-## How To Use It
+## How To Install It
 
-- Download the LTL<sub>f</sub>2DFA.zip repository or clone it locally:
+- From PyPI:
 ```
-git clone https://github.com/Francesco17/LTLf2DFA.git
+pip install ltlf2dfa
 ```
-- Unzip it
-- Enter the folder with the terminal and run the program
+- From this repository:
 ```
-python3 main.py [-h] [-d] "formula"
+pip install git+https://github.com/Francesco17/LTLf2DFA@distribution#egg=ltlf2dfa
 ```
-**Flags**:
-```
--h, --help     Show help message and exit
--d, --declare  Compute DECLARE assumption for the formula. -- OPTIONAL
-```
-- You will get the DFA automaton in .dot format within the current folder.
 
+## How To Use It:
+
+- Simply parse an LTL<sub>f</sub> formula with past or future operators:
+```python
+from ltlf2dfa.Parser import MyParser
+
+formula = "G(a->Xb)"
+parser = MyParser()
+parsed_formula = parser(formula)
+
+print(parsed_formula)
+```
+- Translate an LTL<sub>f</sub> formula to the corresponding DFA automaton:
+```python
+from ltlf2dfa.Translator import Translator
+from ltlf2dfa.DotHandler import DotHandler
+
+formula = "G(a->Xb)"
+declare_flag = False
+
+translator = Translator(formula)
+translator.formula_parser()
+translator.translate()
+translator.createMonafile(declare_flag) #it creates automa.mona file
+translator.invoke_mona("inter-automa.mona") #it returns an intermediate automa.dot file
+
+dotHandler = DotHandler("inter-automa.dot")
+dotHandler.modify_dot()
+dotHandler.output_dot() #it returns the final automa.dot file
+```
 ## Syntax
 
 The syntax accepted by LTL<sub>f</sub>2DFA is the following:
