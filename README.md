@@ -32,7 +32,7 @@ pip install ltlf2dfa
 pip install git+https://github.com/Francesco17/LTLf2DFA@distribution#egg=ltlf2dfa
 ```
 
-## How To Use It:
+## How To Use It
 
 - Simply parse an LTL<sub>f</sub> formula with past or future operators:
 ```python
