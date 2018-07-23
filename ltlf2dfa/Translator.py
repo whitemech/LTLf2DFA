@@ -2,6 +2,7 @@ from ltlf2dfa.Parser import MyParser
 import itertools as it
 import subprocess
 import os
+import pkg_resources
 
 class Translator:
 
@@ -111,10 +112,12 @@ class Translator:
             print('Problem with the opening of the file!')
 
     def invoke_mona(self, mona_program):
-        if os.access("mona", os.X_OK):  # check if mona is executable
-            subprocess.call('ltlf2dfa/./mona -u -gw ./automa.mona > ./inter-automa.dot', shell=True)
+        package_dir = os.path.dirname(os.path.abspath(__file__))
+        mona_path = pkg_resources.resource_filename('ltlf2dfa','mona')
+        if os.access(mona_path, os.X_OK):  # check if mona is executable
+            subprocess.call(package_dir+'/./mona -u -gw ./automa.mona > ./inter-automa.dot', shell=True)
         else:
-            print('[ERROR] - MONA tool does not exist or it is not executable...')
+            print('[ERROR] - MONA tool is not executable...')
             exit()
 
 def translate_bis(formula_tree, var):
