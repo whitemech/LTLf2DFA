@@ -4,13 +4,13 @@
 LTL<sub>f</sub>2DFA is a simple tool that processes an LTL<sub>f</sub> formula (with past or future operators) and generates the corresponding minimized DFA (Deterministic Finite state Automaton) using [MONA](http://www.brics.dk/mona/).
 This tool is written in Python 3.6.
 
-It is tested on Linux Ubuntu 16.04.
+It is tested on Linux Ubuntu 16.04 and on macOs 10.13.6.
 
 ## Getting Started
 
 ### Requirements
 
-This tool uses MONA for the generation of the DFA. Hence, you should first install all MONA dependencies following the instructions [here](http://www.brics.dk/mona/download.html).
+This tool uses MONA for the generation of the DFA. Hence, you should first install MONA with all its dependencies on your OS following the instructions [here](http://www.brics.dk/mona/download.html).
 
 This tool is also based on the following libraries:
 
@@ -89,13 +89,7 @@ The syntax accepted by LTL<sub>f</sub>2DFA is the following:
 Also parentheses `(` and `)` can be used.
 
 **NOTE**: LTL<sub>f</sub>2DFA accepts ONLY separated formulas, i.e. formulas that have only past, only future or none operators.
-<!---
-## Examples
-Type the following, where `path/to/file/containing/formula.txt` is a text file containing the LTL<sub>f</sub> formula.
-```
-python3 main.py [-h] path/to/file/containing/formula.txt
-```
---->
+
 ## Author
 
 [Francesco Fuggitti](https://www.linkedin.com/in/francesco-fuggitti-b78336131/)
