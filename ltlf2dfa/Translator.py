@@ -1,7 +1,7 @@
 from ltlf2dfa.Parser import MyParser
 import itertools as it
 import subprocess
-import os
+import os, sys
 import pkg_resources
 
 class Translator:
@@ -112,13 +112,30 @@ class Translator:
             print('Problem with the opening of the file!')
 
     def invoke_mona(self, mona_program):
-        package_dir = os.path.dirname(os.path.abspath(__file__))
-        mona_path = pkg_resources.resource_filename('ltlf2dfa','mona')
-        if os.access(mona_path, os.X_OK):  # check if mona is executable
-            subprocess.call(package_dir+'/./mona -u -gw ./automa.mona > ./inter-automa.dot', shell=True)
+        if sys.platform == 'linux':
+            package_dir = os.path.dirname(os.path.abspath(__file__))
+            mona_path = pkg_resources.resource_filename('ltlf2dfa','mona')
+            if os.access(mona_path, os.X_OK):  # check if mona is executable
+                try:
+                    subprocess.call(package_dir+'/./mona -u -gw ./automa.mona > ./inter-automa.dot', shell=True)
+                except subprocess.CalledProcessError as e:
+                    print(e)
+                    exit()
+                except OSError as e:
+                    print(e)
+                    exit()
+            else:
+                print('[ERROR] - MONA tool is not executable...')
+                exit()
         else:
-            print('[ERROR] - MONA tool is not executable...')
-            exit()
+            try:
+                subprocess.call('mona -u -gw ./automa.mona > ./inter-automa.dot', shell=True)
+            except subprocess.CalledProcessError as e:
+                print(e)
+                exit()
+            except OSError as e:
+                print(e)
+                exit()
 
 def translate_bis(formula_tree, var):
     if type(formula_tree) == tuple:
