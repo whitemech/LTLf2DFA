@@ -50,7 +50,7 @@ from ltlf2dfa.Translator import Translator
 from ltlf2dfa.DotHandler import DotHandler
 
 formula = "G(a->Xb)"
-declare_flag = False
+declare_flag = False #True if you want to compute DECLARE assumption for the formula
 
 translator = Translator(formula)
 translator.formula_parser()
