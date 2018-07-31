@@ -97,10 +97,16 @@ class Translator:
         else:
             if flag_for_declare:
                 if self.compute_declare_assumption() is None:
-                    return self.headerMona + 'var2 ' + ", ".join(self.alphabet) + ';\n' + self.translated_formula
+                    if self.alphabet:
+                        return self.headerMona + 'var2 ' + ", ".join(self.alphabet) + ';\n' + self.translated_formula
+                    else:
+                        return self.headerMona + self.translated_formula
                 else: return self.headerMona + 'var2 ' + ", ".join(self.alphabet) + ';\n' + self.translated_formula + self.compute_declare_assumption()
             else:
-                return self.headerMona + 'var2 ' + ", ".join(self.alphabet) + ';\n' + self.translated_formula
+                if self.alphabet:
+                    return self.headerMona + 'var2 ' + ", ".join(self.alphabet) + ';\n' + self.translated_formula
+                else:
+                    return self.headerMona + self.translated_formula
 
     def createMonafile(self, flag):
         program = self.buildMonaProgram(flag)
@@ -232,8 +238,8 @@ def translate_bis(formula_tree, var):
                 else: return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= '+var+' & '+ a +' & forall1 '+new_new_var+': '+new_var+' < '+new_new_var+' & '+new_new_var+' <= '+var+' => '+b+' )'
     else:
         # handling non-tuple cases
-        if formula_tree[0] == 'T': return 'True'
-        elif formula_tree[0] == 'F': return 'False'
+        if formula_tree[0] == 'T': return 'true'
+        elif formula_tree[0] == 'F': return 'false'
 
         # enable if you want to see recursion
         # print('computed tree: '+ str(self.parsed_formula))
