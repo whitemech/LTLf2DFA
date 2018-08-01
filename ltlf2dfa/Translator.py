@@ -131,7 +131,7 @@ class Translator:
                     print(e)
                     exit()
             else:
-                print('[ERROR] - MONA tool is not executable...')
+                print('[ERROR]: MONA tool is not executable...')
                 exit()
         else:
             try:
@@ -203,14 +203,14 @@ def translate_bis(formula_tree, var):
 
             if var == 'v_0':
                 if b == 'true': return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & '+ a +' )'
-                elif a ==  'true': return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & forall1 '+new_new_var+': '+var+' <= '+new_new_var+' & '+new_new_var+' < '+new_var+' => '+b+' )'
+                elif a ==  'true': return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & all1 '+new_new_var+': 0 <= '+new_new_var+' & '+new_new_var+' < '+new_var+' => '+b+' )'
                 elif a == 'false': return 'false'
-                else: return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & '+ a +' & forall1 '+new_new_var+': '+var+' <= '+new_new_var+' & '+new_new_var+' < '+new_var+' => '+b+' )'
+                else: return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & '+ a +' & all1 '+new_new_var+': 0 <= '+new_new_var+' & '+new_new_var+' < '+new_var+' => '+b+' )'
             else:
                 if b == 'true': return '( '+ 'ex1 '+new_var+': '+var+' <= '+new_var+' & '+new_var+' <= max($) & '+ a +' )'
-                elif a ==  'true': return '( '+ 'ex1 '+new_var+': '+var+' <= '+new_var+' & '+new_var+' <= max($) & forall1 '+new_new_var+': '+var+' <= '+new_new_var+' & '+new_new_var+' < '+new_var+' => '+b+' )'
+                elif a ==  'true': return '( '+ 'ex1 '+new_var+': '+var+' <= '+new_var+' & '+new_var+' <= max($) & all1 '+new_new_var+': '+var+' <= '+new_new_var+' & '+new_new_var+' < '+new_var+' => '+b+' )'
                 elif a == 'false': return 'false'
-                else: return '( '+ 'ex1 '+new_var+': '+var+' <= '+new_var+' & '+new_var+' <= max($) & '+ a +' & forall1 '+new_new_var+': '+var+' <= '+new_new_var+' & '+new_new_var+' < '+new_var+' => '+b+' )'
+                else: return '( '+ 'ex1 '+new_var+': '+var+' <= '+new_var+' & '+new_var+' <= max($) & '+ a +' & all1 '+new_new_var+': '+var+' <= '+new_new_var+' & '+new_new_var+' < '+new_var+' => '+b+' )'
         elif formula_tree[0] == 'Y':
             # print('computed tree: '+ str(self.parsed_formula))
             new_var = _next(var)
@@ -228,14 +228,14 @@ def translate_bis(formula_tree, var):
 
             if var == 'v_0':
                 if b == 'true': return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & '+ a +' )'
-                elif a ==  'true': return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & forall1 '+new_new_var+': '+new_var+' < '+new_new_var+' & '+new_new_var+' <= max($) => '+b+' )'
+                elif a ==  'true': return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & all1 '+new_new_var+': '+new_var+' < '+new_new_var+' & '+new_new_var+' <= max($) => '+b+' )'
                 elif a == 'false': return 'false'
-                else: return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & '+ a +' & forall1 '+new_new_var+': '+new_var+' < '+new_new_var+' & '+new_new_var+' <= max($) => '+b+' )'
+                else: return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & '+ a +' & all1 '+new_new_var+': '+new_var+' < '+new_new_var+' & '+new_new_var+' <= max($) => '+b+' )'
             else:
                 if b == 'true': return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & '+ a +' )'
-                elif a ==  'true': return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= '+var+' & forall1 '+new_new_var+': '+new_var+' < '+new_new_var+' & '+new_new_var+' <= '+var+' => '+b+' )'
+                elif a ==  'true': return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= '+var+' & all1 '+new_new_var+': '+new_var+' < '+new_new_var+' & '+new_new_var+' <= '+var+' => '+b+' )'
                 elif a == 'false': return 'false'
-                else: return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= '+var+' & '+ a +' & forall1 '+new_new_var+': '+new_var+' < '+new_new_var+' & '+new_new_var+' <= '+var+' => '+b+' )'
+                else: return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= '+var+' & '+ a +' & all1 '+new_new_var+': '+new_var+' < '+new_new_var+' & '+new_new_var+' <= '+var+' => '+b+' )'
     else:
         # handling non-tuple cases
         if formula_tree[0] == 'T': return 'true'
