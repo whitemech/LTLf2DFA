@@ -29,7 +29,7 @@ translator.createMonafile(params['declare'])
 
 ## CALL MONA TOOL ##
 if os.path.isfile("mona") and os.access("mona", os.X_OK):  # check if mona exists and if it's executable
-    subprocess.call('./mona -u -gw automa.mona > automa.dot', shell=True)
+    subprocess.call('mona -u -gw automa.mona > automa.dot', shell=True)
 else:
     print('[ERROR] - MONA tool does not exist or it is not executable...')
     exit()

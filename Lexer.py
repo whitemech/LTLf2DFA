@@ -11,7 +11,7 @@ class MyLexer(object):
         'G':        'GLOBALLY',
         'Y':        'PASTNEXT', #PREVIOUS
         'S':        'PASTUNTIL', #SINCE
-        'P':        'PASTEVENTUALLY', #ONCE
+        'O':        'PASTEVENTUALLY', #ONCE
         'H':        'PASTGLOBALLY'
     }
     # List of token names.   This is always required
@@ -45,7 +45,7 @@ class MyLexer(object):
     # PAST OPERATOR
     t_PASTNEXT = r'Y'
     t_PASTUNTIL = r'S'
-    t_PASTEVENTUALLY = r'P'
+    t_PASTEVENTUALLY = r'O'
     t_PASTGLOBALLY = r'H'
 
     t_ignore = r' '+'\n'
