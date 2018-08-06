@@ -1,7 +1,7 @@
 from ltlf2dfa.Parser import MyParser
 import itertools as it
 import subprocess
-import os, sys
+import os, sys, re
 import pkg_resources
 
 class Translator:
@@ -30,14 +30,14 @@ class Translator:
     def tuple_to_string(self):
         return '_'.join(str(self.formula_to_be_parsed))
 
-    '''
-    search_mixed_formula() possible outputs:
-    0: formula is mixed
-    1: formula is only future
-    2: formula is only past
-    3: formula is only present
-    '''
     def search_mixed_formula(self):
+        '''
+        search_mixed_formula() possible outputs:
+        0: formula is mixed
+        1: formula is only future
+        2: formula is only past
+        3: formula is only present
+        '''
         formula_to_check_str = self.tuple_to_string()
         separated_formula = formula_to_check_str.split('_')
 
@@ -62,13 +62,17 @@ class Translator:
             return 0
 
     def compute_alphabet(self):
-        formula_to_check_str = self.tuple_to_string()
-        separated_formula = formula_to_check_str.split('_')
 
-        for character in separated_formula:
-            if character.islower():
-                self.alphabet.append(character.upper())
-            else: continue
+        symbols = re.findall('[a-z]+', str(self.formula_to_be_parsed))
+        self.alphabet = [character.upper() for character in symbols]
+
+        # formula_to_check_str = self.tuple_to_string()
+        # separated_formula = formula_to_check_str.split('_')
+        #
+        # for character in separated_formula:
+        #     if character.islower():
+        #         self.alphabet.append(character.upper())
+        #     else: continue
 
     def compute_declare_assumption(self):
         pairs = list(it.combinations(self.alphabet, 2))
