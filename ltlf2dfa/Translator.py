@@ -66,14 +66,6 @@ class Translator:
         symbols = re.findall('[a-z]+', str(self.formula_to_be_parsed))
         self.alphabet = [character.upper() for character in symbols]
 
-        # formula_to_check_str = self.tuple_to_string()
-        # separated_formula = formula_to_check_str.split('_')
-        #
-        # for character in separated_formula:
-        #     if character.islower():
-        #         self.alphabet.append(character.upper())
-        #     else: continue
-
     def compute_declare_assumption(self):
         pairs = list(it.combinations(self.alphabet, 2))
 
