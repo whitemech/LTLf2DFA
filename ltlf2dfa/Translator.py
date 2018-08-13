@@ -11,14 +11,8 @@ class Translator:
         self.alphabet = []
         self.formula_to_be_parsed = formula
         self.formulaType = self.search_mixed_formula()
-        self.parsed_formula = ""
-        self.translated_formula = ""
-
-    def get_parsed_formula(self):
-        return self.parsed_formula
-
-    def get_translated_formula(self):
-        return self.translated_formula
+        self.parsed_formula = None
+        self.translated_formula = None
 
     def formula_parser(self):
         if self.formulaType in {1,2,3}:
@@ -64,7 +58,7 @@ class Translator:
     def compute_alphabet(self):
 
         symbols = re.findall('[a-z]+', str(self.formula_to_be_parsed))
-        self.alphabet = [character.upper() for character in symbols]
+        self.alphabet = [character.upper() for character in set(symbols)]
 
     def compute_declare_assumption(self):
         pairs = list(it.combinations(self.alphabet, 2))
