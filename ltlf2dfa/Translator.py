@@ -107,7 +107,7 @@ class Translator:
         except IOError:
             print('Problem with the opening of the file!')
 
-    def invoke_mona(self, mona_program):
+    def invoke_mona(self):
         if sys.platform == 'linux':
             package_dir = os.path.dirname(os.path.abspath(__file__))
             mona_path = pkg_resources.resource_filename('ltlf2dfa','mona')
