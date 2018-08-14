@@ -4,7 +4,7 @@
 LTL<sub>f</sub>2DFA is a simple tool that processes an LTL<sub>f</sub> formula (with past or future operators) and generates the corresponding minimized DFA (Deterministic Finite state Automaton) using [MONA](http://www.brics.dk/mona/).
 This tool is written in Python 3.6.
 
-It is tested on Linux Ubuntu 16.04 and on macOs 10.13.6.
+It is tested on Linux Ubuntu 16.04 and on macOS 10.13.6.
 
 ## Getting Started
 
@@ -16,8 +16,7 @@ This tool is also based on the following libraries:
 
 - [ply 3.11](https://pypi.org/project/ply/)
 - [graphviz 0.8.3](http://graphviz.org)
-- [pydot 1.2.4](https://pypi.org/project/pydot/)
-- [pyparsing 2.2.0](https://pypi.org/project/pyparsing/)
+- [dotpy 0.0.1](https://pypi.org/project/dotpy/)
 
 They are automatically added while installing LTL<sub>f</sub>2DFA.
 
@@ -56,9 +55,9 @@ translator = Translator(formula)
 translator.formula_parser()
 translator.translate()
 translator.createMonafile(declare_flag) #it creates automa.mona file
-translator.invoke_mona("automa.mona") #it returns an intermediate automa.dot file
+translator.invoke_mona() #it returns an intermediate automa.dot file
 
-dotHandler = DotHandler("inter-automa.dot")
+dotHandler = DotHandler()
 dotHandler.modify_dot()
 dotHandler.output_dot() #it returns the final automa.dot file
 ```
