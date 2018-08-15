@@ -1,5 +1,8 @@
-from Parser import MyParser
+from ltlf2dfa.Parser import MyParser
 import itertools as it
+import subprocess
+import os, sys, re
+import pkg_resources
 
 class Translator:
 
@@ -8,14 +11,8 @@ class Translator:
         self.alphabet = []
         self.formula_to_be_parsed = formula
         self.formulaType = self.search_mixed_formula()
-        self.parsed_formula = ""
-        self.translated_formula = ""
-
-    def get_parsed_formula(self):
-        return self.parsed_formula
-
-    def get_translated_formula(self):
-        return self.translated_formula
+        self.parsed_formula = None
+        self.translated_formula = None
 
     def formula_parser(self):
         if self.formulaType in {1,2,3}:
@@ -27,14 +24,14 @@ class Translator:
     def tuple_to_string(self):
         return '_'.join(str(self.formula_to_be_parsed))
 
-    '''
-    search_mixed_formula() possible outputs:
-    0: formula is mixed
-    1: formula is only future
-    2: formula is only past
-    3: formula is only present
-    '''
     def search_mixed_formula(self):
+        '''
+        search_mixed_formula() possible outputs:
+        0: formula is mixed
+        1: formula is only future
+        2: formula is only past
+        3: formula is only present
+        '''
         formula_to_check_str = self.tuple_to_string()
         separated_formula = formula_to_check_str.split('_')
 
@@ -59,13 +56,9 @@ class Translator:
             return 0
 
     def compute_alphabet(self):
-        formula_to_check_str = self.tuple_to_string()
-        separated_formula = formula_to_check_str.split('_')
 
-        for character in separated_formula:
-            if character.islower():
-                self.alphabet.append(character.upper())
-            else: continue
+        symbols = re.findall('[a-z]+', str(self.formula_to_be_parsed))
+        self.alphabet = [character.upper() for character in set(symbols)]
 
     def compute_declare_assumption(self):
         pairs = list(it.combinations(self.alphabet, 2))
@@ -113,6 +106,32 @@ class Translator:
                 file.close()
         except IOError:
             print('Problem with the opening of the file!')
+
+    def invoke_mona(self):
+        if sys.platform == 'linux':
+            package_dir = os.path.dirname(os.path.abspath(__file__))
+            mona_path = pkg_resources.resource_filename('ltlf2dfa','mona')
+            if os.access(mona_path, os.X_OK):  # check if mona is executable
+                try:
+                    subprocess.call(package_dir+'/./mona -u -gw ./automa.mona > ./inter-automa.dot', shell=True)
+                except subprocess.CalledProcessError as e:
+                    print(e)
+                    exit()
+                except OSError as e:
+                    print(e)
+                    exit()
+            else:
+                print('[ERROR]: MONA tool is not executable...')
+                exit()
+        else:
+            try:
+                subprocess.call('mona -u -gw ./automa.mona > ./inter-automa.dot', shell=True)
+            except subprocess.CalledProcessError as e:
+                print(e)
+                exit()
+            except OSError as e:
+                print(e)
+                exit()
 
 def translate_bis(formula_tree, var):
     if type(formula_tree) == tuple:

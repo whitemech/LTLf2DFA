@@ -1,5 +1,5 @@
 import ply.yacc as yacc
-from Lexer import MyLexer
+from ltlf2dfa.Lexer import MyLexer
 
 class MyParser(object):
 
