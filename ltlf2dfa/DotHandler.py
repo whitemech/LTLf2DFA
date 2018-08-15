@@ -16,7 +16,6 @@ class DotHandler:
 
             graph = parser(dot)
             graph.delete_node('0')
-            graph.delete_node('init')
             graph.delete_edge('init', '0')
             graph.delete_edge('0', '1')
             graph.add_edge('init', '1')
