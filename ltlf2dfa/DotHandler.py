@@ -15,10 +15,11 @@ class DotHandler:
                 f.close()
 
             graph = parser(dot)
-            graph.delete_node('0')
-            graph.delete_edge('init', '0')
-            graph.delete_edge('0', '1')
-            graph.add_edge('init', '1')
+            if not graph.is_singleton():
+                graph.delete_node('0')
+                graph.delete_edge('init', '0')
+                graph.delete_edge('0', '1')
+                graph.add_edge('init', '1')
             self.new_digraph = graph
         else:
             print('[ERROR] - No file DOT exists')
