@@ -16,7 +16,7 @@ This tool is also based on the following libraries:
 
 - [ply 3.11](https://pypi.org/project/ply/)
 - [graphviz 0.8.3](http://graphviz.org)
-- [dotpy 0.0.1](https://pypi.org/project/dotpy/)
+- [dotpy 0.0.2](https://pypi.org/project/dotpy/)
 
 They are automatically added while installing LTL<sub>f</sub>2DFA.
 
