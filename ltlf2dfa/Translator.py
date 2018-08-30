@@ -107,13 +107,13 @@ class Translator:
         except IOError:
             print('Problem with the opening of the file!')
 
-    def invoke_mona(self):
+    def invoke_mona(self, path='./inter-automa'):
         if sys.platform == 'linux':
             package_dir = os.path.dirname(os.path.abspath(__file__))
             mona_path = pkg_resources.resource_filename('ltlf2dfa','mona')
             if os.access(mona_path, os.X_OK):  # check if mona is executable
                 try:
-                    subprocess.call(package_dir+'/./mona -u -gw ./automa.mona > ./inter-automa.dot', shell=True)
+                    subprocess.call(package_dir+'/./mona -u -gw ./automa.mona > ' + path + '.dot', shell=True)
                 except subprocess.CalledProcessError as e:
                     print(e)
                     exit()
@@ -125,7 +125,7 @@ class Translator:
                 exit()
         else:
             try:
-                subprocess.call('mona -u -gw ./automa.mona > ./inter-automa.dot', shell=True)
+                subprocess.call('mona -u -gw ./automa.mona > ' + path + '.dot', shell=True)
             except subprocess.CalledProcessError as e:
                 print(e)
                 exit()

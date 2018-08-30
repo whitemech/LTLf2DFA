@@ -3,8 +3,8 @@ import os
 
 class DotHandler:
 
-    def __init__(self):
-        self.dot_path = './inter-automa.dot'
+    def __init__(self, path='./inter-automa.dot'):
+        self.dot_path = path
         self.new_digraph = None
 
     def modify_dot(self):
@@ -26,16 +26,16 @@ class DotHandler:
             exit()
 
     def delete_intermediate_automaton(self):
-        if os.path.isfile("./inter-automa.dot"):
-            os.remove("./inter-automa.dot")
+        if os.path.isfile(self.dot_path):
+            os.remove(self.dot_path)
             return True
         else:
             return False
 
-    def output_dot(self):
+    def output_dot(self, result_path='./automa.dot'):
         try:
             if self.delete_intermediate_automaton():
-                with open("./automa.dot", 'w+') as f:
+                with open(result_path, 'w+') as f:
                     f.write(str(self.new_digraph))
                     f.close()
             else:
