@@ -6,7 +6,7 @@ This tool is written in Python 3.6.
 
 It is tested on Linux Ubuntu 16.04 and on macOS 10.13.6.
 
-Now it is also available online at [ltlf2dfa.diag.uniroma1.it]().
+Now it is also available online at [ltlf2dfa.diag.uniroma1.it](ltlf2dfa.diag.uniroma1.it).
 
 ## Getting Started
 
