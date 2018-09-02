@@ -39,6 +39,6 @@ class DotHandler:
                     f.write(str(self.new_digraph))
                     f.close()
             else:
-                raise IOError('[ERROR] - Something wrong occurred in the elimination of inter-automa.dot file.')
+                raise IOError('[ERROR] - Something wrong occurred in the elimination of intermediate automaton.')
         except IOError:
-            print('[ERROR] - Problem with the opening of the file automa.dot!')
+            print('[ERROR] - Problem with the opening of the file %s!' %result_path)
