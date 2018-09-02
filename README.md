@@ -6,6 +6,8 @@ This tool is written in Python 3.6.
 
 It is tested on Linux Ubuntu 16.04 and on macOS 10.13.6.
 
+Now it is also available online at [ltlf2dfa.diag.uniroma1.it](http://ltlf2dfa.diag.uniroma1.it).
+
 ## Getting Started
 
 ### Requirements
@@ -16,7 +18,7 @@ This tool is also based on the following libraries:
 
 - [ply 3.11](https://pypi.org/project/ply/)
 - [graphviz 0.8.3](http://graphviz.org)
-- [dotpy 0.0.1](https://pypi.org/project/dotpy/)
+- [dotpy 0.0.2](https://pypi.org/project/dotpy/)
 
 They are automatically added while installing LTL<sub>f</sub>2DFA.
 
