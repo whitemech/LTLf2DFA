@@ -151,6 +151,7 @@ def translate_bis(formula_tree, var):
                 return 'false'
             elif a == 'true':
                 if b == 'true': return 'true'
+                else: return b
             elif b == 'true': return a
             else: return '('+a+' & '+b+')'
         elif formula_tree[0] == '|':
