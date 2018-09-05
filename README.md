@@ -1,7 +1,7 @@
 # LTL<sub>f</sub>2DFA
 [![ciaio](https://img.shields.io/badge/python-3.6-blue.svg)]()
 
-LTL<sub>f</sub>2DFA is a simple tool that processes an LTL<sub>f</sub> formula (with past or future operators) and generates the corresponding minimized DFA (Deterministic Finite state Automaton) using [MONA](http://www.brics.dk/mona/).
+LTL<sub>f</sub>2DFA is a simple tool that processes an LTL<sub>f</sub> formula (with all past or all future operators) and generates the corresponding minimized DFA (Deterministic Finite state Automaton) using [MONA](http://www.brics.dk/mona/).
 This tool is written in Python 3.6.
 
 It is tested on Linux Ubuntu 16.04 and on macOS 10.13.6.
@@ -17,7 +17,6 @@ This tool uses MONA for the generation of the DFA. Hence, you should first insta
 This tool is also based on the following libraries:
 
 - [ply 3.11](https://pypi.org/project/ply/)
-- [graphviz 0.8.3](http://graphviz.org)
 - [dotpy 0.0.2](https://pypi.org/project/dotpy/)
 
 They are automatically added while installing LTL<sub>f</sub>2DFA.
@@ -30,7 +29,7 @@ pip install ltlf2dfa
 ```
 - From this repository:
 ```
-pip install git+https://github.com/Francesco17/LTLf2DFA@distribution#egg=ltlf2dfa
+pip install git+https://github.com/Francesco17/LTLf2DFA@master#egg=ltlf2dfa
 ```
 
 ## How To Use It
@@ -69,8 +68,8 @@ The syntax accepted by LTL<sub>f</sub>2DFA is the following:
 
 |    OPERATOR   | SYMBOL |
 |:-------------:|:------:|
-|      TRUE     |    T   |
-|     FALSE     |    F   |
+|      TRUE     |  true  |
+|     FALSE     |  false |
 |      AND      |    &   |
 |       OR      |    \|  |
 |      NOT      |    ~   |
@@ -78,8 +77,10 @@ The syntax accepted by LTL<sub>f</sub>2DFA is the following:
 | D-IMPLICATION |   <->  |
 |      NEXT     |    X   |
 |     UNTIL     |    U   |
-|   EVENTUALLY  |    E   |
+|   EVENTUALLY  |    F   |
 |    GLOBALLY   |    G   |
+|   WEAK NEXT   |    W   |
+|    RELEASE    |    R   |
 | YESTERDAY (*) |    Y   |
 |    SINCE (*)  |    S   |
 |    ONCE (*)   |    O   |
