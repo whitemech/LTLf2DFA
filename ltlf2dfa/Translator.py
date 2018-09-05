@@ -39,9 +39,7 @@ class Translator:
         future_operators = []
         for character in separated_formula:
             if character.isupper():
-                if character == 'T': continue
-                elif character == 'F': continue
-                elif character in {'X','E','G','U'}: future_operators.append(character)
+                if character in {'X','F','G','U', 'W', 'R'}: future_operators.append(character)
                 elif character in {'Y','O','H','S'}: past_operators.append(character)
                 else: continue
             else: continue
@@ -57,7 +55,7 @@ class Translator:
 
     def compute_alphabet(self):
 
-        symbols = re.findall('[a-z]+', str(self.formula_to_be_parsed))
+        symbols = re.findall('(?<![a-z])(?!true|false)[a-z]+', str(self.formula_to_be_parsed))
         self.alphabet = [character.upper() for character in set(symbols)]
 
     def compute_declare_assumption(self):
@@ -229,8 +227,8 @@ def translate_bis(formula_tree, var):
                 else: return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= '+var+' & '+ a +' & all1 '+new_new_var+': '+new_var+' < '+new_new_var+' & '+new_new_var+' <= '+var+' => '+b+' )'
     else:
         # handling non-tuple cases
-        if formula_tree[0] == 'T': return 'true'
-        elif formula_tree[0] == 'F': return 'false'
+        if formula_tree == 'true': return 'true'
+        elif formula_tree == 'false': return 'false'
 
         # enable if you want to see recursion
         # print('computed tree: '+ str(self.parsed_formula))

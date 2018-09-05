@@ -6,8 +6,10 @@ class MyLexer(object):
         'true':     'TRUE',
         'false':    'FALSE',
         'X':        'NEXT',
+        'W':        'WEAKNEXT',
+        'R':        'RELEASE',
         'U':        'UNTIL',
-        'E':        'EVENTUALLY',
+        'F':        'EVENTUALLY',
         'G':        'GLOBALLY',
         'Y':        'PASTNEXT', #PREVIOUS
         'S':        'PASTUNTIL', #SINCE
@@ -16,7 +18,6 @@ class MyLexer(object):
     }
     # List of token names.   This is always required
     tokens = (
-
         'TERM',
         'NOT',
         'AND',
@@ -28,8 +29,8 @@ class MyLexer(object):
     ) + tuple(reserved.values())
 
     # Regular expression rules for simple tokens
-    t_TRUE = r'T'
-    t_FALSE = r'F'
+    t_TRUE = r'true'
+    t_FALSE = r'false'
     t_AND = r'\&'
     t_OR = r'\|'
     t_IMPLIES = r'\->'
@@ -39,8 +40,10 @@ class MyLexer(object):
     t_RPAR = r'\)'
     # FUTURE OPERATORS
     t_NEXT = r'X'
+    t_WEAKNEXT = r'W'
+    t_RELEASE = r'R'
     t_UNTIL = r'U'
-    t_EVENTUALLY = r'E'
+    t_EVENTUALLY = r'F'
     t_GLOBALLY = r'G'
     # PAST OPERATOR
     t_PASTNEXT = r'Y'
@@ -51,7 +54,7 @@ class MyLexer(object):
     t_ignore = r' '+'\n'
 
     def t_TERM(self, t):
-        r'[a-z]+'
+        r'(?<![a-z])(?!true|false)[a-z]+'
         t.type = MyLexer.reserved.get(t.value, 'TERM')
         return t  # Check for reserved words
 

@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 with open('README.md') as readme_file:
     readme = readme_file.read()
 
-requirements = ['ply', 'graphviz', 'dotpy']
+requirements = ['ply', 'dotpy']
 
 setup(
     author="Francesco Fuggitti",
@@ -28,5 +28,5 @@ setup(
     name='ltlf2dfa',
     packages=find_packages(include=['ltlf2dfa*']),
     url='https://github.com/Francesco17/LTLf2DFA',
-    version='0.2.0.post3',
+    version='0.2.1',
 )
