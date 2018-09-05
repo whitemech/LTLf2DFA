@@ -52,7 +52,7 @@ class MyParser(object):
             elif p[1] == 'H': # pastglobally A == not( pasteventually (not A) )
                 p[0] = ('~',('S', 'true', ('~',p[2])))
             elif p[1] == 'W':
-                p[0] = ('~', ('X', ('~', p[1])))
+                p[0] = ('~', ('X', ('~', p[2])))
             else:
                 p[0] = (p[1], p[2])
         elif len(p) == 4:
