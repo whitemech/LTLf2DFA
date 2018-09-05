@@ -28,5 +28,5 @@ setup(
     name='ltlf2dfa',
     packages=find_packages(include=['ltlf2dfa*']),
     url='https://github.com/Francesco17/LTLf2DFA',
-    version='0.2.1',
+    version='0.2.1post0',
 )
