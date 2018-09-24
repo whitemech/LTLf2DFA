@@ -8,44 +8,48 @@ Rule 2     formula -> formula OR formula
 Rule 3     formula -> formula IMPLIES formula
 Rule 4     formula -> formula DIMPLIES formula
 Rule 5     formula -> formula UNTIL formula
-Rule 6     formula -> formula PASTUNTIL formula
-Rule 7     formula -> NEXT formula
-Rule 8     formula -> EVENTUALLY formula
-Rule 9     formula -> GLOBALLY formula
-Rule 10    formula -> PASTNEXT formula
-Rule 11    formula -> PASTEVENTUALLY formula
-Rule 12    formula -> PASTGLOBALLY formula
-Rule 13    formula -> NOT formula
-Rule 14    formula -> TRUE
-Rule 15    formula -> FALSE
-Rule 16    formula -> TERM
-Rule 17    formula -> LPAR formula RPAR
+Rule 6     formula -> formula RELEASE formula
+Rule 7     formula -> formula PASTUNTIL formula
+Rule 8     formula -> NEXT formula
+Rule 9     formula -> WEAKNEXT formula
+Rule 10    formula -> EVENTUALLY formula
+Rule 11    formula -> GLOBALLY formula
+Rule 12    formula -> PASTNEXT formula
+Rule 13    formula -> PASTEVENTUALLY formula
+Rule 14    formula -> PASTGLOBALLY formula
+Rule 15    formula -> NOT formula
+Rule 16    formula -> TRUE
+Rule 17    formula -> FALSE
+Rule 18    formula -> TERM
+Rule 19    formula -> LPAR formula RPAR
 
 Terminals, with rules where they appear
 
 AND                  : 1
 DIMPLIES             : 4
-EVENTUALLY           : 8
-FALSE                : 15
-GLOBALLY             : 9
+EVENTUALLY           : 10
+FALSE                : 17
+GLOBALLY             : 11
 IMPLIES              : 3
-LPAR                 : 17
-NEXT                 : 7
-NOT                  : 13
+LPAR                 : 19
+NEXT                 : 8
+NOT                  : 15
 OR                   : 2
-PASTEVENTUALLY       : 11
-PASTGLOBALLY         : 12
-PASTNEXT             : 10
-PASTUNTIL            : 6
-RPAR                 : 17
-TERM                 : 16
-TRUE                 : 14
+PASTEVENTUALLY       : 13
+PASTGLOBALLY         : 14
+PASTNEXT             : 12
+PASTUNTIL            : 7
+RELEASE              : 6
+RPAR                 : 19
+TERM                 : 18
+TRUE                 : 16
 UNTIL                : 5
+WEAKNEXT             : 9
 error                : 
 
 Nonterminals, with rules where they appear
 
-formula              : 1 1 2 2 3 3 4 4 5 5 6 6 7 8 9 10 11 12 13 17 0
+formula              : 1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 9 10 11 12 13 14 15 19 0
 
 Parsing method: LALR
 
@@ -57,30 +61,33 @@ state 0
     (3) formula -> . formula IMPLIES formula
     (4) formula -> . formula DIMPLIES formula
     (5) formula -> . formula UNTIL formula
-    (6) formula -> . formula PASTUNTIL formula
-    (7) formula -> . NEXT formula
-    (8) formula -> . EVENTUALLY formula
-    (9) formula -> . GLOBALLY formula
-    (10) formula -> . PASTNEXT formula
-    (11) formula -> . PASTEVENTUALLY formula
-    (12) formula -> . PASTGLOBALLY formula
-    (13) formula -> . NOT formula
-    (14) formula -> . TRUE
-    (15) formula -> . FALSE
-    (16) formula -> . TERM
-    (17) formula -> . LPAR formula RPAR
+    (6) formula -> . formula RELEASE formula
+    (7) formula -> . formula PASTUNTIL formula
+    (8) formula -> . NEXT formula
+    (9) formula -> . WEAKNEXT formula
+    (10) formula -> . EVENTUALLY formula
+    (11) formula -> . GLOBALLY formula
+    (12) formula -> . PASTNEXT formula
+    (13) formula -> . PASTEVENTUALLY formula
+    (14) formula -> . PASTGLOBALLY formula
+    (15) formula -> . NOT formula
+    (16) formula -> . TRUE
+    (17) formula -> . FALSE
+    (18) formula -> . TERM
+    (19) formula -> . LPAR formula RPAR
 
     NEXT            shift and go to state 2
-    EVENTUALLY      shift and go to state 3
-    GLOBALLY        shift and go to state 4
-    PASTNEXT        shift and go to state 5
-    PASTEVENTUALLY  shift and go to state 6
-    PASTGLOBALLY    shift and go to state 7
-    NOT             shift and go to state 8
-    TRUE            shift and go to state 9
-    FALSE           shift and go to state 10
-    TERM            shift and go to state 11
-    LPAR            shift and go to state 12
+    WEAKNEXT        shift and go to state 3
+    EVENTUALLY      shift and go to state 4
+    GLOBALLY        shift and go to state 5
+    PASTNEXT        shift and go to state 6
+    PASTEVENTUALLY  shift and go to state 7
+    PASTGLOBALLY    shift and go to state 8
+    NOT             shift and go to state 9
+    TRUE            shift and go to state 10
+    FALSE           shift and go to state 11
+    TERM            shift and go to state 12
+    LPAR            shift and go to state 13
 
     formula                        shift and go to state 1
 
@@ -92,339 +99,406 @@ state 1
     (3) formula -> formula . IMPLIES formula
     (4) formula -> formula . DIMPLIES formula
     (5) formula -> formula . UNTIL formula
-    (6) formula -> formula . PASTUNTIL formula
+    (6) formula -> formula . RELEASE formula
+    (7) formula -> formula . PASTUNTIL formula
 
-    AND             shift and go to state 13
-    OR              shift and go to state 14
-    IMPLIES         shift and go to state 15
-    DIMPLIES        shift and go to state 16
-    UNTIL           shift and go to state 17
-    PASTUNTIL       shift and go to state 18
+    AND             shift and go to state 14
+    OR              shift and go to state 15
+    IMPLIES         shift and go to state 16
+    DIMPLIES        shift and go to state 17
+    UNTIL           shift and go to state 18
+    RELEASE         shift and go to state 19
+    PASTUNTIL       shift and go to state 20
 
 
 state 2
 
-    (7) formula -> NEXT . formula
+    (8) formula -> NEXT . formula
     (1) formula -> . formula AND formula
     (2) formula -> . formula OR formula
     (3) formula -> . formula IMPLIES formula
     (4) formula -> . formula DIMPLIES formula
     (5) formula -> . formula UNTIL formula
-    (6) formula -> . formula PASTUNTIL formula
-    (7) formula -> . NEXT formula
-    (8) formula -> . EVENTUALLY formula
-    (9) formula -> . GLOBALLY formula
-    (10) formula -> . PASTNEXT formula
-    (11) formula -> . PASTEVENTUALLY formula
-    (12) formula -> . PASTGLOBALLY formula
-    (13) formula -> . NOT formula
-    (14) formula -> . TRUE
-    (15) formula -> . FALSE
-    (16) formula -> . TERM
-    (17) formula -> . LPAR formula RPAR
+    (6) formula -> . formula RELEASE formula
+    (7) formula -> . formula PASTUNTIL formula
+    (8) formula -> . NEXT formula
+    (9) formula -> . WEAKNEXT formula
+    (10) formula -> . EVENTUALLY formula
+    (11) formula -> . GLOBALLY formula
+    (12) formula -> . PASTNEXT formula
+    (13) formula -> . PASTEVENTUALLY formula
+    (14) formula -> . PASTGLOBALLY formula
+    (15) formula -> . NOT formula
+    (16) formula -> . TRUE
+    (17) formula -> . FALSE
+    (18) formula -> . TERM
+    (19) formula -> . LPAR formula RPAR
 
     NEXT            shift and go to state 2
-    EVENTUALLY      shift and go to state 3
-    GLOBALLY        shift and go to state 4
-    PASTNEXT        shift and go to state 5
-    PASTEVENTUALLY  shift and go to state 6
-    PASTGLOBALLY    shift and go to state 7
-    NOT             shift and go to state 8
-    TRUE            shift and go to state 9
-    FALSE           shift and go to state 10
-    TERM            shift and go to state 11
-    LPAR            shift and go to state 12
-
-    formula                        shift and go to state 19
-
-state 3
-
-    (8) formula -> EVENTUALLY . formula
-    (1) formula -> . formula AND formula
-    (2) formula -> . formula OR formula
-    (3) formula -> . formula IMPLIES formula
-    (4) formula -> . formula DIMPLIES formula
-    (5) formula -> . formula UNTIL formula
-    (6) formula -> . formula PASTUNTIL formula
-    (7) formula -> . NEXT formula
-    (8) formula -> . EVENTUALLY formula
-    (9) formula -> . GLOBALLY formula
-    (10) formula -> . PASTNEXT formula
-    (11) formula -> . PASTEVENTUALLY formula
-    (12) formula -> . PASTGLOBALLY formula
-    (13) formula -> . NOT formula
-    (14) formula -> . TRUE
-    (15) formula -> . FALSE
-    (16) formula -> . TERM
-    (17) formula -> . LPAR formula RPAR
-
-    NEXT            shift and go to state 2
-    EVENTUALLY      shift and go to state 3
-    GLOBALLY        shift and go to state 4
-    PASTNEXT        shift and go to state 5
-    PASTEVENTUALLY  shift and go to state 6
-    PASTGLOBALLY    shift and go to state 7
-    NOT             shift and go to state 8
-    TRUE            shift and go to state 9
-    FALSE           shift and go to state 10
-    TERM            shift and go to state 11
-    LPAR            shift and go to state 12
-
-    formula                        shift and go to state 20
-
-state 4
-
-    (9) formula -> GLOBALLY . formula
-    (1) formula -> . formula AND formula
-    (2) formula -> . formula OR formula
-    (3) formula -> . formula IMPLIES formula
-    (4) formula -> . formula DIMPLIES formula
-    (5) formula -> . formula UNTIL formula
-    (6) formula -> . formula PASTUNTIL formula
-    (7) formula -> . NEXT formula
-    (8) formula -> . EVENTUALLY formula
-    (9) formula -> . GLOBALLY formula
-    (10) formula -> . PASTNEXT formula
-    (11) formula -> . PASTEVENTUALLY formula
-    (12) formula -> . PASTGLOBALLY formula
-    (13) formula -> . NOT formula
-    (14) formula -> . TRUE
-    (15) formula -> . FALSE
-    (16) formula -> . TERM
-    (17) formula -> . LPAR formula RPAR
-
-    NEXT            shift and go to state 2
-    EVENTUALLY      shift and go to state 3
-    GLOBALLY        shift and go to state 4
-    PASTNEXT        shift and go to state 5
-    PASTEVENTUALLY  shift and go to state 6
-    PASTGLOBALLY    shift and go to state 7
-    NOT             shift and go to state 8
-    TRUE            shift and go to state 9
-    FALSE           shift and go to state 10
-    TERM            shift and go to state 11
-    LPAR            shift and go to state 12
+    WEAKNEXT        shift and go to state 3
+    EVENTUALLY      shift and go to state 4
+    GLOBALLY        shift and go to state 5
+    PASTNEXT        shift and go to state 6
+    PASTEVENTUALLY  shift and go to state 7
+    PASTGLOBALLY    shift and go to state 8
+    NOT             shift and go to state 9
+    TRUE            shift and go to state 10
+    FALSE           shift and go to state 11
+    TERM            shift and go to state 12
+    LPAR            shift and go to state 13
 
     formula                        shift and go to state 21
 
-state 5
+state 3
 
-    (10) formula -> PASTNEXT . formula
+    (9) formula -> WEAKNEXT . formula
     (1) formula -> . formula AND formula
     (2) formula -> . formula OR formula
     (3) formula -> . formula IMPLIES formula
     (4) formula -> . formula DIMPLIES formula
     (5) formula -> . formula UNTIL formula
-    (6) formula -> . formula PASTUNTIL formula
-    (7) formula -> . NEXT formula
-    (8) formula -> . EVENTUALLY formula
-    (9) formula -> . GLOBALLY formula
-    (10) formula -> . PASTNEXT formula
-    (11) formula -> . PASTEVENTUALLY formula
-    (12) formula -> . PASTGLOBALLY formula
-    (13) formula -> . NOT formula
-    (14) formula -> . TRUE
-    (15) formula -> . FALSE
-    (16) formula -> . TERM
-    (17) formula -> . LPAR formula RPAR
+    (6) formula -> . formula RELEASE formula
+    (7) formula -> . formula PASTUNTIL formula
+    (8) formula -> . NEXT formula
+    (9) formula -> . WEAKNEXT formula
+    (10) formula -> . EVENTUALLY formula
+    (11) formula -> . GLOBALLY formula
+    (12) formula -> . PASTNEXT formula
+    (13) formula -> . PASTEVENTUALLY formula
+    (14) formula -> . PASTGLOBALLY formula
+    (15) formula -> . NOT formula
+    (16) formula -> . TRUE
+    (17) formula -> . FALSE
+    (18) formula -> . TERM
+    (19) formula -> . LPAR formula RPAR
 
     NEXT            shift and go to state 2
-    EVENTUALLY      shift and go to state 3
-    GLOBALLY        shift and go to state 4
-    PASTNEXT        shift and go to state 5
-    PASTEVENTUALLY  shift and go to state 6
-    PASTGLOBALLY    shift and go to state 7
-    NOT             shift and go to state 8
-    TRUE            shift and go to state 9
-    FALSE           shift and go to state 10
-    TERM            shift and go to state 11
-    LPAR            shift and go to state 12
+    WEAKNEXT        shift and go to state 3
+    EVENTUALLY      shift and go to state 4
+    GLOBALLY        shift and go to state 5
+    PASTNEXT        shift and go to state 6
+    PASTEVENTUALLY  shift and go to state 7
+    PASTGLOBALLY    shift and go to state 8
+    NOT             shift and go to state 9
+    TRUE            shift and go to state 10
+    FALSE           shift and go to state 11
+    TERM            shift and go to state 12
+    LPAR            shift and go to state 13
 
     formula                        shift and go to state 22
 
-state 6
+state 4
 
-    (11) formula -> PASTEVENTUALLY . formula
+    (10) formula -> EVENTUALLY . formula
     (1) formula -> . formula AND formula
     (2) formula -> . formula OR formula
     (3) formula -> . formula IMPLIES formula
     (4) formula -> . formula DIMPLIES formula
     (5) formula -> . formula UNTIL formula
-    (6) formula -> . formula PASTUNTIL formula
-    (7) formula -> . NEXT formula
-    (8) formula -> . EVENTUALLY formula
-    (9) formula -> . GLOBALLY formula
-    (10) formula -> . PASTNEXT formula
-    (11) formula -> . PASTEVENTUALLY formula
-    (12) formula -> . PASTGLOBALLY formula
-    (13) formula -> . NOT formula
-    (14) formula -> . TRUE
-    (15) formula -> . FALSE
-    (16) formula -> . TERM
-    (17) formula -> . LPAR formula RPAR
+    (6) formula -> . formula RELEASE formula
+    (7) formula -> . formula PASTUNTIL formula
+    (8) formula -> . NEXT formula
+    (9) formula -> . WEAKNEXT formula
+    (10) formula -> . EVENTUALLY formula
+    (11) formula -> . GLOBALLY formula
+    (12) formula -> . PASTNEXT formula
+    (13) formula -> . PASTEVENTUALLY formula
+    (14) formula -> . PASTGLOBALLY formula
+    (15) formula -> . NOT formula
+    (16) formula -> . TRUE
+    (17) formula -> . FALSE
+    (18) formula -> . TERM
+    (19) formula -> . LPAR formula RPAR
 
     NEXT            shift and go to state 2
-    EVENTUALLY      shift and go to state 3
-    GLOBALLY        shift and go to state 4
-    PASTNEXT        shift and go to state 5
-    PASTEVENTUALLY  shift and go to state 6
-    PASTGLOBALLY    shift and go to state 7
-    NOT             shift and go to state 8
-    TRUE            shift and go to state 9
-    FALSE           shift and go to state 10
-    TERM            shift and go to state 11
-    LPAR            shift and go to state 12
+    WEAKNEXT        shift and go to state 3
+    EVENTUALLY      shift and go to state 4
+    GLOBALLY        shift and go to state 5
+    PASTNEXT        shift and go to state 6
+    PASTEVENTUALLY  shift and go to state 7
+    PASTGLOBALLY    shift and go to state 8
+    NOT             shift and go to state 9
+    TRUE            shift and go to state 10
+    FALSE           shift and go to state 11
+    TERM            shift and go to state 12
+    LPAR            shift and go to state 13
 
     formula                        shift and go to state 23
 
-state 7
+state 5
 
-    (12) formula -> PASTGLOBALLY . formula
+    (11) formula -> GLOBALLY . formula
     (1) formula -> . formula AND formula
     (2) formula -> . formula OR formula
     (3) formula -> . formula IMPLIES formula
     (4) formula -> . formula DIMPLIES formula
     (5) formula -> . formula UNTIL formula
-    (6) formula -> . formula PASTUNTIL formula
-    (7) formula -> . NEXT formula
-    (8) formula -> . EVENTUALLY formula
-    (9) formula -> . GLOBALLY formula
-    (10) formula -> . PASTNEXT formula
-    (11) formula -> . PASTEVENTUALLY formula
-    (12) formula -> . PASTGLOBALLY formula
-    (13) formula -> . NOT formula
-    (14) formula -> . TRUE
-    (15) formula -> . FALSE
-    (16) formula -> . TERM
-    (17) formula -> . LPAR formula RPAR
+    (6) formula -> . formula RELEASE formula
+    (7) formula -> . formula PASTUNTIL formula
+    (8) formula -> . NEXT formula
+    (9) formula -> . WEAKNEXT formula
+    (10) formula -> . EVENTUALLY formula
+    (11) formula -> . GLOBALLY formula
+    (12) formula -> . PASTNEXT formula
+    (13) formula -> . PASTEVENTUALLY formula
+    (14) formula -> . PASTGLOBALLY formula
+    (15) formula -> . NOT formula
+    (16) formula -> . TRUE
+    (17) formula -> . FALSE
+    (18) formula -> . TERM
+    (19) formula -> . LPAR formula RPAR
 
     NEXT            shift and go to state 2
-    EVENTUALLY      shift and go to state 3
-    GLOBALLY        shift and go to state 4
-    PASTNEXT        shift and go to state 5
-    PASTEVENTUALLY  shift and go to state 6
-    PASTGLOBALLY    shift and go to state 7
-    NOT             shift and go to state 8
-    TRUE            shift and go to state 9
-    FALSE           shift and go to state 10
-    TERM            shift and go to state 11
-    LPAR            shift and go to state 12
+    WEAKNEXT        shift and go to state 3
+    EVENTUALLY      shift and go to state 4
+    GLOBALLY        shift and go to state 5
+    PASTNEXT        shift and go to state 6
+    PASTEVENTUALLY  shift and go to state 7
+    PASTGLOBALLY    shift and go to state 8
+    NOT             shift and go to state 9
+    TRUE            shift and go to state 10
+    FALSE           shift and go to state 11
+    TERM            shift and go to state 12
+    LPAR            shift and go to state 13
 
     formula                        shift and go to state 24
 
-state 8
+state 6
 
-    (13) formula -> NOT . formula
+    (12) formula -> PASTNEXT . formula
     (1) formula -> . formula AND formula
     (2) formula -> . formula OR formula
     (3) formula -> . formula IMPLIES formula
     (4) formula -> . formula DIMPLIES formula
     (5) formula -> . formula UNTIL formula
-    (6) formula -> . formula PASTUNTIL formula
-    (7) formula -> . NEXT formula
-    (8) formula -> . EVENTUALLY formula
-    (9) formula -> . GLOBALLY formula
-    (10) formula -> . PASTNEXT formula
-    (11) formula -> . PASTEVENTUALLY formula
-    (12) formula -> . PASTGLOBALLY formula
-    (13) formula -> . NOT formula
-    (14) formula -> . TRUE
-    (15) formula -> . FALSE
-    (16) formula -> . TERM
-    (17) formula -> . LPAR formula RPAR
+    (6) formula -> . formula RELEASE formula
+    (7) formula -> . formula PASTUNTIL formula
+    (8) formula -> . NEXT formula
+    (9) formula -> . WEAKNEXT formula
+    (10) formula -> . EVENTUALLY formula
+    (11) formula -> . GLOBALLY formula
+    (12) formula -> . PASTNEXT formula
+    (13) formula -> . PASTEVENTUALLY formula
+    (14) formula -> . PASTGLOBALLY formula
+    (15) formula -> . NOT formula
+    (16) formula -> . TRUE
+    (17) formula -> . FALSE
+    (18) formula -> . TERM
+    (19) formula -> . LPAR formula RPAR
 
     NEXT            shift and go to state 2
-    EVENTUALLY      shift and go to state 3
-    GLOBALLY        shift and go to state 4
-    PASTNEXT        shift and go to state 5
-    PASTEVENTUALLY  shift and go to state 6
-    PASTGLOBALLY    shift and go to state 7
-    NOT             shift and go to state 8
-    TRUE            shift and go to state 9
-    FALSE           shift and go to state 10
-    TERM            shift and go to state 11
-    LPAR            shift and go to state 12
+    WEAKNEXT        shift and go to state 3
+    EVENTUALLY      shift and go to state 4
+    GLOBALLY        shift and go to state 5
+    PASTNEXT        shift and go to state 6
+    PASTEVENTUALLY  shift and go to state 7
+    PASTGLOBALLY    shift and go to state 8
+    NOT             shift and go to state 9
+    TRUE            shift and go to state 10
+    FALSE           shift and go to state 11
+    TERM            shift and go to state 12
+    LPAR            shift and go to state 13
 
     formula                        shift and go to state 25
 
+state 7
+
+    (13) formula -> PASTEVENTUALLY . formula
+    (1) formula -> . formula AND formula
+    (2) formula -> . formula OR formula
+    (3) formula -> . formula IMPLIES formula
+    (4) formula -> . formula DIMPLIES formula
+    (5) formula -> . formula UNTIL formula
+    (6) formula -> . formula RELEASE formula
+    (7) formula -> . formula PASTUNTIL formula
+    (8) formula -> . NEXT formula
+    (9) formula -> . WEAKNEXT formula
+    (10) formula -> . EVENTUALLY formula
+    (11) formula -> . GLOBALLY formula
+    (12) formula -> . PASTNEXT formula
+    (13) formula -> . PASTEVENTUALLY formula
+    (14) formula -> . PASTGLOBALLY formula
+    (15) formula -> . NOT formula
+    (16) formula -> . TRUE
+    (17) formula -> . FALSE
+    (18) formula -> . TERM
+    (19) formula -> . LPAR formula RPAR
+
+    NEXT            shift and go to state 2
+    WEAKNEXT        shift and go to state 3
+    EVENTUALLY      shift and go to state 4
+    GLOBALLY        shift and go to state 5
+    PASTNEXT        shift and go to state 6
+    PASTEVENTUALLY  shift and go to state 7
+    PASTGLOBALLY    shift and go to state 8
+    NOT             shift and go to state 9
+    TRUE            shift and go to state 10
+    FALSE           shift and go to state 11
+    TERM            shift and go to state 12
+    LPAR            shift and go to state 13
+
+    formula                        shift and go to state 26
+
+state 8
+
+    (14) formula -> PASTGLOBALLY . formula
+    (1) formula -> . formula AND formula
+    (2) formula -> . formula OR formula
+    (3) formula -> . formula IMPLIES formula
+    (4) formula -> . formula DIMPLIES formula
+    (5) formula -> . formula UNTIL formula
+    (6) formula -> . formula RELEASE formula
+    (7) formula -> . formula PASTUNTIL formula
+    (8) formula -> . NEXT formula
+    (9) formula -> . WEAKNEXT formula
+    (10) formula -> . EVENTUALLY formula
+    (11) formula -> . GLOBALLY formula
+    (12) formula -> . PASTNEXT formula
+    (13) formula -> . PASTEVENTUALLY formula
+    (14) formula -> . PASTGLOBALLY formula
+    (15) formula -> . NOT formula
+    (16) formula -> . TRUE
+    (17) formula -> . FALSE
+    (18) formula -> . TERM
+    (19) formula -> . LPAR formula RPAR
+
+    NEXT            shift and go to state 2
+    WEAKNEXT        shift and go to state 3
+    EVENTUALLY      shift and go to state 4
+    GLOBALLY        shift and go to state 5
+    PASTNEXT        shift and go to state 6
+    PASTEVENTUALLY  shift and go to state 7
+    PASTGLOBALLY    shift and go to state 8
+    NOT             shift and go to state 9
+    TRUE            shift and go to state 10
+    FALSE           shift and go to state 11
+    TERM            shift and go to state 12
+    LPAR            shift and go to state 13
+
+    formula                        shift and go to state 27
+
 state 9
 
-    (14) formula -> TRUE .
+    (15) formula -> NOT . formula
+    (1) formula -> . formula AND formula
+    (2) formula -> . formula OR formula
+    (3) formula -> . formula IMPLIES formula
+    (4) formula -> . formula DIMPLIES formula
+    (5) formula -> . formula UNTIL formula
+    (6) formula -> . formula RELEASE formula
+    (7) formula -> . formula PASTUNTIL formula
+    (8) formula -> . NEXT formula
+    (9) formula -> . WEAKNEXT formula
+    (10) formula -> . EVENTUALLY formula
+    (11) formula -> . GLOBALLY formula
+    (12) formula -> . PASTNEXT formula
+    (13) formula -> . PASTEVENTUALLY formula
+    (14) formula -> . PASTGLOBALLY formula
+    (15) formula -> . NOT formula
+    (16) formula -> . TRUE
+    (17) formula -> . FALSE
+    (18) formula -> . TERM
+    (19) formula -> . LPAR formula RPAR
 
-    AND             reduce using rule 14 (formula -> TRUE .)
-    OR              reduce using rule 14 (formula -> TRUE .)
-    IMPLIES         reduce using rule 14 (formula -> TRUE .)
-    DIMPLIES        reduce using rule 14 (formula -> TRUE .)
-    UNTIL           reduce using rule 14 (formula -> TRUE .)
-    PASTUNTIL       reduce using rule 14 (formula -> TRUE .)
-    $end            reduce using rule 14 (formula -> TRUE .)
-    RPAR            reduce using rule 14 (formula -> TRUE .)
+    NEXT            shift and go to state 2
+    WEAKNEXT        shift and go to state 3
+    EVENTUALLY      shift and go to state 4
+    GLOBALLY        shift and go to state 5
+    PASTNEXT        shift and go to state 6
+    PASTEVENTUALLY  shift and go to state 7
+    PASTGLOBALLY    shift and go to state 8
+    NOT             shift and go to state 9
+    TRUE            shift and go to state 10
+    FALSE           shift and go to state 11
+    TERM            shift and go to state 12
+    LPAR            shift and go to state 13
 
+    formula                        shift and go to state 28
 
 state 10
 
-    (15) formula -> FALSE .
+    (16) formula -> TRUE .
 
-    AND             reduce using rule 15 (formula -> FALSE .)
-    OR              reduce using rule 15 (formula -> FALSE .)
-    IMPLIES         reduce using rule 15 (formula -> FALSE .)
-    DIMPLIES        reduce using rule 15 (formula -> FALSE .)
-    UNTIL           reduce using rule 15 (formula -> FALSE .)
-    PASTUNTIL       reduce using rule 15 (formula -> FALSE .)
-    $end            reduce using rule 15 (formula -> FALSE .)
-    RPAR            reduce using rule 15 (formula -> FALSE .)
+    AND             reduce using rule 16 (formula -> TRUE .)
+    OR              reduce using rule 16 (formula -> TRUE .)
+    IMPLIES         reduce using rule 16 (formula -> TRUE .)
+    DIMPLIES        reduce using rule 16 (formula -> TRUE .)
+    UNTIL           reduce using rule 16 (formula -> TRUE .)
+    RELEASE         reduce using rule 16 (formula -> TRUE .)
+    PASTUNTIL       reduce using rule 16 (formula -> TRUE .)
+    $end            reduce using rule 16 (formula -> TRUE .)
+    RPAR            reduce using rule 16 (formula -> TRUE .)
 
 
 state 11
 
-    (16) formula -> TERM .
+    (17) formula -> FALSE .
 
-    AND             reduce using rule 16 (formula -> TERM .)
-    OR              reduce using rule 16 (formula -> TERM .)
-    IMPLIES         reduce using rule 16 (formula -> TERM .)
-    DIMPLIES        reduce using rule 16 (formula -> TERM .)
-    UNTIL           reduce using rule 16 (formula -> TERM .)
-    PASTUNTIL       reduce using rule 16 (formula -> TERM .)
-    $end            reduce using rule 16 (formula -> TERM .)
-    RPAR            reduce using rule 16 (formula -> TERM .)
+    AND             reduce using rule 17 (formula -> FALSE .)
+    OR              reduce using rule 17 (formula -> FALSE .)
+    IMPLIES         reduce using rule 17 (formula -> FALSE .)
+    DIMPLIES        reduce using rule 17 (formula -> FALSE .)
+    UNTIL           reduce using rule 17 (formula -> FALSE .)
+    RELEASE         reduce using rule 17 (formula -> FALSE .)
+    PASTUNTIL       reduce using rule 17 (formula -> FALSE .)
+    $end            reduce using rule 17 (formula -> FALSE .)
+    RPAR            reduce using rule 17 (formula -> FALSE .)
 
 
 state 12
 
-    (17) formula -> LPAR . formula RPAR
+    (18) formula -> TERM .
+
+    AND             reduce using rule 18 (formula -> TERM .)
+    OR              reduce using rule 18 (formula -> TERM .)
+    IMPLIES         reduce using rule 18 (formula -> TERM .)
+    DIMPLIES        reduce using rule 18 (formula -> TERM .)
+    UNTIL           reduce using rule 18 (formula -> TERM .)
+    RELEASE         reduce using rule 18 (formula -> TERM .)
+    PASTUNTIL       reduce using rule 18 (formula -> TERM .)
+    $end            reduce using rule 18 (formula -> TERM .)
+    RPAR            reduce using rule 18 (formula -> TERM .)
+
+
+state 13
+
+    (19) formula -> LPAR . formula RPAR
     (1) formula -> . formula AND formula
     (2) formula -> . formula OR formula
     (3) formula -> . formula IMPLIES formula
     (4) formula -> . formula DIMPLIES formula
     (5) formula -> . formula UNTIL formula
-    (6) formula -> . formula PASTUNTIL formula
-    (7) formula -> . NEXT formula
-    (8) formula -> . EVENTUALLY formula
-    (9) formula -> . GLOBALLY formula
-    (10) formula -> . PASTNEXT formula
-    (11) formula -> . PASTEVENTUALLY formula
-    (12) formula -> . PASTGLOBALLY formula
-    (13) formula -> . NOT formula
-    (14) formula -> . TRUE
-    (15) formula -> . FALSE
-    (16) formula -> . TERM
-    (17) formula -> . LPAR formula RPAR
+    (6) formula -> . formula RELEASE formula
+    (7) formula -> . formula PASTUNTIL formula
+    (8) formula -> . NEXT formula
+    (9) formula -> . WEAKNEXT formula
+    (10) formula -> . EVENTUALLY formula
+    (11) formula -> . GLOBALLY formula
+    (12) formula -> . PASTNEXT formula
+    (13) formula -> . PASTEVENTUALLY formula
+    (14) formula -> . PASTGLOBALLY formula
+    (15) formula -> . NOT formula
+    (16) formula -> . TRUE
+    (17) formula -> . FALSE
+    (18) formula -> . TERM
+    (19) formula -> . LPAR formula RPAR
 
     NEXT            shift and go to state 2
-    EVENTUALLY      shift and go to state 3
-    GLOBALLY        shift and go to state 4
-    PASTNEXT        shift and go to state 5
-    PASTEVENTUALLY  shift and go to state 6
-    PASTGLOBALLY    shift and go to state 7
-    NOT             shift and go to state 8
-    TRUE            shift and go to state 9
-    FALSE           shift and go to state 10
-    TERM            shift and go to state 11
-    LPAR            shift and go to state 12
+    WEAKNEXT        shift and go to state 3
+    EVENTUALLY      shift and go to state 4
+    GLOBALLY        shift and go to state 5
+    PASTNEXT        shift and go to state 6
+    PASTEVENTUALLY  shift and go to state 7
+    PASTGLOBALLY    shift and go to state 8
+    NOT             shift and go to state 9
+    TRUE            shift and go to state 10
+    FALSE           shift and go to state 11
+    TERM            shift and go to state 12
+    LPAR            shift and go to state 13
 
-    formula                        shift and go to state 26
+    formula                        shift and go to state 29
 
-state 13
+state 14
 
     (1) formula -> formula AND . formula
     (1) formula -> . formula AND formula
@@ -432,34 +506,37 @@ state 13
     (3) formula -> . formula IMPLIES formula
     (4) formula -> . formula DIMPLIES formula
     (5) formula -> . formula UNTIL formula
-    (6) formula -> . formula PASTUNTIL formula
-    (7) formula -> . NEXT formula
-    (8) formula -> . EVENTUALLY formula
-    (9) formula -> . GLOBALLY formula
-    (10) formula -> . PASTNEXT formula
-    (11) formula -> . PASTEVENTUALLY formula
-    (12) formula -> . PASTGLOBALLY formula
-    (13) formula -> . NOT formula
-    (14) formula -> . TRUE
-    (15) formula -> . FALSE
-    (16) formula -> . TERM
-    (17) formula -> . LPAR formula RPAR
+    (6) formula -> . formula RELEASE formula
+    (7) formula -> . formula PASTUNTIL formula
+    (8) formula -> . NEXT formula
+    (9) formula -> . WEAKNEXT formula
+    (10) formula -> . EVENTUALLY formula
+    (11) formula -> . GLOBALLY formula
+    (12) formula -> . PASTNEXT formula
+    (13) formula -> . PASTEVENTUALLY formula
+    (14) formula -> . PASTGLOBALLY formula
+    (15) formula -> . NOT formula
+    (16) formula -> . TRUE
+    (17) formula -> . FALSE
+    (18) formula -> . TERM
+    (19) formula -> . LPAR formula RPAR
 
     NEXT            shift and go to state 2
-    EVENTUALLY      shift and go to state 3
-    GLOBALLY        shift and go to state 4
-    PASTNEXT        shift and go to state 5
-    PASTEVENTUALLY  shift and go to state 6
-    PASTGLOBALLY    shift and go to state 7
-    NOT             shift and go to state 8
-    TRUE            shift and go to state 9
-    FALSE           shift and go to state 10
-    TERM            shift and go to state 11
-    LPAR            shift and go to state 12
+    WEAKNEXT        shift and go to state 3
+    EVENTUALLY      shift and go to state 4
+    GLOBALLY        shift and go to state 5
+    PASTNEXT        shift and go to state 6
+    PASTEVENTUALLY  shift and go to state 7
+    PASTGLOBALLY    shift and go to state 8
+    NOT             shift and go to state 9
+    TRUE            shift and go to state 10
+    FALSE           shift and go to state 11
+    TERM            shift and go to state 12
+    LPAR            shift and go to state 13
 
-    formula                        shift and go to state 27
+    formula                        shift and go to state 30
 
-state 14
+state 15
 
     (2) formula -> formula OR . formula
     (1) formula -> . formula AND formula
@@ -467,34 +544,37 @@ state 14
     (3) formula -> . formula IMPLIES formula
     (4) formula -> . formula DIMPLIES formula
     (5) formula -> . formula UNTIL formula
-    (6) formula -> . formula PASTUNTIL formula
-    (7) formula -> . NEXT formula
-    (8) formula -> . EVENTUALLY formula
-    (9) formula -> . GLOBALLY formula
-    (10) formula -> . PASTNEXT formula
-    (11) formula -> . PASTEVENTUALLY formula
-    (12) formula -> . PASTGLOBALLY formula
-    (13) formula -> . NOT formula
-    (14) formula -> . TRUE
-    (15) formula -> . FALSE
-    (16) formula -> . TERM
-    (17) formula -> . LPAR formula RPAR
+    (6) formula -> . formula RELEASE formula
+    (7) formula -> . formula PASTUNTIL formula
+    (8) formula -> . NEXT formula
+    (9) formula -> . WEAKNEXT formula
+    (10) formula -> . EVENTUALLY formula
+    (11) formula -> . GLOBALLY formula
+    (12) formula -> . PASTNEXT formula
+    (13) formula -> . PASTEVENTUALLY formula
+    (14) formula -> . PASTGLOBALLY formula
+    (15) formula -> . NOT formula
+    (16) formula -> . TRUE
+    (17) formula -> . FALSE
+    (18) formula -> . TERM
+    (19) formula -> . LPAR formula RPAR
 
     NEXT            shift and go to state 2
-    EVENTUALLY      shift and go to state 3
-    GLOBALLY        shift and go to state 4
-    PASTNEXT        shift and go to state 5
-    PASTEVENTUALLY  shift and go to state 6
-    PASTGLOBALLY    shift and go to state 7
-    NOT             shift and go to state 8
-    TRUE            shift and go to state 9
-    FALSE           shift and go to state 10
-    TERM            shift and go to state 11
-    LPAR            shift and go to state 12
+    WEAKNEXT        shift and go to state 3
+    EVENTUALLY      shift and go to state 4
+    GLOBALLY        shift and go to state 5
+    PASTNEXT        shift and go to state 6
+    PASTEVENTUALLY  shift and go to state 7
+    PASTGLOBALLY    shift and go to state 8
+    NOT             shift and go to state 9
+    TRUE            shift and go to state 10
+    FALSE           shift and go to state 11
+    TERM            shift and go to state 12
+    LPAR            shift and go to state 13
 
-    formula                        shift and go to state 28
+    formula                        shift and go to state 31
 
-state 15
+state 16
 
     (3) formula -> formula IMPLIES . formula
     (1) formula -> . formula AND formula
@@ -502,34 +582,37 @@ state 15
     (3) formula -> . formula IMPLIES formula
     (4) formula -> . formula DIMPLIES formula
     (5) formula -> . formula UNTIL formula
-    (6) formula -> . formula PASTUNTIL formula
-    (7) formula -> . NEXT formula
-    (8) formula -> . EVENTUALLY formula
-    (9) formula -> . GLOBALLY formula
-    (10) formula -> . PASTNEXT formula
-    (11) formula -> . PASTEVENTUALLY formula
-    (12) formula -> . PASTGLOBALLY formula
-    (13) formula -> . NOT formula
-    (14) formula -> . TRUE
-    (15) formula -> . FALSE
-    (16) formula -> . TERM
-    (17) formula -> . LPAR formula RPAR
+    (6) formula -> . formula RELEASE formula
+    (7) formula -> . formula PASTUNTIL formula
+    (8) formula -> . NEXT formula
+    (9) formula -> . WEAKNEXT formula
+    (10) formula -> . EVENTUALLY formula
+    (11) formula -> . GLOBALLY formula
+    (12) formula -> . PASTNEXT formula
+    (13) formula -> . PASTEVENTUALLY formula
+    (14) formula -> . PASTGLOBALLY formula
+    (15) formula -> . NOT formula
+    (16) formula -> . TRUE
+    (17) formula -> . FALSE
+    (18) formula -> . TERM
+    (19) formula -> . LPAR formula RPAR
 
     NEXT            shift and go to state 2
-    EVENTUALLY      shift and go to state 3
-    GLOBALLY        shift and go to state 4
-    PASTNEXT        shift and go to state 5
-    PASTEVENTUALLY  shift and go to state 6
-    PASTGLOBALLY    shift and go to state 7
-    NOT             shift and go to state 8
-    TRUE            shift and go to state 9
-    FALSE           shift and go to state 10
-    TERM            shift and go to state 11
-    LPAR            shift and go to state 12
+    WEAKNEXT        shift and go to state 3
+    EVENTUALLY      shift and go to state 4
+    GLOBALLY        shift and go to state 5
+    PASTNEXT        shift and go to state 6
+    PASTEVENTUALLY  shift and go to state 7
+    PASTGLOBALLY    shift and go to state 8
+    NOT             shift and go to state 9
+    TRUE            shift and go to state 10
+    FALSE           shift and go to state 11
+    TERM            shift and go to state 12
+    LPAR            shift and go to state 13
 
-    formula                        shift and go to state 29
+    formula                        shift and go to state 32
 
-state 16
+state 17
 
     (4) formula -> formula DIMPLIES . formula
     (1) formula -> . formula AND formula
@@ -537,34 +620,37 @@ state 16
     (3) formula -> . formula IMPLIES formula
     (4) formula -> . formula DIMPLIES formula
     (5) formula -> . formula UNTIL formula
-    (6) formula -> . formula PASTUNTIL formula
-    (7) formula -> . NEXT formula
-    (8) formula -> . EVENTUALLY formula
-    (9) formula -> . GLOBALLY formula
-    (10) formula -> . PASTNEXT formula
-    (11) formula -> . PASTEVENTUALLY formula
-    (12) formula -> . PASTGLOBALLY formula
-    (13) formula -> . NOT formula
-    (14) formula -> . TRUE
-    (15) formula -> . FALSE
-    (16) formula -> . TERM
-    (17) formula -> . LPAR formula RPAR
+    (6) formula -> . formula RELEASE formula
+    (7) formula -> . formula PASTUNTIL formula
+    (8) formula -> . NEXT formula
+    (9) formula -> . WEAKNEXT formula
+    (10) formula -> . EVENTUALLY formula
+    (11) formula -> . GLOBALLY formula
+    (12) formula -> . PASTNEXT formula
+    (13) formula -> . PASTEVENTUALLY formula
+    (14) formula -> . PASTGLOBALLY formula
+    (15) formula -> . NOT formula
+    (16) formula -> . TRUE
+    (17) formula -> . FALSE
+    (18) formula -> . TERM
+    (19) formula -> . LPAR formula RPAR
 
     NEXT            shift and go to state 2
-    EVENTUALLY      shift and go to state 3
-    GLOBALLY        shift and go to state 4
-    PASTNEXT        shift and go to state 5
-    PASTEVENTUALLY  shift and go to state 6
-    PASTGLOBALLY    shift and go to state 7
-    NOT             shift and go to state 8
-    TRUE            shift and go to state 9
-    FALSE           shift and go to state 10
-    TERM            shift and go to state 11
-    LPAR            shift and go to state 12
+    WEAKNEXT        shift and go to state 3
+    EVENTUALLY      shift and go to state 4
+    GLOBALLY        shift and go to state 5
+    PASTNEXT        shift and go to state 6
+    PASTEVENTUALLY  shift and go to state 7
+    PASTGLOBALLY    shift and go to state 8
+    NOT             shift and go to state 9
+    TRUE            shift and go to state 10
+    FALSE           shift and go to state 11
+    TERM            shift and go to state 12
+    LPAR            shift and go to state 13
 
-    formula                        shift and go to state 30
+    formula                        shift and go to state 33
 
-state 17
+state 18
 
     (5) formula -> formula UNTIL . formula
     (1) formula -> . formula AND formula
@@ -572,319 +658,430 @@ state 17
     (3) formula -> . formula IMPLIES formula
     (4) formula -> . formula DIMPLIES formula
     (5) formula -> . formula UNTIL formula
-    (6) formula -> . formula PASTUNTIL formula
-    (7) formula -> . NEXT formula
-    (8) formula -> . EVENTUALLY formula
-    (9) formula -> . GLOBALLY formula
-    (10) formula -> . PASTNEXT formula
-    (11) formula -> . PASTEVENTUALLY formula
-    (12) formula -> . PASTGLOBALLY formula
-    (13) formula -> . NOT formula
-    (14) formula -> . TRUE
-    (15) formula -> . FALSE
-    (16) formula -> . TERM
-    (17) formula -> . LPAR formula RPAR
+    (6) formula -> . formula RELEASE formula
+    (7) formula -> . formula PASTUNTIL formula
+    (8) formula -> . NEXT formula
+    (9) formula -> . WEAKNEXT formula
+    (10) formula -> . EVENTUALLY formula
+    (11) formula -> . GLOBALLY formula
+    (12) formula -> . PASTNEXT formula
+    (13) formula -> . PASTEVENTUALLY formula
+    (14) formula -> . PASTGLOBALLY formula
+    (15) formula -> . NOT formula
+    (16) formula -> . TRUE
+    (17) formula -> . FALSE
+    (18) formula -> . TERM
+    (19) formula -> . LPAR formula RPAR
 
     NEXT            shift and go to state 2
-    EVENTUALLY      shift and go to state 3
-    GLOBALLY        shift and go to state 4
-    PASTNEXT        shift and go to state 5
-    PASTEVENTUALLY  shift and go to state 6
-    PASTGLOBALLY    shift and go to state 7
-    NOT             shift and go to state 8
-    TRUE            shift and go to state 9
-    FALSE           shift and go to state 10
-    TERM            shift and go to state 11
-    LPAR            shift and go to state 12
+    WEAKNEXT        shift and go to state 3
+    EVENTUALLY      shift and go to state 4
+    GLOBALLY        shift and go to state 5
+    PASTNEXT        shift and go to state 6
+    PASTEVENTUALLY  shift and go to state 7
+    PASTGLOBALLY    shift and go to state 8
+    NOT             shift and go to state 9
+    TRUE            shift and go to state 10
+    FALSE           shift and go to state 11
+    TERM            shift and go to state 12
+    LPAR            shift and go to state 13
 
-    formula                        shift and go to state 31
+    formula                        shift and go to state 34
 
-state 18
+state 19
 
-    (6) formula -> formula PASTUNTIL . formula
+    (6) formula -> formula RELEASE . formula
     (1) formula -> . formula AND formula
     (2) formula -> . formula OR formula
     (3) formula -> . formula IMPLIES formula
     (4) formula -> . formula DIMPLIES formula
     (5) formula -> . formula UNTIL formula
-    (6) formula -> . formula PASTUNTIL formula
-    (7) formula -> . NEXT formula
-    (8) formula -> . EVENTUALLY formula
-    (9) formula -> . GLOBALLY formula
-    (10) formula -> . PASTNEXT formula
-    (11) formula -> . PASTEVENTUALLY formula
-    (12) formula -> . PASTGLOBALLY formula
-    (13) formula -> . NOT formula
-    (14) formula -> . TRUE
-    (15) formula -> . FALSE
-    (16) formula -> . TERM
-    (17) formula -> . LPAR formula RPAR
+    (6) formula -> . formula RELEASE formula
+    (7) formula -> . formula PASTUNTIL formula
+    (8) formula -> . NEXT formula
+    (9) formula -> . WEAKNEXT formula
+    (10) formula -> . EVENTUALLY formula
+    (11) formula -> . GLOBALLY formula
+    (12) formula -> . PASTNEXT formula
+    (13) formula -> . PASTEVENTUALLY formula
+    (14) formula -> . PASTGLOBALLY formula
+    (15) formula -> . NOT formula
+    (16) formula -> . TRUE
+    (17) formula -> . FALSE
+    (18) formula -> . TERM
+    (19) formula -> . LPAR formula RPAR
 
     NEXT            shift and go to state 2
-    EVENTUALLY      shift and go to state 3
-    GLOBALLY        shift and go to state 4
-    PASTNEXT        shift and go to state 5
-    PASTEVENTUALLY  shift and go to state 6
-    PASTGLOBALLY    shift and go to state 7
-    NOT             shift and go to state 8
-    TRUE            shift and go to state 9
-    FALSE           shift and go to state 10
-    TERM            shift and go to state 11
-    LPAR            shift and go to state 12
+    WEAKNEXT        shift and go to state 3
+    EVENTUALLY      shift and go to state 4
+    GLOBALLY        shift and go to state 5
+    PASTNEXT        shift and go to state 6
+    PASTEVENTUALLY  shift and go to state 7
+    PASTGLOBALLY    shift and go to state 8
+    NOT             shift and go to state 9
+    TRUE            shift and go to state 10
+    FALSE           shift and go to state 11
+    TERM            shift and go to state 12
+    LPAR            shift and go to state 13
 
-    formula                        shift and go to state 32
-
-state 19
-
-    (7) formula -> NEXT formula .
-    (1) formula -> formula . AND formula
-    (2) formula -> formula . OR formula
-    (3) formula -> formula . IMPLIES formula
-    (4) formula -> formula . DIMPLIES formula
-    (5) formula -> formula . UNTIL formula
-    (6) formula -> formula . PASTUNTIL formula
-
-  ! shift/reduce conflict for AND resolved as shift
-  ! shift/reduce conflict for OR resolved as shift
-  ! shift/reduce conflict for IMPLIES resolved as shift
-  ! shift/reduce conflict for DIMPLIES resolved as shift
-  ! shift/reduce conflict for UNTIL resolved as shift
-  ! shift/reduce conflict for PASTUNTIL resolved as shift
-    $end            reduce using rule 7 (formula -> NEXT formula .)
-    RPAR            reduce using rule 7 (formula -> NEXT formula .)
-    AND             shift and go to state 13
-    OR              shift and go to state 14
-    IMPLIES         shift and go to state 15
-    DIMPLIES        shift and go to state 16
-    UNTIL           shift and go to state 17
-    PASTUNTIL       shift and go to state 18
-
-  ! AND             [ reduce using rule 7 (formula -> NEXT formula .) ]
-  ! OR              [ reduce using rule 7 (formula -> NEXT formula .) ]
-  ! IMPLIES         [ reduce using rule 7 (formula -> NEXT formula .) ]
-  ! DIMPLIES        [ reduce using rule 7 (formula -> NEXT formula .) ]
-  ! UNTIL           [ reduce using rule 7 (formula -> NEXT formula .) ]
-  ! PASTUNTIL       [ reduce using rule 7 (formula -> NEXT formula .) ]
-
+    formula                        shift and go to state 35
 
 state 20
 
-    (8) formula -> EVENTUALLY formula .
-    (1) formula -> formula . AND formula
-    (2) formula -> formula . OR formula
-    (3) formula -> formula . IMPLIES formula
-    (4) formula -> formula . DIMPLIES formula
-    (5) formula -> formula . UNTIL formula
-    (6) formula -> formula . PASTUNTIL formula
+    (7) formula -> formula PASTUNTIL . formula
+    (1) formula -> . formula AND formula
+    (2) formula -> . formula OR formula
+    (3) formula -> . formula IMPLIES formula
+    (4) formula -> . formula DIMPLIES formula
+    (5) formula -> . formula UNTIL formula
+    (6) formula -> . formula RELEASE formula
+    (7) formula -> . formula PASTUNTIL formula
+    (8) formula -> . NEXT formula
+    (9) formula -> . WEAKNEXT formula
+    (10) formula -> . EVENTUALLY formula
+    (11) formula -> . GLOBALLY formula
+    (12) formula -> . PASTNEXT formula
+    (13) formula -> . PASTEVENTUALLY formula
+    (14) formula -> . PASTGLOBALLY formula
+    (15) formula -> . NOT formula
+    (16) formula -> . TRUE
+    (17) formula -> . FALSE
+    (18) formula -> . TERM
+    (19) formula -> . LPAR formula RPAR
 
-  ! shift/reduce conflict for AND resolved as shift
-  ! shift/reduce conflict for OR resolved as shift
-  ! shift/reduce conflict for IMPLIES resolved as shift
-  ! shift/reduce conflict for DIMPLIES resolved as shift
-  ! shift/reduce conflict for UNTIL resolved as shift
-  ! shift/reduce conflict for PASTUNTIL resolved as shift
-    $end            reduce using rule 8 (formula -> EVENTUALLY formula .)
-    RPAR            reduce using rule 8 (formula -> EVENTUALLY formula .)
-    AND             shift and go to state 13
-    OR              shift and go to state 14
-    IMPLIES         shift and go to state 15
-    DIMPLIES        shift and go to state 16
-    UNTIL           shift and go to state 17
-    PASTUNTIL       shift and go to state 18
+    NEXT            shift and go to state 2
+    WEAKNEXT        shift and go to state 3
+    EVENTUALLY      shift and go to state 4
+    GLOBALLY        shift and go to state 5
+    PASTNEXT        shift and go to state 6
+    PASTEVENTUALLY  shift and go to state 7
+    PASTGLOBALLY    shift and go to state 8
+    NOT             shift and go to state 9
+    TRUE            shift and go to state 10
+    FALSE           shift and go to state 11
+    TERM            shift and go to state 12
+    LPAR            shift and go to state 13
 
-  ! AND             [ reduce using rule 8 (formula -> EVENTUALLY formula .) ]
-  ! OR              [ reduce using rule 8 (formula -> EVENTUALLY formula .) ]
-  ! IMPLIES         [ reduce using rule 8 (formula -> EVENTUALLY formula .) ]
-  ! DIMPLIES        [ reduce using rule 8 (formula -> EVENTUALLY formula .) ]
-  ! UNTIL           [ reduce using rule 8 (formula -> EVENTUALLY formula .) ]
-  ! PASTUNTIL       [ reduce using rule 8 (formula -> EVENTUALLY formula .) ]
-
+    formula                        shift and go to state 36
 
 state 21
 
-    (9) formula -> GLOBALLY formula .
+    (8) formula -> NEXT formula .
     (1) formula -> formula . AND formula
     (2) formula -> formula . OR formula
     (3) formula -> formula . IMPLIES formula
     (4) formula -> formula . DIMPLIES formula
     (5) formula -> formula . UNTIL formula
-    (6) formula -> formula . PASTUNTIL formula
+    (6) formula -> formula . RELEASE formula
+    (7) formula -> formula . PASTUNTIL formula
 
   ! shift/reduce conflict for AND resolved as shift
   ! shift/reduce conflict for OR resolved as shift
   ! shift/reduce conflict for IMPLIES resolved as shift
   ! shift/reduce conflict for DIMPLIES resolved as shift
   ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for RELEASE resolved as shift
   ! shift/reduce conflict for PASTUNTIL resolved as shift
-    $end            reduce using rule 9 (formula -> GLOBALLY formula .)
-    RPAR            reduce using rule 9 (formula -> GLOBALLY formula .)
-    AND             shift and go to state 13
-    OR              shift and go to state 14
-    IMPLIES         shift and go to state 15
-    DIMPLIES        shift and go to state 16
-    UNTIL           shift and go to state 17
-    PASTUNTIL       shift and go to state 18
+    $end            reduce using rule 8 (formula -> NEXT formula .)
+    RPAR            reduce using rule 8 (formula -> NEXT formula .)
+    AND             shift and go to state 14
+    OR              shift and go to state 15
+    IMPLIES         shift and go to state 16
+    DIMPLIES        shift and go to state 17
+    UNTIL           shift and go to state 18
+    RELEASE         shift and go to state 19
+    PASTUNTIL       shift and go to state 20
 
-  ! AND             [ reduce using rule 9 (formula -> GLOBALLY formula .) ]
-  ! OR              [ reduce using rule 9 (formula -> GLOBALLY formula .) ]
-  ! IMPLIES         [ reduce using rule 9 (formula -> GLOBALLY formula .) ]
-  ! DIMPLIES        [ reduce using rule 9 (formula -> GLOBALLY formula .) ]
-  ! UNTIL           [ reduce using rule 9 (formula -> GLOBALLY formula .) ]
-  ! PASTUNTIL       [ reduce using rule 9 (formula -> GLOBALLY formula .) ]
+  ! AND             [ reduce using rule 8 (formula -> NEXT formula .) ]
+  ! OR              [ reduce using rule 8 (formula -> NEXT formula .) ]
+  ! IMPLIES         [ reduce using rule 8 (formula -> NEXT formula .) ]
+  ! DIMPLIES        [ reduce using rule 8 (formula -> NEXT formula .) ]
+  ! UNTIL           [ reduce using rule 8 (formula -> NEXT formula .) ]
+  ! RELEASE         [ reduce using rule 8 (formula -> NEXT formula .) ]
+  ! PASTUNTIL       [ reduce using rule 8 (formula -> NEXT formula .) ]
 
 
 state 22
 
-    (10) formula -> PASTNEXT formula .
+    (9) formula -> WEAKNEXT formula .
     (1) formula -> formula . AND formula
     (2) formula -> formula . OR formula
     (3) formula -> formula . IMPLIES formula
     (4) formula -> formula . DIMPLIES formula
     (5) formula -> formula . UNTIL formula
-    (6) formula -> formula . PASTUNTIL formula
+    (6) formula -> formula . RELEASE formula
+    (7) formula -> formula . PASTUNTIL formula
 
   ! shift/reduce conflict for AND resolved as shift
   ! shift/reduce conflict for OR resolved as shift
   ! shift/reduce conflict for IMPLIES resolved as shift
   ! shift/reduce conflict for DIMPLIES resolved as shift
   ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for RELEASE resolved as shift
   ! shift/reduce conflict for PASTUNTIL resolved as shift
-    $end            reduce using rule 10 (formula -> PASTNEXT formula .)
-    RPAR            reduce using rule 10 (formula -> PASTNEXT formula .)
-    AND             shift and go to state 13
-    OR              shift and go to state 14
-    IMPLIES         shift and go to state 15
-    DIMPLIES        shift and go to state 16
-    UNTIL           shift and go to state 17
-    PASTUNTIL       shift and go to state 18
+    $end            reduce using rule 9 (formula -> WEAKNEXT formula .)
+    RPAR            reduce using rule 9 (formula -> WEAKNEXT formula .)
+    AND             shift and go to state 14
+    OR              shift and go to state 15
+    IMPLIES         shift and go to state 16
+    DIMPLIES        shift and go to state 17
+    UNTIL           shift and go to state 18
+    RELEASE         shift and go to state 19
+    PASTUNTIL       shift and go to state 20
 
-  ! AND             [ reduce using rule 10 (formula -> PASTNEXT formula .) ]
-  ! OR              [ reduce using rule 10 (formula -> PASTNEXT formula .) ]
-  ! IMPLIES         [ reduce using rule 10 (formula -> PASTNEXT formula .) ]
-  ! DIMPLIES        [ reduce using rule 10 (formula -> PASTNEXT formula .) ]
-  ! UNTIL           [ reduce using rule 10 (formula -> PASTNEXT formula .) ]
-  ! PASTUNTIL       [ reduce using rule 10 (formula -> PASTNEXT formula .) ]
+  ! AND             [ reduce using rule 9 (formula -> WEAKNEXT formula .) ]
+  ! OR              [ reduce using rule 9 (formula -> WEAKNEXT formula .) ]
+  ! IMPLIES         [ reduce using rule 9 (formula -> WEAKNEXT formula .) ]
+  ! DIMPLIES        [ reduce using rule 9 (formula -> WEAKNEXT formula .) ]
+  ! UNTIL           [ reduce using rule 9 (formula -> WEAKNEXT formula .) ]
+  ! RELEASE         [ reduce using rule 9 (formula -> WEAKNEXT formula .) ]
+  ! PASTUNTIL       [ reduce using rule 9 (formula -> WEAKNEXT formula .) ]
 
 
 state 23
 
-    (11) formula -> PASTEVENTUALLY formula .
+    (10) formula -> EVENTUALLY formula .
     (1) formula -> formula . AND formula
     (2) formula -> formula . OR formula
     (3) formula -> formula . IMPLIES formula
     (4) formula -> formula . DIMPLIES formula
     (5) formula -> formula . UNTIL formula
-    (6) formula -> formula . PASTUNTIL formula
+    (6) formula -> formula . RELEASE formula
+    (7) formula -> formula . PASTUNTIL formula
 
   ! shift/reduce conflict for AND resolved as shift
   ! shift/reduce conflict for OR resolved as shift
   ! shift/reduce conflict for IMPLIES resolved as shift
   ! shift/reduce conflict for DIMPLIES resolved as shift
   ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for RELEASE resolved as shift
   ! shift/reduce conflict for PASTUNTIL resolved as shift
-    $end            reduce using rule 11 (formula -> PASTEVENTUALLY formula .)
-    RPAR            reduce using rule 11 (formula -> PASTEVENTUALLY formula .)
-    AND             shift and go to state 13
-    OR              shift and go to state 14
-    IMPLIES         shift and go to state 15
-    DIMPLIES        shift and go to state 16
-    UNTIL           shift and go to state 17
-    PASTUNTIL       shift and go to state 18
+    $end            reduce using rule 10 (formula -> EVENTUALLY formula .)
+    RPAR            reduce using rule 10 (formula -> EVENTUALLY formula .)
+    AND             shift and go to state 14
+    OR              shift and go to state 15
+    IMPLIES         shift and go to state 16
+    DIMPLIES        shift and go to state 17
+    UNTIL           shift and go to state 18
+    RELEASE         shift and go to state 19
+    PASTUNTIL       shift and go to state 20
 
-  ! AND             [ reduce using rule 11 (formula -> PASTEVENTUALLY formula .) ]
-  ! OR              [ reduce using rule 11 (formula -> PASTEVENTUALLY formula .) ]
-  ! IMPLIES         [ reduce using rule 11 (formula -> PASTEVENTUALLY formula .) ]
-  ! DIMPLIES        [ reduce using rule 11 (formula -> PASTEVENTUALLY formula .) ]
-  ! UNTIL           [ reduce using rule 11 (formula -> PASTEVENTUALLY formula .) ]
-  ! PASTUNTIL       [ reduce using rule 11 (formula -> PASTEVENTUALLY formula .) ]
+  ! AND             [ reduce using rule 10 (formula -> EVENTUALLY formula .) ]
+  ! OR              [ reduce using rule 10 (formula -> EVENTUALLY formula .) ]
+  ! IMPLIES         [ reduce using rule 10 (formula -> EVENTUALLY formula .) ]
+  ! DIMPLIES        [ reduce using rule 10 (formula -> EVENTUALLY formula .) ]
+  ! UNTIL           [ reduce using rule 10 (formula -> EVENTUALLY formula .) ]
+  ! RELEASE         [ reduce using rule 10 (formula -> EVENTUALLY formula .) ]
+  ! PASTUNTIL       [ reduce using rule 10 (formula -> EVENTUALLY formula .) ]
 
 
 state 24
 
-    (12) formula -> PASTGLOBALLY formula .
+    (11) formula -> GLOBALLY formula .
     (1) formula -> formula . AND formula
     (2) formula -> formula . OR formula
     (3) formula -> formula . IMPLIES formula
     (4) formula -> formula . DIMPLIES formula
     (5) formula -> formula . UNTIL formula
-    (6) formula -> formula . PASTUNTIL formula
+    (6) formula -> formula . RELEASE formula
+    (7) formula -> formula . PASTUNTIL formula
 
   ! shift/reduce conflict for AND resolved as shift
   ! shift/reduce conflict for OR resolved as shift
   ! shift/reduce conflict for IMPLIES resolved as shift
   ! shift/reduce conflict for DIMPLIES resolved as shift
   ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for RELEASE resolved as shift
   ! shift/reduce conflict for PASTUNTIL resolved as shift
-    $end            reduce using rule 12 (formula -> PASTGLOBALLY formula .)
-    RPAR            reduce using rule 12 (formula -> PASTGLOBALLY formula .)
-    AND             shift and go to state 13
-    OR              shift and go to state 14
-    IMPLIES         shift and go to state 15
-    DIMPLIES        shift and go to state 16
-    UNTIL           shift and go to state 17
-    PASTUNTIL       shift and go to state 18
+    $end            reduce using rule 11 (formula -> GLOBALLY formula .)
+    RPAR            reduce using rule 11 (formula -> GLOBALLY formula .)
+    AND             shift and go to state 14
+    OR              shift and go to state 15
+    IMPLIES         shift and go to state 16
+    DIMPLIES        shift and go to state 17
+    UNTIL           shift and go to state 18
+    RELEASE         shift and go to state 19
+    PASTUNTIL       shift and go to state 20
 
-  ! AND             [ reduce using rule 12 (formula -> PASTGLOBALLY formula .) ]
-  ! OR              [ reduce using rule 12 (formula -> PASTGLOBALLY formula .) ]
-  ! IMPLIES         [ reduce using rule 12 (formula -> PASTGLOBALLY formula .) ]
-  ! DIMPLIES        [ reduce using rule 12 (formula -> PASTGLOBALLY formula .) ]
-  ! UNTIL           [ reduce using rule 12 (formula -> PASTGLOBALLY formula .) ]
-  ! PASTUNTIL       [ reduce using rule 12 (formula -> PASTGLOBALLY formula .) ]
+  ! AND             [ reduce using rule 11 (formula -> GLOBALLY formula .) ]
+  ! OR              [ reduce using rule 11 (formula -> GLOBALLY formula .) ]
+  ! IMPLIES         [ reduce using rule 11 (formula -> GLOBALLY formula .) ]
+  ! DIMPLIES        [ reduce using rule 11 (formula -> GLOBALLY formula .) ]
+  ! UNTIL           [ reduce using rule 11 (formula -> GLOBALLY formula .) ]
+  ! RELEASE         [ reduce using rule 11 (formula -> GLOBALLY formula .) ]
+  ! PASTUNTIL       [ reduce using rule 11 (formula -> GLOBALLY formula .) ]
 
 
 state 25
 
-    (13) formula -> NOT formula .
+    (12) formula -> PASTNEXT formula .
     (1) formula -> formula . AND formula
     (2) formula -> formula . OR formula
     (3) formula -> formula . IMPLIES formula
     (4) formula -> formula . DIMPLIES formula
     (5) formula -> formula . UNTIL formula
-    (6) formula -> formula . PASTUNTIL formula
+    (6) formula -> formula . RELEASE formula
+    (7) formula -> formula . PASTUNTIL formula
 
   ! shift/reduce conflict for AND resolved as shift
   ! shift/reduce conflict for OR resolved as shift
   ! shift/reduce conflict for IMPLIES resolved as shift
   ! shift/reduce conflict for DIMPLIES resolved as shift
   ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for RELEASE resolved as shift
   ! shift/reduce conflict for PASTUNTIL resolved as shift
-    $end            reduce using rule 13 (formula -> NOT formula .)
-    RPAR            reduce using rule 13 (formula -> NOT formula .)
-    AND             shift and go to state 13
-    OR              shift and go to state 14
-    IMPLIES         shift and go to state 15
-    DIMPLIES        shift and go to state 16
-    UNTIL           shift and go to state 17
-    PASTUNTIL       shift and go to state 18
+    $end            reduce using rule 12 (formula -> PASTNEXT formula .)
+    RPAR            reduce using rule 12 (formula -> PASTNEXT formula .)
+    AND             shift and go to state 14
+    OR              shift and go to state 15
+    IMPLIES         shift and go to state 16
+    DIMPLIES        shift and go to state 17
+    UNTIL           shift and go to state 18
+    RELEASE         shift and go to state 19
+    PASTUNTIL       shift and go to state 20
 
-  ! AND             [ reduce using rule 13 (formula -> NOT formula .) ]
-  ! OR              [ reduce using rule 13 (formula -> NOT formula .) ]
-  ! IMPLIES         [ reduce using rule 13 (formula -> NOT formula .) ]
-  ! DIMPLIES        [ reduce using rule 13 (formula -> NOT formula .) ]
-  ! UNTIL           [ reduce using rule 13 (formula -> NOT formula .) ]
-  ! PASTUNTIL       [ reduce using rule 13 (formula -> NOT formula .) ]
+  ! AND             [ reduce using rule 12 (formula -> PASTNEXT formula .) ]
+  ! OR              [ reduce using rule 12 (formula -> PASTNEXT formula .) ]
+  ! IMPLIES         [ reduce using rule 12 (formula -> PASTNEXT formula .) ]
+  ! DIMPLIES        [ reduce using rule 12 (formula -> PASTNEXT formula .) ]
+  ! UNTIL           [ reduce using rule 12 (formula -> PASTNEXT formula .) ]
+  ! RELEASE         [ reduce using rule 12 (formula -> PASTNEXT formula .) ]
+  ! PASTUNTIL       [ reduce using rule 12 (formula -> PASTNEXT formula .) ]
 
 
 state 26
 
-    (17) formula -> LPAR formula . RPAR
+    (13) formula -> PASTEVENTUALLY formula .
     (1) formula -> formula . AND formula
     (2) formula -> formula . OR formula
     (3) formula -> formula . IMPLIES formula
     (4) formula -> formula . DIMPLIES formula
     (5) formula -> formula . UNTIL formula
-    (6) formula -> formula . PASTUNTIL formula
+    (6) formula -> formula . RELEASE formula
+    (7) formula -> formula . PASTUNTIL formula
 
-    RPAR            shift and go to state 33
-    AND             shift and go to state 13
-    OR              shift and go to state 14
-    IMPLIES         shift and go to state 15
-    DIMPLIES        shift and go to state 16
-    UNTIL           shift and go to state 17
-    PASTUNTIL       shift and go to state 18
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for IMPLIES resolved as shift
+  ! shift/reduce conflict for DIMPLIES resolved as shift
+  ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for RELEASE resolved as shift
+  ! shift/reduce conflict for PASTUNTIL resolved as shift
+    $end            reduce using rule 13 (formula -> PASTEVENTUALLY formula .)
+    RPAR            reduce using rule 13 (formula -> PASTEVENTUALLY formula .)
+    AND             shift and go to state 14
+    OR              shift and go to state 15
+    IMPLIES         shift and go to state 16
+    DIMPLIES        shift and go to state 17
+    UNTIL           shift and go to state 18
+    RELEASE         shift and go to state 19
+    PASTUNTIL       shift and go to state 20
+
+  ! AND             [ reduce using rule 13 (formula -> PASTEVENTUALLY formula .) ]
+  ! OR              [ reduce using rule 13 (formula -> PASTEVENTUALLY formula .) ]
+  ! IMPLIES         [ reduce using rule 13 (formula -> PASTEVENTUALLY formula .) ]
+  ! DIMPLIES        [ reduce using rule 13 (formula -> PASTEVENTUALLY formula .) ]
+  ! UNTIL           [ reduce using rule 13 (formula -> PASTEVENTUALLY formula .) ]
+  ! RELEASE         [ reduce using rule 13 (formula -> PASTEVENTUALLY formula .) ]
+  ! PASTUNTIL       [ reduce using rule 13 (formula -> PASTEVENTUALLY formula .) ]
 
 
 state 27
+
+    (14) formula -> PASTGLOBALLY formula .
+    (1) formula -> formula . AND formula
+    (2) formula -> formula . OR formula
+    (3) formula -> formula . IMPLIES formula
+    (4) formula -> formula . DIMPLIES formula
+    (5) formula -> formula . UNTIL formula
+    (6) formula -> formula . RELEASE formula
+    (7) formula -> formula . PASTUNTIL formula
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for IMPLIES resolved as shift
+  ! shift/reduce conflict for DIMPLIES resolved as shift
+  ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for RELEASE resolved as shift
+  ! shift/reduce conflict for PASTUNTIL resolved as shift
+    $end            reduce using rule 14 (formula -> PASTGLOBALLY formula .)
+    RPAR            reduce using rule 14 (formula -> PASTGLOBALLY formula .)
+    AND             shift and go to state 14
+    OR              shift and go to state 15
+    IMPLIES         shift and go to state 16
+    DIMPLIES        shift and go to state 17
+    UNTIL           shift and go to state 18
+    RELEASE         shift and go to state 19
+    PASTUNTIL       shift and go to state 20
+
+  ! AND             [ reduce using rule 14 (formula -> PASTGLOBALLY formula .) ]
+  ! OR              [ reduce using rule 14 (formula -> PASTGLOBALLY formula .) ]
+  ! IMPLIES         [ reduce using rule 14 (formula -> PASTGLOBALLY formula .) ]
+  ! DIMPLIES        [ reduce using rule 14 (formula -> PASTGLOBALLY formula .) ]
+  ! UNTIL           [ reduce using rule 14 (formula -> PASTGLOBALLY formula .) ]
+  ! RELEASE         [ reduce using rule 14 (formula -> PASTGLOBALLY formula .) ]
+  ! PASTUNTIL       [ reduce using rule 14 (formula -> PASTGLOBALLY formula .) ]
+
+
+state 28
+
+    (15) formula -> NOT formula .
+    (1) formula -> formula . AND formula
+    (2) formula -> formula . OR formula
+    (3) formula -> formula . IMPLIES formula
+    (4) formula -> formula . DIMPLIES formula
+    (5) formula -> formula . UNTIL formula
+    (6) formula -> formula . RELEASE formula
+    (7) formula -> formula . PASTUNTIL formula
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for IMPLIES resolved as shift
+  ! shift/reduce conflict for DIMPLIES resolved as shift
+  ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for RELEASE resolved as shift
+  ! shift/reduce conflict for PASTUNTIL resolved as shift
+    $end            reduce using rule 15 (formula -> NOT formula .)
+    RPAR            reduce using rule 15 (formula -> NOT formula .)
+    AND             shift and go to state 14
+    OR              shift and go to state 15
+    IMPLIES         shift and go to state 16
+    DIMPLIES        shift and go to state 17
+    UNTIL           shift and go to state 18
+    RELEASE         shift and go to state 19
+    PASTUNTIL       shift and go to state 20
+
+  ! AND             [ reduce using rule 15 (formula -> NOT formula .) ]
+  ! OR              [ reduce using rule 15 (formula -> NOT formula .) ]
+  ! IMPLIES         [ reduce using rule 15 (formula -> NOT formula .) ]
+  ! DIMPLIES        [ reduce using rule 15 (formula -> NOT formula .) ]
+  ! UNTIL           [ reduce using rule 15 (formula -> NOT formula .) ]
+  ! RELEASE         [ reduce using rule 15 (formula -> NOT formula .) ]
+  ! PASTUNTIL       [ reduce using rule 15 (formula -> NOT formula .) ]
+
+
+state 29
+
+    (19) formula -> LPAR formula . RPAR
+    (1) formula -> formula . AND formula
+    (2) formula -> formula . OR formula
+    (3) formula -> formula . IMPLIES formula
+    (4) formula -> formula . DIMPLIES formula
+    (5) formula -> formula . UNTIL formula
+    (6) formula -> formula . RELEASE formula
+    (7) formula -> formula . PASTUNTIL formula
+
+    RPAR            shift and go to state 37
+    AND             shift and go to state 14
+    OR              shift and go to state 15
+    IMPLIES         shift and go to state 16
+    DIMPLIES        shift and go to state 17
+    UNTIL           shift and go to state 18
+    RELEASE         shift and go to state 19
+    PASTUNTIL       shift and go to state 20
+
+
+state 30
 
     (1) formula -> formula AND formula .
     (1) formula -> formula . AND formula
@@ -892,32 +1089,36 @@ state 27
     (3) formula -> formula . IMPLIES formula
     (4) formula -> formula . DIMPLIES formula
     (5) formula -> formula . UNTIL formula
-    (6) formula -> formula . PASTUNTIL formula
+    (6) formula -> formula . RELEASE formula
+    (7) formula -> formula . PASTUNTIL formula
 
   ! shift/reduce conflict for AND resolved as shift
   ! shift/reduce conflict for OR resolved as shift
   ! shift/reduce conflict for IMPLIES resolved as shift
   ! shift/reduce conflict for DIMPLIES resolved as shift
   ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for RELEASE resolved as shift
   ! shift/reduce conflict for PASTUNTIL resolved as shift
     $end            reduce using rule 1 (formula -> formula AND formula .)
     RPAR            reduce using rule 1 (formula -> formula AND formula .)
-    AND             shift and go to state 13
-    OR              shift and go to state 14
-    IMPLIES         shift and go to state 15
-    DIMPLIES        shift and go to state 16
-    UNTIL           shift and go to state 17
-    PASTUNTIL       shift and go to state 18
+    AND             shift and go to state 14
+    OR              shift and go to state 15
+    IMPLIES         shift and go to state 16
+    DIMPLIES        shift and go to state 17
+    UNTIL           shift and go to state 18
+    RELEASE         shift and go to state 19
+    PASTUNTIL       shift and go to state 20
 
   ! AND             [ reduce using rule 1 (formula -> formula AND formula .) ]
   ! OR              [ reduce using rule 1 (formula -> formula AND formula .) ]
   ! IMPLIES         [ reduce using rule 1 (formula -> formula AND formula .) ]
   ! DIMPLIES        [ reduce using rule 1 (formula -> formula AND formula .) ]
   ! UNTIL           [ reduce using rule 1 (formula -> formula AND formula .) ]
+  ! RELEASE         [ reduce using rule 1 (formula -> formula AND formula .) ]
   ! PASTUNTIL       [ reduce using rule 1 (formula -> formula AND formula .) ]
 
 
-state 28
+state 31
 
     (2) formula -> formula OR formula .
     (1) formula -> formula . AND formula
@@ -925,32 +1126,36 @@ state 28
     (3) formula -> formula . IMPLIES formula
     (4) formula -> formula . DIMPLIES formula
     (5) formula -> formula . UNTIL formula
-    (6) formula -> formula . PASTUNTIL formula
+    (6) formula -> formula . RELEASE formula
+    (7) formula -> formula . PASTUNTIL formula
 
   ! shift/reduce conflict for AND resolved as shift
   ! shift/reduce conflict for OR resolved as shift
   ! shift/reduce conflict for IMPLIES resolved as shift
   ! shift/reduce conflict for DIMPLIES resolved as shift
   ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for RELEASE resolved as shift
   ! shift/reduce conflict for PASTUNTIL resolved as shift
     $end            reduce using rule 2 (formula -> formula OR formula .)
     RPAR            reduce using rule 2 (formula -> formula OR formula .)
-    AND             shift and go to state 13
-    OR              shift and go to state 14
-    IMPLIES         shift and go to state 15
-    DIMPLIES        shift and go to state 16
-    UNTIL           shift and go to state 17
-    PASTUNTIL       shift and go to state 18
+    AND             shift and go to state 14
+    OR              shift and go to state 15
+    IMPLIES         shift and go to state 16
+    DIMPLIES        shift and go to state 17
+    UNTIL           shift and go to state 18
+    RELEASE         shift and go to state 19
+    PASTUNTIL       shift and go to state 20
 
   ! AND             [ reduce using rule 2 (formula -> formula OR formula .) ]
   ! OR              [ reduce using rule 2 (formula -> formula OR formula .) ]
   ! IMPLIES         [ reduce using rule 2 (formula -> formula OR formula .) ]
   ! DIMPLIES        [ reduce using rule 2 (formula -> formula OR formula .) ]
   ! UNTIL           [ reduce using rule 2 (formula -> formula OR formula .) ]
+  ! RELEASE         [ reduce using rule 2 (formula -> formula OR formula .) ]
   ! PASTUNTIL       [ reduce using rule 2 (formula -> formula OR formula .) ]
 
 
-state 29
+state 32
 
     (3) formula -> formula IMPLIES formula .
     (1) formula -> formula . AND formula
@@ -958,32 +1163,36 @@ state 29
     (3) formula -> formula . IMPLIES formula
     (4) formula -> formula . DIMPLIES formula
     (5) formula -> formula . UNTIL formula
-    (6) formula -> formula . PASTUNTIL formula
+    (6) formula -> formula . RELEASE formula
+    (7) formula -> formula . PASTUNTIL formula
 
   ! shift/reduce conflict for AND resolved as shift
   ! shift/reduce conflict for OR resolved as shift
   ! shift/reduce conflict for IMPLIES resolved as shift
   ! shift/reduce conflict for DIMPLIES resolved as shift
   ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for RELEASE resolved as shift
   ! shift/reduce conflict for PASTUNTIL resolved as shift
     $end            reduce using rule 3 (formula -> formula IMPLIES formula .)
     RPAR            reduce using rule 3 (formula -> formula IMPLIES formula .)
-    AND             shift and go to state 13
-    OR              shift and go to state 14
-    IMPLIES         shift and go to state 15
-    DIMPLIES        shift and go to state 16
-    UNTIL           shift and go to state 17
-    PASTUNTIL       shift and go to state 18
+    AND             shift and go to state 14
+    OR              shift and go to state 15
+    IMPLIES         shift and go to state 16
+    DIMPLIES        shift and go to state 17
+    UNTIL           shift and go to state 18
+    RELEASE         shift and go to state 19
+    PASTUNTIL       shift and go to state 20
 
   ! AND             [ reduce using rule 3 (formula -> formula IMPLIES formula .) ]
   ! OR              [ reduce using rule 3 (formula -> formula IMPLIES formula .) ]
   ! IMPLIES         [ reduce using rule 3 (formula -> formula IMPLIES formula .) ]
   ! DIMPLIES        [ reduce using rule 3 (formula -> formula IMPLIES formula .) ]
   ! UNTIL           [ reduce using rule 3 (formula -> formula IMPLIES formula .) ]
+  ! RELEASE         [ reduce using rule 3 (formula -> formula IMPLIES formula .) ]
   ! PASTUNTIL       [ reduce using rule 3 (formula -> formula IMPLIES formula .) ]
 
 
-state 30
+state 33
 
     (4) formula -> formula DIMPLIES formula .
     (1) formula -> formula . AND formula
@@ -991,32 +1200,36 @@ state 30
     (3) formula -> formula . IMPLIES formula
     (4) formula -> formula . DIMPLIES formula
     (5) formula -> formula . UNTIL formula
-    (6) formula -> formula . PASTUNTIL formula
+    (6) formula -> formula . RELEASE formula
+    (7) formula -> formula . PASTUNTIL formula
 
   ! shift/reduce conflict for AND resolved as shift
   ! shift/reduce conflict for OR resolved as shift
   ! shift/reduce conflict for IMPLIES resolved as shift
   ! shift/reduce conflict for DIMPLIES resolved as shift
   ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for RELEASE resolved as shift
   ! shift/reduce conflict for PASTUNTIL resolved as shift
     $end            reduce using rule 4 (formula -> formula DIMPLIES formula .)
     RPAR            reduce using rule 4 (formula -> formula DIMPLIES formula .)
-    AND             shift and go to state 13
-    OR              shift and go to state 14
-    IMPLIES         shift and go to state 15
-    DIMPLIES        shift and go to state 16
-    UNTIL           shift and go to state 17
-    PASTUNTIL       shift and go to state 18
+    AND             shift and go to state 14
+    OR              shift and go to state 15
+    IMPLIES         shift and go to state 16
+    DIMPLIES        shift and go to state 17
+    UNTIL           shift and go to state 18
+    RELEASE         shift and go to state 19
+    PASTUNTIL       shift and go to state 20
 
   ! AND             [ reduce using rule 4 (formula -> formula DIMPLIES formula .) ]
   ! OR              [ reduce using rule 4 (formula -> formula DIMPLIES formula .) ]
   ! IMPLIES         [ reduce using rule 4 (formula -> formula DIMPLIES formula .) ]
   ! DIMPLIES        [ reduce using rule 4 (formula -> formula DIMPLIES formula .) ]
   ! UNTIL           [ reduce using rule 4 (formula -> formula DIMPLIES formula .) ]
+  ! RELEASE         [ reduce using rule 4 (formula -> formula DIMPLIES formula .) ]
   ! PASTUNTIL       [ reduce using rule 4 (formula -> formula DIMPLIES formula .) ]
 
 
-state 31
+state 34
 
     (5) formula -> formula UNTIL formula .
     (1) formula -> formula . AND formula
@@ -1024,155 +1237,228 @@ state 31
     (3) formula -> formula . IMPLIES formula
     (4) formula -> formula . DIMPLIES formula
     (5) formula -> formula . UNTIL formula
-    (6) formula -> formula . PASTUNTIL formula
+    (6) formula -> formula . RELEASE formula
+    (7) formula -> formula . PASTUNTIL formula
 
   ! shift/reduce conflict for AND resolved as shift
   ! shift/reduce conflict for OR resolved as shift
   ! shift/reduce conflict for IMPLIES resolved as shift
   ! shift/reduce conflict for DIMPLIES resolved as shift
   ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for RELEASE resolved as shift
   ! shift/reduce conflict for PASTUNTIL resolved as shift
     $end            reduce using rule 5 (formula -> formula UNTIL formula .)
     RPAR            reduce using rule 5 (formula -> formula UNTIL formula .)
-    AND             shift and go to state 13
-    OR              shift and go to state 14
-    IMPLIES         shift and go to state 15
-    DIMPLIES        shift and go to state 16
-    UNTIL           shift and go to state 17
-    PASTUNTIL       shift and go to state 18
+    AND             shift and go to state 14
+    OR              shift and go to state 15
+    IMPLIES         shift and go to state 16
+    DIMPLIES        shift and go to state 17
+    UNTIL           shift and go to state 18
+    RELEASE         shift and go to state 19
+    PASTUNTIL       shift and go to state 20
 
   ! AND             [ reduce using rule 5 (formula -> formula UNTIL formula .) ]
   ! OR              [ reduce using rule 5 (formula -> formula UNTIL formula .) ]
   ! IMPLIES         [ reduce using rule 5 (formula -> formula UNTIL formula .) ]
   ! DIMPLIES        [ reduce using rule 5 (formula -> formula UNTIL formula .) ]
   ! UNTIL           [ reduce using rule 5 (formula -> formula UNTIL formula .) ]
+  ! RELEASE         [ reduce using rule 5 (formula -> formula UNTIL formula .) ]
   ! PASTUNTIL       [ reduce using rule 5 (formula -> formula UNTIL formula .) ]
 
 
-state 32
+state 35
 
-    (6) formula -> formula PASTUNTIL formula .
+    (6) formula -> formula RELEASE formula .
     (1) formula -> formula . AND formula
     (2) formula -> formula . OR formula
     (3) formula -> formula . IMPLIES formula
     (4) formula -> formula . DIMPLIES formula
     (5) formula -> formula . UNTIL formula
-    (6) formula -> formula . PASTUNTIL formula
+    (6) formula -> formula . RELEASE formula
+    (7) formula -> formula . PASTUNTIL formula
 
   ! shift/reduce conflict for AND resolved as shift
   ! shift/reduce conflict for OR resolved as shift
   ! shift/reduce conflict for IMPLIES resolved as shift
   ! shift/reduce conflict for DIMPLIES resolved as shift
   ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for RELEASE resolved as shift
   ! shift/reduce conflict for PASTUNTIL resolved as shift
-    $end            reduce using rule 6 (formula -> formula PASTUNTIL formula .)
-    RPAR            reduce using rule 6 (formula -> formula PASTUNTIL formula .)
-    AND             shift and go to state 13
-    OR              shift and go to state 14
-    IMPLIES         shift and go to state 15
-    DIMPLIES        shift and go to state 16
-    UNTIL           shift and go to state 17
-    PASTUNTIL       shift and go to state 18
+    $end            reduce using rule 6 (formula -> formula RELEASE formula .)
+    RPAR            reduce using rule 6 (formula -> formula RELEASE formula .)
+    AND             shift and go to state 14
+    OR              shift and go to state 15
+    IMPLIES         shift and go to state 16
+    DIMPLIES        shift and go to state 17
+    UNTIL           shift and go to state 18
+    RELEASE         shift and go to state 19
+    PASTUNTIL       shift and go to state 20
 
-  ! AND             [ reduce using rule 6 (formula -> formula PASTUNTIL formula .) ]
-  ! OR              [ reduce using rule 6 (formula -> formula PASTUNTIL formula .) ]
-  ! IMPLIES         [ reduce using rule 6 (formula -> formula PASTUNTIL formula .) ]
-  ! DIMPLIES        [ reduce using rule 6 (formula -> formula PASTUNTIL formula .) ]
-  ! UNTIL           [ reduce using rule 6 (formula -> formula PASTUNTIL formula .) ]
-  ! PASTUNTIL       [ reduce using rule 6 (formula -> formula PASTUNTIL formula .) ]
+  ! AND             [ reduce using rule 6 (formula -> formula RELEASE formula .) ]
+  ! OR              [ reduce using rule 6 (formula -> formula RELEASE formula .) ]
+  ! IMPLIES         [ reduce using rule 6 (formula -> formula RELEASE formula .) ]
+  ! DIMPLIES        [ reduce using rule 6 (formula -> formula RELEASE formula .) ]
+  ! UNTIL           [ reduce using rule 6 (formula -> formula RELEASE formula .) ]
+  ! RELEASE         [ reduce using rule 6 (formula -> formula RELEASE formula .) ]
+  ! PASTUNTIL       [ reduce using rule 6 (formula -> formula RELEASE formula .) ]
 
 
-state 33
+state 36
 
-    (17) formula -> LPAR formula RPAR .
+    (7) formula -> formula PASTUNTIL formula .
+    (1) formula -> formula . AND formula
+    (2) formula -> formula . OR formula
+    (3) formula -> formula . IMPLIES formula
+    (4) formula -> formula . DIMPLIES formula
+    (5) formula -> formula . UNTIL formula
+    (6) formula -> formula . RELEASE formula
+    (7) formula -> formula . PASTUNTIL formula
 
-    AND             reduce using rule 17 (formula -> LPAR formula RPAR .)
-    OR              reduce using rule 17 (formula -> LPAR formula RPAR .)
-    IMPLIES         reduce using rule 17 (formula -> LPAR formula RPAR .)
-    DIMPLIES        reduce using rule 17 (formula -> LPAR formula RPAR .)
-    UNTIL           reduce using rule 17 (formula -> LPAR formula RPAR .)
-    PASTUNTIL       reduce using rule 17 (formula -> LPAR formula RPAR .)
-    $end            reduce using rule 17 (formula -> LPAR formula RPAR .)
-    RPAR            reduce using rule 17 (formula -> LPAR formula RPAR .)
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for IMPLIES resolved as shift
+  ! shift/reduce conflict for DIMPLIES resolved as shift
+  ! shift/reduce conflict for UNTIL resolved as shift
+  ! shift/reduce conflict for RELEASE resolved as shift
+  ! shift/reduce conflict for PASTUNTIL resolved as shift
+    $end            reduce using rule 7 (formula -> formula PASTUNTIL formula .)
+    RPAR            reduce using rule 7 (formula -> formula PASTUNTIL formula .)
+    AND             shift and go to state 14
+    OR              shift and go to state 15
+    IMPLIES         shift and go to state 16
+    DIMPLIES        shift and go to state 17
+    UNTIL           shift and go to state 18
+    RELEASE         shift and go to state 19
+    PASTUNTIL       shift and go to state 20
+
+  ! AND             [ reduce using rule 7 (formula -> formula PASTUNTIL formula .) ]
+  ! OR              [ reduce using rule 7 (formula -> formula PASTUNTIL formula .) ]
+  ! IMPLIES         [ reduce using rule 7 (formula -> formula PASTUNTIL formula .) ]
+  ! DIMPLIES        [ reduce using rule 7 (formula -> formula PASTUNTIL formula .) ]
+  ! UNTIL           [ reduce using rule 7 (formula -> formula PASTUNTIL formula .) ]
+  ! RELEASE         [ reduce using rule 7 (formula -> formula PASTUNTIL formula .) ]
+  ! PASTUNTIL       [ reduce using rule 7 (formula -> formula PASTUNTIL formula .) ]
+
+
+state 37
+
+    (19) formula -> LPAR formula RPAR .
+
+    AND             reduce using rule 19 (formula -> LPAR formula RPAR .)
+    OR              reduce using rule 19 (formula -> LPAR formula RPAR .)
+    IMPLIES         reduce using rule 19 (formula -> LPAR formula RPAR .)
+    DIMPLIES        reduce using rule 19 (formula -> LPAR formula RPAR .)
+    UNTIL           reduce using rule 19 (formula -> LPAR formula RPAR .)
+    RELEASE         reduce using rule 19 (formula -> LPAR formula RPAR .)
+    PASTUNTIL       reduce using rule 19 (formula -> LPAR formula RPAR .)
+    $end            reduce using rule 19 (formula -> LPAR formula RPAR .)
+    RPAR            reduce using rule 19 (formula -> LPAR formula RPAR .)
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for AND in state 19 resolved as shift
-WARNING: shift/reduce conflict for OR in state 19 resolved as shift
-WARNING: shift/reduce conflict for IMPLIES in state 19 resolved as shift
-WARNING: shift/reduce conflict for DIMPLIES in state 19 resolved as shift
-WARNING: shift/reduce conflict for UNTIL in state 19 resolved as shift
-WARNING: shift/reduce conflict for PASTUNTIL in state 19 resolved as shift
-WARNING: shift/reduce conflict for AND in state 20 resolved as shift
-WARNING: shift/reduce conflict for OR in state 20 resolved as shift
-WARNING: shift/reduce conflict for IMPLIES in state 20 resolved as shift
-WARNING: shift/reduce conflict for DIMPLIES in state 20 resolved as shift
-WARNING: shift/reduce conflict for UNTIL in state 20 resolved as shift
-WARNING: shift/reduce conflict for PASTUNTIL in state 20 resolved as shift
 WARNING: shift/reduce conflict for AND in state 21 resolved as shift
 WARNING: shift/reduce conflict for OR in state 21 resolved as shift
 WARNING: shift/reduce conflict for IMPLIES in state 21 resolved as shift
 WARNING: shift/reduce conflict for DIMPLIES in state 21 resolved as shift
 WARNING: shift/reduce conflict for UNTIL in state 21 resolved as shift
+WARNING: shift/reduce conflict for RELEASE in state 21 resolved as shift
 WARNING: shift/reduce conflict for PASTUNTIL in state 21 resolved as shift
 WARNING: shift/reduce conflict for AND in state 22 resolved as shift
 WARNING: shift/reduce conflict for OR in state 22 resolved as shift
 WARNING: shift/reduce conflict for IMPLIES in state 22 resolved as shift
 WARNING: shift/reduce conflict for DIMPLIES in state 22 resolved as shift
 WARNING: shift/reduce conflict for UNTIL in state 22 resolved as shift
+WARNING: shift/reduce conflict for RELEASE in state 22 resolved as shift
 WARNING: shift/reduce conflict for PASTUNTIL in state 22 resolved as shift
 WARNING: shift/reduce conflict for AND in state 23 resolved as shift
 WARNING: shift/reduce conflict for OR in state 23 resolved as shift
 WARNING: shift/reduce conflict for IMPLIES in state 23 resolved as shift
 WARNING: shift/reduce conflict for DIMPLIES in state 23 resolved as shift
 WARNING: shift/reduce conflict for UNTIL in state 23 resolved as shift
+WARNING: shift/reduce conflict for RELEASE in state 23 resolved as shift
 WARNING: shift/reduce conflict for PASTUNTIL in state 23 resolved as shift
 WARNING: shift/reduce conflict for AND in state 24 resolved as shift
 WARNING: shift/reduce conflict for OR in state 24 resolved as shift
 WARNING: shift/reduce conflict for IMPLIES in state 24 resolved as shift
 WARNING: shift/reduce conflict for DIMPLIES in state 24 resolved as shift
 WARNING: shift/reduce conflict for UNTIL in state 24 resolved as shift
+WARNING: shift/reduce conflict for RELEASE in state 24 resolved as shift
 WARNING: shift/reduce conflict for PASTUNTIL in state 24 resolved as shift
 WARNING: shift/reduce conflict for AND in state 25 resolved as shift
 WARNING: shift/reduce conflict for OR in state 25 resolved as shift
 WARNING: shift/reduce conflict for IMPLIES in state 25 resolved as shift
 WARNING: shift/reduce conflict for DIMPLIES in state 25 resolved as shift
 WARNING: shift/reduce conflict for UNTIL in state 25 resolved as shift
+WARNING: shift/reduce conflict for RELEASE in state 25 resolved as shift
 WARNING: shift/reduce conflict for PASTUNTIL in state 25 resolved as shift
+WARNING: shift/reduce conflict for AND in state 26 resolved as shift
+WARNING: shift/reduce conflict for OR in state 26 resolved as shift
+WARNING: shift/reduce conflict for IMPLIES in state 26 resolved as shift
+WARNING: shift/reduce conflict for DIMPLIES in state 26 resolved as shift
+WARNING: shift/reduce conflict for UNTIL in state 26 resolved as shift
+WARNING: shift/reduce conflict for RELEASE in state 26 resolved as shift
+WARNING: shift/reduce conflict for PASTUNTIL in state 26 resolved as shift
 WARNING: shift/reduce conflict for AND in state 27 resolved as shift
 WARNING: shift/reduce conflict for OR in state 27 resolved as shift
 WARNING: shift/reduce conflict for IMPLIES in state 27 resolved as shift
 WARNING: shift/reduce conflict for DIMPLIES in state 27 resolved as shift
 WARNING: shift/reduce conflict for UNTIL in state 27 resolved as shift
+WARNING: shift/reduce conflict for RELEASE in state 27 resolved as shift
 WARNING: shift/reduce conflict for PASTUNTIL in state 27 resolved as shift
 WARNING: shift/reduce conflict for AND in state 28 resolved as shift
 WARNING: shift/reduce conflict for OR in state 28 resolved as shift
 WARNING: shift/reduce conflict for IMPLIES in state 28 resolved as shift
 WARNING: shift/reduce conflict for DIMPLIES in state 28 resolved as shift
 WARNING: shift/reduce conflict for UNTIL in state 28 resolved as shift
+WARNING: shift/reduce conflict for RELEASE in state 28 resolved as shift
 WARNING: shift/reduce conflict for PASTUNTIL in state 28 resolved as shift
-WARNING: shift/reduce conflict for AND in state 29 resolved as shift
-WARNING: shift/reduce conflict for OR in state 29 resolved as shift
-WARNING: shift/reduce conflict for IMPLIES in state 29 resolved as shift
-WARNING: shift/reduce conflict for DIMPLIES in state 29 resolved as shift
-WARNING: shift/reduce conflict for UNTIL in state 29 resolved as shift
-WARNING: shift/reduce conflict for PASTUNTIL in state 29 resolved as shift
 WARNING: shift/reduce conflict for AND in state 30 resolved as shift
 WARNING: shift/reduce conflict for OR in state 30 resolved as shift
 WARNING: shift/reduce conflict for IMPLIES in state 30 resolved as shift
 WARNING: shift/reduce conflict for DIMPLIES in state 30 resolved as shift
 WARNING: shift/reduce conflict for UNTIL in state 30 resolved as shift
+WARNING: shift/reduce conflict for RELEASE in state 30 resolved as shift
 WARNING: shift/reduce conflict for PASTUNTIL in state 30 resolved as shift
 WARNING: shift/reduce conflict for AND in state 31 resolved as shift
 WARNING: shift/reduce conflict for OR in state 31 resolved as shift
 WARNING: shift/reduce conflict for IMPLIES in state 31 resolved as shift
 WARNING: shift/reduce conflict for DIMPLIES in state 31 resolved as shift
 WARNING: shift/reduce conflict for UNTIL in state 31 resolved as shift
+WARNING: shift/reduce conflict for RELEASE in state 31 resolved as shift
 WARNING: shift/reduce conflict for PASTUNTIL in state 31 resolved as shift
 WARNING: shift/reduce conflict for AND in state 32 resolved as shift
 WARNING: shift/reduce conflict for OR in state 32 resolved as shift
 WARNING: shift/reduce conflict for IMPLIES in state 32 resolved as shift
 WARNING: shift/reduce conflict for DIMPLIES in state 32 resolved as shift
 WARNING: shift/reduce conflict for UNTIL in state 32 resolved as shift
+WARNING: shift/reduce conflict for RELEASE in state 32 resolved as shift
 WARNING: shift/reduce conflict for PASTUNTIL in state 32 resolved as shift
+WARNING: shift/reduce conflict for AND in state 33 resolved as shift
+WARNING: shift/reduce conflict for OR in state 33 resolved as shift
+WARNING: shift/reduce conflict for IMPLIES in state 33 resolved as shift
+WARNING: shift/reduce conflict for DIMPLIES in state 33 resolved as shift
+WARNING: shift/reduce conflict for UNTIL in state 33 resolved as shift
+WARNING: shift/reduce conflict for RELEASE in state 33 resolved as shift
+WARNING: shift/reduce conflict for PASTUNTIL in state 33 resolved as shift
+WARNING: shift/reduce conflict for AND in state 34 resolved as shift
+WARNING: shift/reduce conflict for OR in state 34 resolved as shift
+WARNING: shift/reduce conflict for IMPLIES in state 34 resolved as shift
+WARNING: shift/reduce conflict for DIMPLIES in state 34 resolved as shift
+WARNING: shift/reduce conflict for UNTIL in state 34 resolved as shift
+WARNING: shift/reduce conflict for RELEASE in state 34 resolved as shift
+WARNING: shift/reduce conflict for PASTUNTIL in state 34 resolved as shift
+WARNING: shift/reduce conflict for AND in state 35 resolved as shift
+WARNING: shift/reduce conflict for OR in state 35 resolved as shift
+WARNING: shift/reduce conflict for IMPLIES in state 35 resolved as shift
+WARNING: shift/reduce conflict for DIMPLIES in state 35 resolved as shift
+WARNING: shift/reduce conflict for UNTIL in state 35 resolved as shift
+WARNING: shift/reduce conflict for RELEASE in state 35 resolved as shift
+WARNING: shift/reduce conflict for PASTUNTIL in state 35 resolved as shift
+WARNING: shift/reduce conflict for AND in state 36 resolved as shift
+WARNING: shift/reduce conflict for OR in state 36 resolved as shift
+WARNING: shift/reduce conflict for IMPLIES in state 36 resolved as shift
+WARNING: shift/reduce conflict for DIMPLIES in state 36 resolved as shift
+WARNING: shift/reduce conflict for UNTIL in state 36 resolved as shift
+WARNING: shift/reduce conflict for RELEASE in state 36 resolved as shift
+WARNING: shift/reduce conflict for PASTUNTIL in state 36 resolved as shift
