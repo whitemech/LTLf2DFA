@@ -20,6 +20,9 @@ class DotHandler:
                 graph.delete_edge('init', '0')
                 graph.delete_edge('0', '1')
                 graph.add_edge('init', '1')
+            else:
+                graph.delete_edge('init', '0')
+                graph.add_edge('init', '0')
             self.new_digraph = graph
         else:
             print('[ERROR] - No file DOT exists')
