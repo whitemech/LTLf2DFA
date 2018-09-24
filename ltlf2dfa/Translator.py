@@ -53,10 +53,16 @@ class Translator:
         else:
             return 0
 
+    def rem_duplicates_order(self, seq):
+        seen = set()
+        seen_add = seen.add
+        return [x for x in seq if not (x in seen or seen_add(x))]
+
     def compute_alphabet(self):
 
-        symbols = re.findall('(?<![a-z])(?!true|false)[a-z]+', str(self.formula_to_be_parsed))
-        self.alphabet = [character.upper() for character in set(symbols)]
+        symbols = re.findall('(?<![a-z])(?!true|false)[_a-z0-9]+', str(self.formula_to_be_parsed))
+        _symbols = self.rem_duplicates_order(symbols)
+        self.alphabet = [character.upper() for character in _symbols]
 
     def compute_declare_assumption(self):
         pairs = list(it.combinations(self.alphabet, 2))
@@ -200,6 +206,36 @@ def translate_bis(formula_tree, var):
                 elif a ==  'true': return '( '+ 'ex1 '+new_var+': '+var+' <= '+new_var+' & '+new_var+' <= max($) & all1 '+new_new_var+': '+var+' <= '+new_new_var+' & '+new_new_var+' < '+new_var+' => '+b+' )'
                 elif a == 'false': return 'false'
                 else: return '( '+ 'ex1 '+new_var+': '+var+' <= '+new_var+' & '+new_var+' <= max($) & '+ a +' & all1 '+new_new_var+': '+var+' <= '+new_new_var+' & '+new_new_var+' < '+new_var+' => '+b+' )'
+
+        elif formula_tree[0] == 'W':
+            new_var = _next(var)
+            a = translate_bis(formula_tree[1], new_var)
+            if var == 'v_0':
+                return '(0 = max($)) | ('+ 'ex1 '+new_var+': '+ new_var +' = 1 '+ '& '+ a +')'
+            else:
+                return '('+ var +' = max($)) | ('+ 'ex1 '+new_var+': '+ new_var +' = '+ var + ' + 1 '+ '& '+ a +')'
+
+        elif formula_tree[0] == 'R':
+            new_var = _next(var)
+            new_new_var = _next(new_var)
+            a = translate_bis(formula_tree[2],new_new_var)
+            b = translate_bis(formula_tree[1],new_var)
+
+            if var == 'v_0':
+                if b == 'true': return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & all1 '+new_new_var+': 0 <= '+new_new_var+' & '+new_new_var+' <= '+new_var+' => '+a+' ) |'\
+                                        '(all1 '+new_new_var+': 0 <= '+new_new_var+' & '+new_new_var+' <= max($) => '+a+' )'
+                elif a ==  'true': return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & '+b+')'
+                elif b == 'false': return '(all1 '+new_new_var+': 0 <= '+new_new_var+' & '+new_new_var+' <= max($) => '+a+' )'
+                else: return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & '+ b +' & all1 '+new_new_var+': 0 <= '+new_new_var+' & '+new_new_var+' <= '+new_var+' => '+a+' ) |'\
+                            '(all1 '+new_new_var+': 0 <= '+new_new_var+' & '+new_new_var+' <= max($) => '+a+' )'
+            else:
+                if b == 'true': return '( '+ 'ex1 '+new_var+': '+var+' <= '+new_var+' & '+new_var+' <= max($) & all1 '+new_new_var+': '+var+' <= '+new_new_var+' & '+new_new_var+' <= '+new_var+' => '+a+' ) |'\
+                                        '(all1 '+new_new_var+': '+var+' <= '+new_new_var+' & '+new_new_var+' <= max($) => '+a+' )'
+                elif a ==  'true': return '( '+ 'ex1 '+new_var+': '+var+' <= '+new_var+' & '+new_var+' <= max($) & '+b+')'
+                elif b == 'false': return '(all1 '+new_new_var+': '+var+' <= '+new_new_var+' & '+new_new_var+' <= max($) => '+a+' )'
+                else: return '( '+ 'ex1 '+new_var+': '+var+' <= '+new_var+' & '+new_var+' <= max($) & '+ b +' & all1 '+new_new_var+': '+var+' <= '+new_new_var+' & '+new_new_var+' <= '+new_var+' => '+a+' ) |'\
+                            '(all1 '+new_new_var+': '+var+' <= '+new_new_var+' & '+new_new_var+' <= max($) => '+a+' )'
+                                            
         elif formula_tree[0] == 'Y':
             # print('computed tree: '+ str(self.parsed_formula))
             new_var = _next(var)
@@ -241,7 +277,7 @@ def translate_bis(formula_tree, var):
                 else:
                     return var + ' in ' + formula_tree.upper()
             else:
-                return var + ' in ' + formula_tree
+                return var + ' in ' + formula_tree.upper()
 
 def _next(var):
     if var == '0': return 'v_1'
