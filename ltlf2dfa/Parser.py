@@ -51,8 +51,6 @@ class MyParser(object):
                 p[0] = ('S','true', p[2])
             elif p[1] == 'H': # pastglobally A == not( pasteventually (not A) )
                 p[0] = ('~',('S', 'true', ('~',p[2])))
-            elif p[1] == 'W':
-                p[0] = ('~', ('X', ('~', p[2])))
             else:
                 p[0] = (p[1], p[2])
         elif len(p) == 4:
@@ -60,8 +58,6 @@ class MyParser(object):
                 p[0] = ('|', ('~', p[1]), p[3])
             elif p[2] == '<->':
                 p[0] = ('&', ('|', ('~', p[1]), p[3]), ('|', ('~', p[3]), p[1]))
-            elif p[2] == 'R':
-                p[0] = ('~', ('U', ('~', p[1]), ('~', p[3])))
             else:
                 p[0] = (p[2],p[1],p[3])
         else: raise ValueError
@@ -75,14 +71,3 @@ class MyParser(object):
 
     def p_error(self, p):
         raise ValueError("Syntax error in input! %s" %str(p))
-
-# if __name__ == '__main__':
-#     par = MyParser()
-#     while True:
-#        try:
-#            s = input('calc > ')
-#        except EOFError:
-#            break
-#        if not s: continue
-#        result = par(s)
-#        print(result)

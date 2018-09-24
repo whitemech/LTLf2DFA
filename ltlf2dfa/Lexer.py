@@ -54,7 +54,7 @@ class MyLexer(object):
     t_ignore = r' '+'\n'
 
     def t_TERM(self, t):
-        r'(?<![a-z])(?!true|false)[a-z]+'
+        r'(?<![a-z])(?!true|false)[_a-z0-9]+'
         t.type = MyLexer.reserved.get(t.value, 'TERM')
         return t  # Check for reserved words
 
@@ -65,17 +65,3 @@ class MyLexer(object):
     # Build the lexer
     def build(self,**kwargs):
         self.lexer = lex.lex(module=self, **kwargs)
-
-    # Test it output
-#     def test(self,data):
-#         self.lexer.input(data)
-#         while True:
-#             tok = self.lexer.token()
-#             if not tok:
-#                 break
-#             print(tok)
-#
-# # Build the lexer and try it out
-# m = Lexer()
-# m.build()           # Build the lexer
-# m.test("P(a -> bSc)")     # Test it
