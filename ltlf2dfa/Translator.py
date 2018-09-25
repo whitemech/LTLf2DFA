@@ -83,7 +83,7 @@ class Translator:
             return None
 
     def translate(self):
-        self.translated_formula = translate_bis(self.parsed_formula, var='v_0')+";\n"
+        self.translated_formula = translate_bis(self.parsed_formula, self.formulaType, var='v_0')+";\n"
 
     def buildMonaProgram(self, flag_for_declare):
         if not self.alphabet and not self.translated_formula:
@@ -137,7 +137,7 @@ class Translator:
                 print(e)
                 exit()
 
-def translate_bis(formula_tree, var):
+def translate_bis(formula_tree, _type, var):
     if type(formula_tree) == tuple:
         #enable this print to see the tree pruning
         # print(self.parsed_formula)
@@ -145,12 +145,15 @@ def translate_bis(formula_tree, var):
         if formula_tree[0] == '&':
             # print('computed tree: '+ str(self.parsed_formula))
             if var == 'v_0':
-                a = translate_bis(formula_tree[1], '0')
-                # a = translate_bis(self.parsed_formula[1], '0')
-                b = translate_bis(formula_tree[2], '0')
+                if _type == 2:
+                    a = translate_bis(formula_tree[1], _type, 'max($)')
+                    b = translate_bis(formula_tree[2], _type, 'max($)')
+                else:
+                    a = translate_bis(formula_tree[1], _type, '0')
+                    b = translate_bis(formula_tree[2], _type, '0')
             else:
-                a = translate_bis(formula_tree[1], var)
-                b = translate_bis(formula_tree[2], var)
+                a = translate_bis(formula_tree[1], _type, var)
+                b = translate_bis(formula_tree[2], _type, var)
             if a == 'false' or b == 'false':
                 return 'false'
             elif a == 'true':
@@ -161,11 +164,15 @@ def translate_bis(formula_tree, var):
         elif formula_tree[0] == '|':
             # print('computed tree: '+ str(self.parsed_formula))
             if var == 'v_0':
-                a = translate_bis(formula_tree[1], '0')
-                b = translate_bis(formula_tree[2], '0')
+                if _type == 2:
+                    a = translate_bis(formula_tree[1], _type, 'max($)')
+                    b = translate_bis(formula_tree[2], _type, 'max($)')
+                else:
+                    a = translate_bis(formula_tree[1], _type, '0')
+                    b = translate_bis(formula_tree[2], _type, '0')
             else:
-                a = translate_bis(formula_tree[1], var)
-                b = translate_bis(formula_tree[2], var)
+                a = translate_bis(formula_tree[1], _type, var)
+                b = translate_bis(formula_tree[2], _type, var)
             if a == 'true' or b == 'true':
                 return 'true'
             elif a == 'false':
@@ -176,15 +183,19 @@ def translate_bis(formula_tree, var):
             else: return '('+a+' | '+b+')'
         elif formula_tree[0] == '~':
             # print('computed tree: '+ str(self.parsed_formula))
-            if var == 'v_0': a = translate_bis(formula_tree[1], '0')
-            else: a = translate_bis(formula_tree[1], var)
+            if var == 'v_0':
+                if _type == 2:
+                    a = translate_bis(formula_tree[1], _type, 'max($)')
+                else:
+                    a = translate_bis(formula_tree[1], _type, '0')
+            else: a = translate_bis(formula_tree[1], _type, var)
             if a == 'true': return 'false'
             elif a == 'false': return 'true'
             else: return '~('+ a +')'
         elif formula_tree[0] == 'X':
             # print('computed tree: '+ str(self.parsed_formula))
             new_var = _next(var)
-            a = translate_bis(formula_tree[1],new_var)
+            a = translate_bis(formula_tree[1], _type, new_var)
             if var == 'v_0':
                 return '('+ 'ex1 '+new_var+': '+ new_var +' = 1 '+ '& '+ a +')'
             else:
@@ -193,8 +204,8 @@ def translate_bis(formula_tree, var):
             # print('computed tree: '+ str(self.parsed_formula))
             new_var = _next(var)
             new_new_var = _next(new_var)
-            a = translate_bis(formula_tree[2],new_var)
-            b = translate_bis(formula_tree[1],new_new_var)
+            a = translate_bis(formula_tree[2], _type,new_var)
+            b = translate_bis(formula_tree[1], _type,new_new_var)
 
             if var == 'v_0':
                 if b == 'true': return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & '+ a +' )'
@@ -209,7 +220,7 @@ def translate_bis(formula_tree, var):
 
         elif formula_tree[0] == 'W':
             new_var = _next(var)
-            a = translate_bis(formula_tree[1], new_var)
+            a = translate_bis(formula_tree[1], _type, new_var)
             if var == 'v_0':
                 return '(0 = max($)) | ('+ 'ex1 '+new_var+': '+ new_var +' = 1 '+ '& '+ a +')'
             else:
@@ -218,8 +229,8 @@ def translate_bis(formula_tree, var):
         elif formula_tree[0] == 'R':
             new_var = _next(var)
             new_new_var = _next(new_var)
-            a = translate_bis(formula_tree[2],new_new_var)
-            b = translate_bis(formula_tree[1],new_var)
+            a = translate_bis(formula_tree[2], _type,new_new_var)
+            b = translate_bis(formula_tree[1], _type,new_var)
 
             if var == 'v_0':
                 if b == 'true': return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & all1 '+new_new_var+': 0 <= '+new_new_var+' & '+new_new_var+' <= '+new_var+' => '+a+' ) |'\
@@ -235,11 +246,11 @@ def translate_bis(formula_tree, var):
                 elif b == 'false': return '(all1 '+new_new_var+': '+var+' <= '+new_new_var+' & '+new_new_var+' <= max($) => '+a+' )'
                 else: return '( '+ 'ex1 '+new_var+': '+var+' <= '+new_var+' & '+new_var+' <= max($) & '+ b +' & all1 '+new_new_var+': '+var+' <= '+new_new_var+' & '+new_new_var+' <= '+new_var+' => '+a+' ) |'\
                             '(all1 '+new_new_var+': '+var+' <= '+new_new_var+' & '+new_new_var+' <= max($) => '+a+' )'
-                                            
+
         elif formula_tree[0] == 'Y':
             # print('computed tree: '+ str(self.parsed_formula))
             new_var = _next(var)
-            a = translate_bis(formula_tree[1],new_var)
+            a = translate_bis(formula_tree[1], _type,new_var)
             if var == 'v_0':
                 return '('+ 'ex1 '+new_var+': '+ new_var +' = max($) - 1 '+ '& max($) > 0 & '+ a +')'
             else:
@@ -248,8 +259,8 @@ def translate_bis(formula_tree, var):
             # print('computed tree: '+ str(self.parsed_formula))
             new_var = _next(var)
             new_new_var = _next(new_var)
-            a = translate_bis(formula_tree[2],new_var)
-            b = translate_bis(formula_tree[1],new_new_var)
+            a = translate_bis(formula_tree[2], _type,new_var)
+            b = translate_bis(formula_tree[1], _type,new_new_var)
 
             if var == 'v_0':
                 if b == 'true': return '( '+ 'ex1 '+new_var+': 0 <= '+new_var+' & '+new_var+' <= max($) & '+ a +' )'
@@ -271,16 +282,23 @@ def translate_bis(formula_tree, var):
 
         # BASE CASE OF RECURSION
         else:
-            if formula_tree.isalpha():
-                if var == 'v_0':
-                    return '0 in '+ formula_tree.upper()
+            if var == 'v_0':
+                if _type == 2:
+                    return 'max($) in '+ formula_tree.upper()
                 else:
-                    return var + ' in ' + formula_tree.upper()
+                    return '0 in '+ formula_tree.upper()
             else:
                 return var + ' in ' + formula_tree.upper()
+            # if formula_tree.isalpha():
+            #     if var == 'v_0':
+            #         return '0 in '+ formula_tree.upper()
+            #     else:
+            #         return var + ' in ' + formula_tree.upper()
+            # else:
+            #     return var + ' in ' + formula_tree.upper()
 
 def _next(var):
-    if var == '0': return 'v_1'
+    if var == '0' or var == 'max($)': return 'v_1'
     else:
         s = var.split('_')
         s[1] = str(int(s[1])+1)
