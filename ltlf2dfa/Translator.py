@@ -1,8 +1,9 @@
 from ltlf2dfa.Parser import MyParser
 import itertools as it
-import subprocess
+from subprocess import PIPE, Popen, TimeoutExpired
 import os, sys, re
 import pkg_resources
+import signal
 
 class Translator:
 
@@ -15,11 +16,12 @@ class Translator:
         self.translated_formula = None
 
     def formula_parser(self):
-        if self.formulaType in {1,2,3}:
+        if self.formulaType in {1, 2, 3}:
             self.compute_alphabet()
             parser = MyParser()
             self.parsed_formula = parser(self.formula_to_be_parsed)
-        else: raise ValueError('Ooops! You typed a formula with mixed past/future operators')
+        else:
+            raise ValueError('Ooops! You typed a formula with mixed past/future operators')
 
     def tuple_to_string(self):
         return '_'.join(str(self.formula_to_be_parsed))
@@ -39,8 +41,8 @@ class Translator:
         future_operators = []
         for character in separated_formula:
             if character.isupper():
-                if character in {'X','F','G','U', 'W', 'R'}: future_operators.append(character)
-                elif character in {'Y','O','H','S'}: past_operators.append(character)
+                if character in {'X', 'F', 'G', 'U', 'W', 'R'}: future_operators.append(character)
+                elif character in {'Y', 'O', 'H', 'S'}: past_operators.append(character)
                 else: continue
             else: continue
 
@@ -59,7 +61,6 @@ class Translator:
         return [x for x in seq if not (x in seen or seen_add(x))]
 
     def compute_alphabet(self):
-
         symbols = re.findall('(?<![a-z])(?!true|false)[_a-z0-9]+', str(self.formula_to_be_parsed))
         _symbols = self.rem_duplicates_order(symbols)
         self.alphabet = [character.upper() for character in _symbols]
@@ -71,7 +72,7 @@ class Translator:
             first_assumption = "~(ex1 y: 0<=y & y<=max($) & ~("
             for symbol in self.alphabet:
                 if symbol == self.alphabet[-1]: first_assumption += 'y in '+ symbol +'))'
-                else : first_assumption += 'y in '+ symbol +' | '
+                else: first_assumption += 'y in '+ symbol +' | '
 
             second_assumption = "~(ex1 y: 0<=y & y<=max($) & ~("
             for pair in pairs:
@@ -87,7 +88,7 @@ class Translator:
 
     def buildMonaProgram(self, flag_for_declare):
         if not self.alphabet and not self.translated_formula:
-            raise ValueError
+            raise ValueError('Formula not parsed or translated...')
         else:
             if flag_for_declare:
                 if self.compute_declare_assumption() is None:
@@ -109,33 +110,51 @@ class Translator:
                 file.write(program)
                 file.close()
         except IOError:
-            print('Problem with the opening of the file!')
+            print('[ERROR]: Problem with the opening of the file!')
 
-    def invoke_mona(self, path='./inter-automa'):
+    def invoke_mona(self):
         if sys.platform == 'linux':
             package_dir = os.path.dirname(os.path.abspath(__file__))
-            mona_path = pkg_resources.resource_filename('ltlf2dfa','mona')
+            mona_path = pkg_resources.resource_filename('ltlf2dfa', 'mona')
             if os.access(mona_path, os.X_OK):  # check if mona is executable
+                command = package_dir+'/./mona -q -w ./automa.mona'
+                process = Popen(args=command, stdout=PIPE, stderr=PIPE, preexec_fn=os.setsid, shell=True,
+                                encoding="utf-8")
                 try:
-                    subprocess.call(package_dir+'/./mona -u -gw ./automa.mona > ' + path + '.dot', shell=True)
-                except subprocess.CalledProcessError as e:
-                    print(e)
-                    exit()
-                except OSError as e:
-                    print(e)
-                    exit()
+                    output, error = process.communicate(timeout=30)
+                    return str(output).strip()
+                    # output, error = subprocess.call('mona -q -w ./automa.mona', shell=True)
+                except TimeoutExpired:
+                    os.killpg(os.getpgid(process.pid), signal.SIGTERM)
+                    return False
+                    # subprocess.call(package_dir+'/./mona -u -gw ./automa.mona > ' + path + '.dot', shell=True)
+                    # output, error = subprocess.call(package_dir + '/./mona -q -w ./automa.mona', shell=True)
+                # except subprocess.CalledProcessError as e:
+                #     print(e)
+                #     exit()
+                # except OSError as e:
+                #     print(e)
+                #     exit()
             else:
                 print('[ERROR]: MONA tool is not executable...')
                 exit()
         else:
+            command = 'mona -q -w ./automa.mona'
+            process = Popen(args=command, stdout=PIPE, stderr=PIPE, preexec_fn=os.setsid, shell=True,
+                            encoding="utf-8")
             try:
-                subprocess.call('mona -u -gw ./automa.mona > ' + path + '.dot', shell=True)
-            except subprocess.CalledProcessError as e:
-                print(e)
-                exit()
-            except OSError as e:
-                print(e)
-                exit()
+                output, error = process.communicate(timeout=30)
+                return str(output).strip()
+                # output, error = subprocess.call('mona -q -w ./automa.mona', shell=True)
+            except TimeoutExpired:
+                os.killpg(os.getpgid(process.pid), signal.SIGTERM)
+                return False
+            # except subprocess.CalledProcessError as e:
+            #     print(e)
+            #     exit()
+            # except OSError as e:
+            #     print(e)
+            #     exit()
 
 def translate_bis(formula_tree, _type, var):
     if type(formula_tree) == tuple:
@@ -303,3 +322,16 @@ def _next(var):
         s = var.split('_')
         s[1] = str(int(s[1])+1)
         return '_'.join(s)
+
+
+if __name__ == '__main__':
+
+    formula = 'G (a)'
+    declare_flag = False
+
+    translator = Translator(formula)
+    translator.formula_parser()
+    translator.translate()
+    translator.createMonafile(declare_flag)  # it creates automa.mona file
+    result = translator.invoke_mona()  # it returns an intermediate automa.dot file
+    translator.parse_mona(result)
