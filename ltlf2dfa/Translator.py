@@ -5,6 +5,31 @@ import os, sys, re
 import pkg_resources
 import signal
 
+UNSAT_DOT = '''digraph MONA_DFA {
+ rankdir = LR;
+ center = true;
+ size = "7.5,10.5";
+ edge [fontname = Courier];
+ node [height = .5, width = .5];
+ node [shape = doublecircle];
+ node [shape = circle]; 1;
+ init [shape = plaintext, label = ""];
+ init -> 1;
+ 1 -> 1 [label="true"];
+}'''
+
+
+def get_value(text, regex, value_type=float):
+    """dump a value from a file based on a regex passed in."""
+    # Get the text of the time
+    pattern = re.compile(regex, re.MULTILINE)
+    results = pattern.search(text)
+    if results:
+        return value_type(results.group(1))
+    else:
+        print("Could not find the value, {}, in the text provided".format(regex))
+        return (value_type(0.0))
+
 class Translator:
 
     def __init__(self, formula):
@@ -155,6 +180,129 @@ class Translator:
             # except OSError as e:
             #     print(e)
             #     exit()
+
+
+    def output2dot(self, mona_output):
+        # print(mona_output)
+        if "Formula is unsatisfiable" in mona_output:
+            return UNSAT_DOT
+        else:
+            return self.parse_mona(mona_output)
+
+
+    def parse_mona(self, mona_output):
+        free_variables = get_value(mona_output, '.*DFA for formula with free variables:[\s]*(.*?)\n.*', str)
+        free_variables = [x.strip().lower() for x in free_variables.split() if len(x.strip()) > 0]
+        # assert ("alive" in free_variables)
+        # alive_var_idx = free_variables.index("alive")
+        # substract the "alive" variable
+        num_AP = len(free_variables)
+
+        # initial_state = get_value(mona_output, '.*Initial state:[\s]*(\d+)\n.*', int)
+        accepting_states = get_value(mona_output, '.*Accepting states:[\s]*(.*?)\n.*', str)
+        accepting_states = [int(x.strip()) for x in accepting_states.split() if len(x.strip()) > 0]
+        num_states = get_value(mona_output, '.*Automaton has[\s]*(\d+)[\s]states.*', int) - 1
+
+        cur_state = 0
+        hoa = "HOA: v1\n"
+        hoa += "States: {}\n".format(num_states)
+        # hoa += "Start: %s\n" % initial_state
+        hoa += "Start: 1\n"
+        hoa += 'AP: {0} {1}\n'.format(num_AP, ' '.join('"{0}"'.format(literal) for literal in free_variables))
+        # hoa += 'AP: {} {}\n'.format(num_AP, ' '.join('"{}"'.format(literal for literal in free_variables)))
+        hoa += "acc-name: Finite-State\n"
+        hoa += "Acceptance: 1 Inf(0)\n"
+        # hoa += "# properties: trans-labels explicit-labels complete stutter-invariant\n"
+        hoa += "--BODY--"
+
+        # the dictionary maps a dest_id automaton state
+        # to a list of guards, where each guard is a set
+        # guard_dict = {}
+        for line in mona_output.splitlines():
+            if line.startswith("State "):
+                orig_state = get_value(line, '.*State[\s]*(\d+):\s.*', int)
+                guard = get_value(line, '.*:[\s](.*?)[\s]->.*', str)
+                dest_state = get_value(line, '.*state[\s]*(\d+)[\s]*.*', int)
+                # print(dest_state)
+                if orig_state != cur_state:
+                    hoa += "\nState: {}".format(orig_state)
+                    cur_state = orig_state
+                    # # clear dictionary to start monitoring a new orig state
+                    # guard_dict.clear()
+
+                # if dest_state not in guard_dict:
+                #     guard_dict[dest_state] = []
+                hoa_guard = []
+                alive_guard = True
+                # assert (len(guard) == len(free_variables))
+
+                # for g in guard:
+                #     if g == "X":
+                #         continue
+                #     elif g == "1":
+                #         hoa_guard.append(str(i))
+                #     else:
+                #         assert (g == "0")
+                #         hoa_guard.append('!' + str(i))
+
+
+                for m in range(len(guard)):
+                    # if m == alive_var_idx:
+                    #     # assert(guard[i] in ["X","1"])
+                    #     if guard[m] in ["X", "1"]:
+                    #         continue
+                    #     else:
+                    #         assert (guard[m] == "0")
+                    #         alive_guard = False
+                    #         break
+                    i = m
+                    # if m > alive_var_idx:
+                    #     i -= 1
+
+                    if guard[m] == "X":
+                        continue
+                    elif guard[m] == "1":
+                        hoa_guard.append(str(i))
+                    else:
+                        assert (guard[m] == "0")
+                        hoa_guard.append('!' + str(i))
+
+                if len(hoa_guard) == 0:
+                    hoa_guard.append("t")
+                if alive_guard:
+                    # the automaton starts at time -1
+                    # this checks that the automaton can advance one time step and
+                    # start in State 1
+                    # if cur_state == 0:
+                    #     assert (hoa_guard == ["t"])
+                    #     assert (dest_state == 1)
+
+                    # # Add transition to dest_state only if it is novel
+                    # # If it is a proper subset of an existing guard, then
+                    # # remove this guard from the dictionary
+                    # hoa_guard = set(hoa_guard)
+                    # for guard_idx in range(len(guard_dict[dest_state])):
+                    #     if hoa_guard < guard_dict[dest_state][guard_idx]:
+                    #         print("Removing redundant transition %s covered by %s" % (str(guard_dict[dest_state][guard_idx]), str(hoa_guard)))
+                    #         guard_dict[dest_state].pop(guard_idx)
+
+                    # must_add_guard = True
+                    # for guard_idx in range(len(guard_dict[dest_state])):
+                    #     if guard_dict[dest_state][guard_idx] < hoa_guard:
+                    #         print("Ignoring redundant transition %s covered by %s" % (str(hoa_guard), str(guard_dict[dest_state][guard_idx])))
+                    #         must_add_guard = False
+                    #         break
+                    # if must_add_guard:
+                    #     guard_dict[dest_state].append(hoa_guard)
+                    if cur_state != 0:
+                        hoa += "\n[{}] {}".format('&'.join(hoa_guard), dest_state)
+                    # hoa += "\n[%s] %s" % (guard, dest_state)
+                    if dest_state in accepting_states:
+                        hoa += " {0}"
+
+        hoa += "\n--END--\n"
+        return hoa
+
 
 def translate_bis(formula_tree, _type, var):
     if type(formula_tree) == tuple:
@@ -315,6 +463,7 @@ def translate_bis(formula_tree, _type, var):
             #         return var + ' in ' + formula_tree.upper()
             # else:
             #     return var + ' in ' + formula_tree.upper()
+
 
 def _next(var):
     if var == '0' or var == 'max($)': return 'v_1'
