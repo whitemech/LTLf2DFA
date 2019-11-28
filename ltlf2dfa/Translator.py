@@ -96,7 +96,7 @@ def parse_mona(mona_output):
 
     for c, guards in dot_trans.items():
         simplified_guard = simp_guard(guards)
-        dot += " {} -> {} [label=\"{}\"];\n".format(c[0], c[1], simplified_guard)
+        dot += " {} -> {} [label=\"{}\"];\n".format(c[0], c[1], str(simplified_guard).lower())
 
     dot += "}"
     return dot
