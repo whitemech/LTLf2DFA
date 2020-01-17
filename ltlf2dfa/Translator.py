@@ -1,7 +1,7 @@
 from ltlf2dfa.Parser import MyParser
 import itertools as it
 from subprocess import PIPE, Popen, TimeoutExpired
-import os, sys
+import os
 import re
 import signal
 from sympy import symbols, And, Not, Or, simplify
@@ -42,10 +42,10 @@ def ter2symb(ap, ternary):
         if value == 'X':
             continue
         elif value == '1':
-            expr = And(expr, ap[i])
+            expr = And(expr, ap[i] if isinstance(ap, tuple) else ap)
         else:
             assert(value == '0')
-            expr = And(expr, Not(ap[i]))
+            expr = And(expr, Not(ap[i] if isinstance(ap, tuple) else ap))
         i += 1
     return expr
 
@@ -62,15 +62,12 @@ def parse_mona(mona_output):
     """parse mona output and construct a dot."""
     free_variables = get_value(mona_output, '.*DFA for formula with free variables:[\s]*(.*?)\n.*', str)
     free_variables = symbols(' '.join(x.strip().lower() for x in free_variables.split() if len(x.strip()) > 0))
-    #free_variables = [x.strip().lower() for x in free_variables.split() if len(x.strip()) > 0]
-    # num_AP = len(free_variables)
 
     # initial_state = get_value(mona_output, '.*Initial state:[\s]*(\d+)\n.*', int)
     accepting_states = get_value(mona_output, '.*Accepting states:[\s]*(.*?)\n.*', str)
     accepting_states = [str(x.strip()) for x in accepting_states.split() if len(x.strip()) > 0]
     # num_states = get_value(mona_output, '.*Automaton has[\s]*(\d+)[\s]states.*', int) - 1
 
-    # cur_state = 0
     dot = '''digraph MONA_DFA {
  rankdir = LR;
  center = true;
@@ -82,7 +79,7 @@ def parse_mona(mona_output):
  init [shape = plaintext, label = ""];
  init -> 1;'''
 
-    dot_trans = dict() # maps each couple (src, dst) to a list of guards
+    dot_trans = dict()  # maps each couple (src, dst) to a list of guards
     for line in mona_output.splitlines():
         if line.startswith("State "):
             orig_state = get_value(line, '.*State[\s]*(\d+):\s.*', int)
