@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 with open('README.md') as readme_file:
     readme = readme_file.read()
 
-requirements = ['ply', 'dotpy']
+requirements = ['ply', 'dotpy', 'sympy']
 
 setup(
     author="Francesco Fuggitti",
@@ -18,7 +18,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Operating System :: POSIX :: Linux',
     ],
-    description="A tool for generating a DFA from an LTLf formula",
+    description="A tool for generating a DFA from an LTLf or a PLTLf formula.",
     install_requires=requirements,
     license="MIT license",
     long_description=readme,
@@ -27,6 +27,6 @@ setup(
     keywords='ltlf2dfa',
     name='ltlf2dfa',
     packages=find_packages(include=['ltlf2dfa*']),
-    url='https://github.com/Francesco17/LTLf2DFA',
-    version='0.2.2.post0',
+    url='https://github.com/francescofuggitti/LTLf2DFA',
+    version='0.3.2',
 )

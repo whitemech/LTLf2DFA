@@ -221,48 +221,58 @@ class Translator:
             print('[ERROR]: Problem with the opening of the file!')
 
     def invoke_mona(self):
-        if sys.platform == 'linux':
-            package_dir = os.path.dirname(os.path.abspath(__file__))
-            mona_path = pkg_resources.resource_filename('ltlf2dfa', 'mona')
-            if os.access(mona_path, os.X_OK):  # check if mona is executable
-                command = package_dir + '/./mona -q -w ./automa.mona'
-                process = Popen(args=command, stdout=PIPE, stderr=PIPE, preexec_fn=os.setsid, shell=True,
-                                encoding="utf-8")
-                try:
-                    output, error = process.communicate(timeout=30)
-                    return str(output).strip()
-                    # output, error = subprocess.call('mona -q -w ./automa.mona', shell=True)
-                except TimeoutExpired:
-                    os.killpg(os.getpgid(process.pid), signal.SIGTERM)
-                    return False
-                    # subprocess.call(package_dir+'/./mona -u -gw ./automa.mona > ' + path + '.dot', shell=True)
-                    # output, error = subprocess.call(package_dir + '/./mona -q -w ./automa.mona', shell=True)
-                # except subprocess.CalledProcessError as e:
-                #     print(e)
-                #     exit()
-                # except OSError as e:
-                #     print(e)
-                #     exit()
-            else:
-                print('[ERROR]: MONA tool is not executable...')
-                exit()
-        else:
-            command = 'mona -q -w ./automa.mona'
-            process = Popen(args=command, stdout=PIPE, stderr=PIPE, preexec_fn=os.setsid, shell=True,
-                            encoding="utf-8")
-            try:
-                output, error = process.communicate(timeout=30)
-                return str(output).strip()
-                # output, error = subprocess.call('mona -q -w ./automa.mona', shell=True)
-            except TimeoutExpired:
-                os.killpg(os.getpgid(process.pid), signal.SIGTERM)
-                return False
-            # except subprocess.CalledProcessError as e:
-            #     print(e)
-            #     exit()
-            # except OSError as e:
-            #     print(e)
-            #     exit()
+        # if sys.platform == 'linux':
+        #     package_dir = os.path.dirname(os.path.abspath(__file__))
+        #     mona_path = pkg_resources.resource_filename('ltlf2dfa', 'mona')
+        #     if os.access(mona_path, os.X_OK):  # check if mona is executable
+        #         command = package_dir + '/./mona -q -w ./automa.mona'
+        #         process = Popen(args=command, stdout=PIPE, stderr=PIPE, preexec_fn=os.setsid, shell=True,
+        #                         encoding="utf-8")
+        #         try:
+        #             output, error = process.communicate(timeout=30)
+        #             return str(output).strip()
+        #             # output, error = subprocess.call('mona -q -w ./automa.mona', shell=True)
+        #         except TimeoutExpired:
+        #             os.killpg(os.getpgid(process.pid), signal.SIGTERM)
+        #             return False
+        #             # subprocess.call(package_dir+'/./mona -u -gw ./automa.mona > ' + path + '.dot', shell=True)
+        #             # output, error = subprocess.call(package_dir + '/./mona -q -w ./automa.mona', shell=True)
+        #         # except subprocess.CalledProcessError as e:
+        #         #     print(e)
+        #         #     exit()
+        #         # except OSError as e:
+        #         #     print(e)
+        #         #     exit()
+        #     else:
+        #         print('[ERROR]: MONA tool is not executable...')
+        #         exit()
+        # else:
+        #     command = 'mona -q -w ./automa.mona'
+        #     process = Popen(args=command, stdout=PIPE, stderr=PIPE, preexec_fn=os.setsid, shell=True,
+        #                     encoding="utf-8")
+        #     try:
+        #         output, error = process.communicate(timeout=30)
+        #         return str(output).strip()
+        #         # output, error = subprocess.call('mona -q -w ./automa.mona', shell=True)
+        #     except TimeoutExpired:
+        #         os.killpg(os.getpgid(process.pid), signal.SIGTERM)
+        #         return False
+        #     # except subprocess.CalledProcessError as e:
+        #     #     print(e)
+        #     #     exit()
+        #     # except OSError as e:
+        #     #     print(e)
+        #     #     exit()
+        command = 'mona -q -w ./automa.mona'
+        process = Popen(args=command, stdout=PIPE, stderr=PIPE, preexec_fn=os.setsid, shell=True,
+                        encoding="utf-8")
+        try:
+            output, error = process.communicate(timeout=30)
+            return str(output).strip()
+            # output, error = subprocess.call('mona -q -w ./automa.mona', shell=True)
+        except TimeoutExpired:
+            os.killpg(os.getpgid(process.pid), signal.SIGTERM)
+            return False
 
     def output2dot(self, mona_output):
         """Parse the mona output or return the unsatisfiable dot."""
@@ -482,7 +492,7 @@ def _next(var):
 
 
 if __name__ == '__main__':
-    formula = 'G (a & b)'
+    formula = 'G(a & b)'
     # formula = '(((G (false  | (~(X(grant0))) | (request0)))) & ((G (false  | (~(X(grant1))) | (request1)))) & ((G (false  | (~(X(grant2))) | (request2)))) & ((G (false  | (~(X(grant3))) | (request3)))) & ((G (false  | (~(X(grant4))) | (request4)))) & ((G (false  | (~(X(grant5))) | (request5)))) & ((G (true  & (false  | (~(X(grant0))) | (~(X(grant1)))) & (false  | (~(X(grant0))) | (~(X(grant2)))) & (false  | (~(X(grant0))) | (~(X(grant3)))) & (false  | (~(X(grant0))) | (~(X(grant4)))) & (false  | (~(X(grant0))) | (~(X(grant5)))) & (false  | (~(X(grant1))) | (~(X(grant0)))) & (false  | (~(X(grant1))) | (~(X(grant2)))) & (false  | (~(X(grant1))) | (~(X(grant3)))) & (false  | (~(X(grant1))) | (~(X(grant4)))) & (false  | (~(X(grant1))) | (~(X(grant5)))) & (false  | (~(X(grant2))) | (~(X(grant0)))) & (false  | (~(X(grant2))) | (~(X(grant1)))) & (false  | (~(X(grant2))) | (~(X(grant3)))) & (false  | (~(X(grant2))) | (~(X(grant4)))) & (false  | (~(X(grant2))) | (~(X(grant5)))) & (false  | (~(X(grant3))) | (~(X(grant0)))) & (false  | (~(X(grant3))) | (~(X(grant1)))) & (false  | (~(X(grant3))) | (~(X(grant2)))) & (false  | (~(X(grant3))) | (~(X(grant4)))) & (false  | (~(X(grant3))) | (~(X(grant5)))) & (false  | (~(X(grant4))) | (~(X(grant0)))) & (false  | (~(X(grant4))) | (~(X(grant1)))) & (false  | (~(X(grant4))) | (~(X(grant2)))) & (false  | (~(X(grant4))) | (~(X(grant3)))) & (false  | (~(X(grant4))) | (~(X(grant5)))) & (false  | (~(X(grant5))) | (~(X(grant0)))) & (false  | (~(X(grant5))) | (~(X(grant1)))) & (false  | (~(X(grant5))) | (~(X(grant2)))) & (false  | (~(X(grant5))) | (~(X(grant3)))) & (false  | (~(X(grant5))) | (~(X(grant4))))))) & ((false  | (~(G (F (request0)))) | (G (F (X(grant0)))))) & ((false  | (~(G (F (request1)))) | (G (F (X(grant1)))))) & ((false  | (~(G (F (request2)))) | (G (F (X(grant2)))))) & ((false  | (~(G (F (request3)))) | (G (F (X(grant3)))))) & ((false  | (~(G (F (request4)))) | (G (F (X(grant4)))))) & ((false  | (~(G (F (request5)))) | (G (F (X(grant5)))))))'
     declare_flag = False
 

@@ -56,11 +56,9 @@ translator = Translator(formula)
 translator.formula_parser()
 translator.translate()
 translator.createMonafile(declare_flag) #it creates automa.mona file
-translator.invoke_mona() #it returns an intermediate automa.dot file
+result = translator.invoke_mona() #it returns an intermediate automa.dot file
+print(t.output2dot(result))
 
-dotHandler = DotHandler()
-dotHandler.modify_dot()
-dotHandler.output_dot() #it returns the final automa.dot file
 ```
 ## Syntax
 
