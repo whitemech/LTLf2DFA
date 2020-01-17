@@ -212,11 +212,10 @@ class Translator:
     def createMonafile(self, flag):
         program = self.buildMonaProgram(flag)
         try:
-            with open('./automa.mona', 'w+') as file:
+            with open('{}/automa.mona'.format(package_dir), 'w+') as file:
                 file.write(program)
-                file.close()
         except IOError:
-            print('[ERROR]: Problem with the opening of the file!')
+            print('[ERROR]: Problem in opening the automa.mona file!')
 
     def invoke_mona(self):
         # if sys.platform == 'linux':
