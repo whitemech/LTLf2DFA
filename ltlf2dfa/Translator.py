@@ -39,13 +39,13 @@ def ter2symb(ap, ternary):
     expr = And()
     i = 0
     for value in ternary:
-        if value == 'X':
-            continue
-        elif value == '1':
+        if value == '1':
             expr = And(expr, ap[i] if isinstance(ap, tuple) else ap)
-        else:
+        elif value == '0':
             assert(value == '0')
             expr = And(expr, Not(ap[i] if isinstance(ap, tuple) else ap))
+        else:
+            assert value == 'X', "[ERROR]: the guard is not X"
         i += 1
     return expr
 
@@ -77,7 +77,7 @@ def parse_mona(mona_output):
     dot += " node [shape = doublecircle]; {};\n".format('; '.join(accepting_states))
     dot += ''' node [shape = circle]; 1;
  init [shape = plaintext, label = ""];
- init -> 1;'''
+ init -> 1;\n'''
 
     dot_trans = dict()  # maps each couple (src, dst) to a list of guards
     for line in mona_output.splitlines():
