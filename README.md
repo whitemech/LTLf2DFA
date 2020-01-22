@@ -1,23 +1,33 @@
 # LTL<sub>f</sub>2DFA
-[![ciaio](https://img.shields.io/badge/python-3.6-blue.svg)]()
+[![](https://img.shields.io/pypi/v/hoa2dot.svg)](https://pypi.python.org/pypi/hoa2dot)
+[![](https://img.shields.io/travis/logics4ai-sapienza/hoa2dot.svg)](https://travis-ci.org/francescofuggitti/ltlf2dfa)
+[![](https://img.shields.io/pypi/pyversions/hoa2dot.svg)](https://pypi.python.org/pypi/ltlf2dfa)
+[![](https://img.shields.io/badge/docs-mkdocs-9cf)](https://www.mkdocs.org/)
+[![](https://img.shields.io/badge/status-development-orange.svg)](https://img.shields.io/badge/status-development-orange.svg)
+[![](https://coveralls.io/repos/github/logics4ai-sapienza/hoa2dot/badge.svg?branch=develop)](https://coveralls.io/github/francescofuggitti/ltlf2dfa?branch=develop)
+[![](https://img.shields.io/badge/flake8-checked-blueviolet)](https://img.shields.io/badge/flake8-checked-blueviolet)
+[![](https://img.shields.io/badge/mypy-checked-blue)](https://img.shields.io/badge/mypy-checked-blue)
+[![](https://img.shields.io/badge/license-MIT-lightgrey)](https://img.shields.io/badge/license-MIT-lightgrey)
 
-LTL<sub>f</sub>2DFA is a simple tool that processes an LTL<sub>f</sub> formula (with all past or all future operators) and generates the corresponding minimized DFA (Deterministic Finite state Automaton) using [MONA](http://www.brics.dk/mona/).
-This tool is written in Python 3.6.
+LTL<sub>f</sub>2DFA is a simple tool that processes an LTL<sub>f</sub> or a PLTLf formula and generates the 
+corresponding minimized DFA (Deterministic Finite state Automaton) using [MONA](http://www.brics.dk/mona/).
+This tool is written in Python 3.7.
 
-It is tested on Linux Ubuntu 16.04 and on macOS 10.13.6.
+It is tested on Linux Ubuntu 18.04 and on macOS 10.15.
 
-Now it is also available online at [ltlf2dfa.diag.uniroma1.it](http://ltlf2dfa.diag.uniroma1.it).
+It is also available online at [ltlf2dfa.diag.uniroma1.it](http://ltlf2dfa.diag.uniroma1.it).
 
 ## Getting Started
 
 ### Requirements
 
-This tool uses MONA for the generation of the DFA. Hence, you should first install MONA with all its dependencies on your OS following the instructions [here](http://www.brics.dk/mona/download.html).
+This tool uses MONA for the generation of the DFA. Hence, you should first install MONA with all its dependencies on 
+your OS following the instructions [here](http://www.brics.dk/mona/download.html).
 
 This tool is also based on the following libraries:
 
 - [ply 3.11](https://pypi.org/project/ply/)
-- [dotpy 0.0.2](https://pypi.org/project/dotpy/)
+- [sympy 1.5.1](https://pypi.org/project/sympy/)
 
 They are automatically added while installing LTL<sub>f</sub>2DFA.
 
@@ -29,7 +39,7 @@ pip install ltlf2dfa
 ```
 - From this repository:
 ```
-pip install git+https://github.com/Francesco17/LTLf2DFA@master#egg=ltlf2dfa
+pip install git+https://github.com/Francesco17/LTLf2DFA@develop#egg=ltlf2dfa
 ```
 
 ## How To Use It
@@ -70,7 +80,7 @@ The syntax accepted by LTL<sub>f</sub>2DFA is the following:
 |     FALSE     |  false |
 |      AND      |    &   |
 |       OR      |    \|  |
-|      NOT      |    ~   |
+|      NOT      |    !   |
 |  IMPLICATION  |   ->   |
 | D-IMPLICATION |   <->  |
 |      NEXT     |    X   |
@@ -88,15 +98,16 @@ The syntax accepted by LTL<sub>f</sub>2DFA is the following:
 
 Also parentheses `(` and `)` can be used.
 
-**NOTE**: LTL<sub>f</sub>2DFA accepts ONLY separated formulas, i.e. formulas that have only past, only future or none operators.
+**NOTE**: LTL<sub>f</sub>2DFA accepts either LTL<sub>f</sub> formulas or PLTL<sub>f</sub> formulas, i.e. formulas that 
+have only past, only future or none operators.
 
 ## Author
 
-[Francesco Fuggitti](https://www.linkedin.com/in/francesco-fuggitti-b78336131/)
+[Francesco Fuggitti](https://francescofuggitti.github.io/)
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/Francesco17/LTLf2FOL/blob/master/LICENSE) file for details
+This project is licensed under the MIT License - see the [LICENSE](AUTHORS.md) file for details
 
 ## Contacts
 
