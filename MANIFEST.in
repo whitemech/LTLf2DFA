@@ -1,1 +1,15 @@
-include ltlf2dfa/mona
+include AUTHORS.md
+include CONTRIBUTING.md
+include HISTORY.md
+include LICENSE
+include README.md
+include Pipfile
+include Pipfile.lock
+
+recursive-include ltlf2dfa *
+recursive-include tests *
+
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+
+recursive-include docs *.md conf.py Makefile make.bat *.jpg *.png *.gif

@@ -5,6 +5,7 @@
 ### Custom
 *.dot
 *.mona
+ltlf2dfa/*.mona
 
 ### Images ###
 # JPEG
