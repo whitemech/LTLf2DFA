@@ -435,6 +435,7 @@ def translate_bis(formula_tree, _type, var):
 
             if var == 'v_0':
                 if b == 'true':
+                    # return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & ' + a + ' )'
                     return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & ' + a + ' )'
                 elif a == 'true':
                     return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & all1 ' + new_new_var + ': ' + new_var + ' < ' + new_new_var + ' & ' + new_new_var + ' <= max($) => ' + b + ' )'
@@ -444,7 +445,7 @@ def translate_bis(formula_tree, _type, var):
                     return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & ' + a + ' & all1 ' + new_new_var + ': ' + new_var + ' < ' + new_new_var + ' & ' + new_new_var + ' <= max($) => ' + b + ' )'
             else:
                 if b == 'true':
-                    return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & ' + a + ' )'
+                    return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= ' + var + ' & ' + a + ' )'
                 elif a == 'true':
                     return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= ' + var + ' & all1 ' + new_new_var + ': ' + new_var + ' < ' + new_new_var + ' & ' + new_new_var + ' <= ' + var + ' => ' + b + ' )'
                 elif a == 'false':
@@ -489,7 +490,7 @@ def _next(var):
 
 
 if __name__ == '__main__':
-    formula = 'Fa'
+    formula = '~( (~b) U (a & (~b)) )'
     # formula = '(((G (false  | (~(X(grant0))) | (request0)))) & ((G (false  | (~(X(grant1))) | (request1)))) & ((G (false  | (~(X(grant2))) | (request2)))) & ((G (false  | (~(X(grant3))) | (request3)))) & ((G (false  | (~(X(grant4))) | (request4)))) & ((G (false  | (~(X(grant5))) | (request5)))) & ((G (true  & (false  | (~(X(grant0))) | (~(X(grant1)))) & (false  | (~(X(grant0))) | (~(X(grant2)))) & (false  | (~(X(grant0))) | (~(X(grant3)))) & (false  | (~(X(grant0))) | (~(X(grant4)))) & (false  | (~(X(grant0))) | (~(X(grant5)))) & (false  | (~(X(grant1))) | (~(X(grant0)))) & (false  | (~(X(grant1))) | (~(X(grant2)))) & (false  | (~(X(grant1))) | (~(X(grant3)))) & (false  | (~(X(grant1))) | (~(X(grant4)))) & (false  | (~(X(grant1))) | (~(X(grant5)))) & (false  | (~(X(grant2))) | (~(X(grant0)))) & (false  | (~(X(grant2))) | (~(X(grant1)))) & (false  | (~(X(grant2))) | (~(X(grant3)))) & (false  | (~(X(grant2))) | (~(X(grant4)))) & (false  | (~(X(grant2))) | (~(X(grant5)))) & (false  | (~(X(grant3))) | (~(X(grant0)))) & (false  | (~(X(grant3))) | (~(X(grant1)))) & (false  | (~(X(grant3))) | (~(X(grant2)))) & (false  | (~(X(grant3))) | (~(X(grant4)))) & (false  | (~(X(grant3))) | (~(X(grant5)))) & (false  | (~(X(grant4))) | (~(X(grant0)))) & (false  | (~(X(grant4))) | (~(X(grant1)))) & (false  | (~(X(grant4))) | (~(X(grant2)))) & (false  | (~(X(grant4))) | (~(X(grant3)))) & (false  | (~(X(grant4))) | (~(X(grant5)))) & (false  | (~(X(grant5))) | (~(X(grant0)))) & (false  | (~(X(grant5))) | (~(X(grant1)))) & (false  | (~(X(grant5))) | (~(X(grant2)))) & (false  | (~(X(grant5))) | (~(X(grant3)))) & (false  | (~(X(grant5))) | (~(X(grant4))))))) & ((false  | (~(G (F (request0)))) | (G (F (X(grant0)))))) & ((false  | (~(G (F (request1)))) | (G (F (X(grant1)))))) & ((false  | (~(G (F (request2)))) | (G (F (X(grant2)))))) & ((false  | (~(G (F (request3)))) | (G (F (X(grant3)))))) & ((false  | (~(G (F (request4)))) | (G (F (X(grant4)))))) & ((false  | (~(G (F (request5)))) | (G (F (X(grant5)))))))'
     declare_flag = False
 
@@ -498,4 +499,5 @@ if __name__ == '__main__':
     t.translate()
     t.createMonafile(declare_flag)  # it creates automa.mona file
     result = t.invoke_mona()  # it returns an intermediate automa.dot file
+    print(result, end='\n\n')
     print(t.output2dot(result))
