@@ -1,3 +1,4 @@
+"""The Translator class."""
 from ltlf2dfa.Parser import MyParser
 import itertools as it
 from subprocess import PIPE, Popen, TimeoutExpired
@@ -23,7 +24,7 @@ UNSAT_DOT = '''digraph MONA_DFA {
 
 
 def get_value(text, regex, value_type=float):
-    """dump a value from a file based on a regex passed in."""
+    """Dump a value from a file based on a regex passed in."""
     # Get the text of the time
     pattern = re.compile(regex, re.MULTILINE)
     results = pattern.search(text)
@@ -35,14 +36,14 @@ def get_value(text, regex, value_type=float):
 
 
 def ter2symb(ap, ternary):
-    """translate ternary output to symbolic."""
+    """Translate ternary output to symbolic."""
     expr = And()
     i = 0
     for value in ternary:
         if value == '1':
             expr = And(expr, ap[i] if isinstance(ap, tuple) else ap)
         elif value == '0':
-            assert(value == '0')
+            assert (value == '0')
             expr = And(expr, Not(ap[i] if isinstance(ap, tuple) else ap))
         else:
             assert value == 'X', "[ERROR]: the guard is not X"
@@ -51,7 +52,7 @@ def ter2symb(ap, ternary):
 
 
 def simp_guard(guards):
-    """make a big OR among guards and simplify them."""
+    """Make a big OR among guards and simplify them."""
     final = Or()
     for g in guards:
         final = Or(final, g)
@@ -59,12 +60,12 @@ def simp_guard(guards):
 
 
 def parse_mona(mona_output):
-    """parse mona output and construct a dot."""
-    free_variables = get_value(mona_output, '.*DFA for formula with free variables:[\s]*(.*?)\n.*', str)
+    """Parse mona output and construct a dot."""
+    free_variables = get_value(mona_output, r'.*DFA for formula with free variables:[\s]*(.*?)\n.*', str)
     free_variables = symbols(' '.join(x.strip().lower() for x in free_variables.split() if len(x.strip()) > 0))
 
     # initial_state = get_value(mona_output, '.*Initial state:[\s]*(\d+)\n.*', int)
-    accepting_states = get_value(mona_output, '.*Accepting states:[\s]*(.*?)\n.*', str)
+    accepting_states = get_value(mona_output, r'.*Accepting states:[\s]*(.*?)\n.*', str)
     accepting_states = [str(x.strip()) for x in accepting_states.split() if len(x.strip()) > 0]
     # num_states = get_value(mona_output, '.*Automaton has[\s]*(\d+)[\s]states.*', int) - 1
 
@@ -82,10 +83,10 @@ def parse_mona(mona_output):
     dot_trans = dict()  # maps each couple (src, dst) to a list of guards
     for line in mona_output.splitlines():
         if line.startswith("State "):
-            orig_state = get_value(line, '.*State[\s]*(\d+):\s.*', int)
-            guard = get_value(line, '.*:[\s](.*?)[\s]->.*', str)
+            orig_state = get_value(line, r'.*State[\s]*(\d+):\s.*', int)
+            guard = get_value(line, r'.*:[\s](.*?)[\s]->.*', str)
             guard = ter2symb(free_variables, guard)
-            dest_state = get_value(line, '.*state[\s]*(\d+)[\s]*.*', int)
+            dest_state = get_value(line, r'.*state[\s]*(\d+)[\s]*.*', int)
             if orig_state:
                 if (orig_state, dest_state) in dot_trans.keys():
                     dot_trans[(orig_state, dest_state)].append(guard)
@@ -104,6 +105,7 @@ class Translator:
     """The Translator class translates the LTLf/PLTLf formula into its corresponding DFA."""
 
     def __init__(self, formula):
+        """Init of a Translator."""
         self.headerMona = "m2l-str;\n"
         self.alphabet = []
         self.formula_to_be_parsed = formula
@@ -112,6 +114,7 @@ class Translator:
         self.translated_formula = None
 
     def formula_parser(self):
+        """Parse the formula."""
         if self.formulaType in {1, 2, 3}:
             self.compute_alphabet()
             parser = MyParser()
@@ -120,15 +123,17 @@ class Translator:
             raise ValueError('Ooops! You typed a formula with mixed past/future operators')
 
     def tuple_to_string(self):
+        """Get a string formula from tuple."""
         return '_'.join(str(self.formula_to_be_parsed))
 
     def search_mixed_formula(self):
         """
-        search_mixed_formula() possible outputs:
+        Search_mixed_formula() possible outputs.
+
         0: formula is mixed
         1: formula is only future
         2: formula is only past
-        3: formula is only present
+        3: formula is only present.
         """
         formula_to_check_str = self.tuple_to_string()
         separated_formula = formula_to_check_str.split('_')
@@ -156,16 +161,19 @@ class Translator:
             return 0
 
     def rem_duplicates_order(self, seq):
+        """Remove duplicates in formula keeping the order of occurrence."""
         seen = set()
         seen_add = seen.add
         return [x for x in seq if not (x in seen or seen_add(x))]
 
     def compute_alphabet(self):
-        symbols = re.findall('(?<![a-z])(?!true|false)[_a-z0-9]+', str(self.formula_to_be_parsed))
+        """Get the alphabet from the formula to be parsed."""
+        symbols = re.findall(r'(?<![a-z])(?!true|false)[_a-z0-9]+', str(self.formula_to_be_parsed))
         _symbols = self.rem_duplicates_order(symbols)
         self.alphabet = [character.upper() for character in _symbols]
 
     def compute_declare_assumption(self):
+        """Compute declare assumptions."""
         pairs = list(it.combinations(self.alphabet, 2))
 
         if pairs:
@@ -188,9 +196,11 @@ class Translator:
             return None
 
     def translate(self):
+        """Call translation function."""
         self.translated_formula = translate_bis(self.parsed_formula, self.formulaType, var='v_0') + ";\n"
 
     def buildMonaProgram(self, flag_for_declare):
+        """Build the MONA program."""
         if not self.alphabet and not self.translated_formula:
             raise ValueError('Formula not parsed or translated...')
         else:
@@ -210,6 +220,7 @@ class Translator:
                     return self.headerMona + self.translated_formula
 
     def createMonafile(self, flag):
+        """Write the .mona file."""
         program = self.buildMonaProgram(flag)
         try:
             with open('{}/automa.mona'.format(PACKAGE_DIR), 'w+') as file:
@@ -218,55 +229,12 @@ class Translator:
             print('[ERROR]: Problem in opening the automa.mona file!')
 
     def invoke_mona(self):
-        # if sys.platform == 'linux':
-        #     PACKAGE_DIR = os.path.dirname(os.path.abspath(__file__))
-        #     mona_path = pkg_resources.resource_filename('ltlf2dfa', 'mona')
-        #     if os.access(mona_path, os.X_OK):  # check if mona is executable
-        #         command = PACKAGE_DIR + '/./mona -q -w ./automa.mona'
-        #         process = Popen(args=command, stdout=PIPE, stderr=PIPE, preexec_fn=os.setsid, shell=True,
-        #                         encoding="utf-8")
-        #         try:
-        #             output, error = process.communicate(timeout=30)
-        #             return str(output).strip()
-        #             # output, error = subprocess.call('mona -q -w ./automa.mona', shell=True)
-        #         except TimeoutExpired:
-        #             os.killpg(os.getpgid(process.pid), signal.SIGTERM)
-        #             return False
-        #             # subprocess.call(PACKAGE_DIR+'/./mona -u -gw ./automa.mona > ' + path + '.dot', shell=True)
-        #             # output, error = subprocess.call(PACKAGE_DIR + '/./mona -q -w ./automa.mona', shell=True)
-        #         # except subprocess.CalledProcessError as e:
-        #         #     print(e)
-        #         #     exit()
-        #         # except OSError as e:
-        #         #     print(e)
-        #         #     exit()
-        #     else:
-        #         print('[ERROR]: MONA tool is not executable...')
-        #         exit()
-        # else:
-        #     command = 'mona -q -w ./automa.mona'
-        #     process = Popen(args=command, stdout=PIPE, stderr=PIPE, preexec_fn=os.setsid, shell=True,
-        #                     encoding="utf-8")
-        #     try:
-        #         output, error = process.communicate(timeout=30)
-        #         return str(output).strip()
-        #         # output, error = subprocess.call('mona -q -w ./automa.mona', shell=True)
-        #     except TimeoutExpired:
-        #         os.killpg(os.getpgid(process.pid), signal.SIGTERM)
-        #         return False
-        #     # except subprocess.CalledProcessError as e:
-        #     #     print(e)
-        #     #     exit()
-        #     # except OSError as e:
-        #     #     print(e)
-        #     #     exit()
+        """Execute the MONA tool."""
         command = 'mona -q -w {}/automa.mona'.format(PACKAGE_DIR)
-        process = Popen(args=command, stdout=PIPE, stderr=PIPE, preexec_fn=os.setsid, shell=True,
-                        encoding="utf-8")
+        process = Popen(args=command, stdout=PIPE, stderr=PIPE, preexec_fn=os.setsid, shell=True, encoding="utf-8")
         try:
             output, error = process.communicate(timeout=30)
             return str(output).strip()
-            # output, error = subprocess.call('mona -q -w ./automa.mona', shell=True)
         except TimeoutExpired:
             os.killpg(os.getpgid(process.pid), signal.SIGTERM)
             return False
@@ -279,7 +247,8 @@ class Translator:
             return parse_mona(mona_output)
 
 
-def translate_bis(formula_tree, _type, var):
+def translate_bis(formula_tree, _type, var):  # noqa: C901
+    """Where the actual translation happen."""
     if type(formula_tree) == tuple:
         # enable this print to see the tree pruning
         # print(self.parsed_formula)
@@ -366,20 +335,29 @@ def translate_bis(formula_tree, _type, var):
                 if b == 'true':
                     return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & ' + a + ' )'
                 elif a == 'true':
-                    return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & all1 ' + new_new_var + ': 0 <= ' + new_new_var + ' & ' + new_new_var + ' < ' + new_var + ' => ' + b + ' )'
+                    return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & all1 ' + \
+                           new_new_var + ': 0 <= ' + new_new_var + ' & ' + new_new_var + ' < ' + new_var + ' => ' + b \
+                           + ' )'
                 elif a == 'false':
                     return 'false'
                 else:
-                    return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & ' + a + ' & all1 ' + new_new_var + ': 0 <= ' + new_new_var + ' & ' + new_new_var + ' < ' + new_var + ' => ' + b + ' )'
+                    return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & ' + a + \
+                           ' & all1 ' + new_new_var + ': 0 <= ' + new_new_var + ' & ' + new_new_var + ' < ' + new_var \
+                           + ' => ' + b + ' )'
             else:
                 if b == 'true':
-                    return '( ' + 'ex1 ' + new_var + ': ' + var + ' <= ' + new_var + ' & ' + new_var + ' <= max($) & ' + a + ' )'
+                    return '( ' + 'ex1 ' + new_var + ': ' + var + ' <= ' + new_var + ' & ' + new_var + ' <= max($) & ' \
+                           + a + ' )'
                 elif a == 'true':
-                    return '( ' + 'ex1 ' + new_var + ': ' + var + ' <= ' + new_var + ' & ' + new_var + ' <= max($) & all1 ' + new_new_var + ': ' + var + ' <= ' + new_new_var + ' & ' + new_new_var + ' < ' + new_var + ' => ' + b + ' )'
+                    return '( ' + 'ex1 ' + new_var + ': ' + var + ' <= ' + new_var + ' & ' + new_var + \
+                           ' <= max($) & all1 ' + new_new_var + ': ' + var + ' <= ' + new_new_var + ' & ' + \
+                           new_new_var + ' < ' + new_var + ' => ' + b + ' )'
                 elif a == 'false':
                     return 'false'
                 else:
-                    return '( ' + 'ex1 ' + new_var + ': ' + var + ' <= ' + new_var + ' & ' + new_var + ' <= max($) & ' + a + ' & all1 ' + new_new_var + ': ' + var + ' <= ' + new_new_var + ' & ' + new_new_var + ' < ' + new_var + ' => ' + b + ' )'
+                    return '( ' + 'ex1 ' + new_var + ': ' + var + ' <= ' + new_var + ' & ' + new_var + ' <= max($) & ' \
+                           + a + ' & all1 ' + new_new_var + ': ' + var + ' <= ' + new_new_var + ' & ' + new_new_var +\
+                           ' < ' + new_var + ' => ' + b + ' )'
 
         elif formula_tree[0] == 'W':
             new_var = _next(var)
@@ -387,7 +365,8 @@ def translate_bis(formula_tree, _type, var):
             if var == 'v_0':
                 return '(0 = max($)) | (' + 'ex1 ' + new_var + ': ' + new_var + ' = 1 ' + '& ' + a + ')'
             else:
-                return '(' + var + ' = max($)) | (' + 'ex1 ' + new_var + ': ' + new_var + ' = ' + var + ' + 1 ' + '& ' + a + ')'
+                return '(' + var + ' = max($)) | (' + 'ex1 ' + new_var + ': ' + new_var + ' = ' + var + ' + 1 ' + '& '\
+                       + a + ')'
 
         elif formula_tree[0] == 'R':
             new_var = _next(var)
@@ -397,26 +376,37 @@ def translate_bis(formula_tree, _type, var):
 
             if var == 'v_0':
                 if b == 'true':
-                    return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & all1 ' + new_new_var + ': 0 <= ' + new_new_var + ' & ' + new_new_var + ' <= ' + new_var + ' => ' + a + ' ) |' \
-                                                                                                                                                                                                                  '(all1 ' + new_new_var + ': 0 <= ' + new_new_var + ' & ' + new_new_var + ' <= max($) => ' + a + ' )'
+                    return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & all1 ' + \
+                           new_new_var + ': 0 <= ' + new_new_var + ' & ' + new_new_var + ' <= ' + new_var + ' => ' + \
+                           a + ' ) | (all1 ' + new_new_var + ': 0 <= ' + new_new_var + ' & ' + new_new_var + \
+                           ' <= max($) => ' + a + ' )'
                 elif a == 'true':
                     return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & ' + b + ')'
                 elif b == 'false':
-                    return '(all1 ' + new_new_var + ': 0 <= ' + new_new_var + ' & ' + new_new_var + ' <= max($) => ' + a + ' )'
+                    return '(all1 ' + new_new_var + ': 0 <= ' + new_new_var + ' & ' + new_new_var + ' <= max($) => ' +\
+                           a + ' )'
                 else:
-                    return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & ' + b + ' & all1 ' + new_new_var + ': 0 <= ' + new_new_var + ' & ' + new_new_var + ' <= ' + new_var + ' => ' + a + ' ) |' \
-                                                                                                                                                                                                                              '(all1 ' + new_new_var + ': 0 <= ' + new_new_var + ' & ' + new_new_var + ' <= max($) => ' + a + ' )'
+                    return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & ' + b + \
+                           ' & all1 ' + new_new_var + ': 0 <= ' + new_new_var + ' & ' + new_new_var + ' <= ' + \
+                           new_var + ' => ' + a + ' ) | (all1 ' + new_new_var + ': 0 <= ' + new_new_var + ' & ' + \
+                           new_new_var + ' <= max($) => ' + a + ' )'
             else:
                 if b == 'true':
-                    return '( ' + 'ex1 ' + new_var + ': ' + var + ' <= ' + new_var + ' & ' + new_var + ' <= max($) & all1 ' + new_new_var + ': ' + var + ' <= ' + new_new_var + ' & ' + new_new_var + ' <= ' + new_var + ' => ' + a + ' ) |' \
-                                                                                                                                                                                                                                      '(all1 ' + new_new_var + ': ' + var + ' <= ' + new_new_var + ' & ' + new_new_var + ' <= max($) => ' + a + ' )'
+                    return '( ' + 'ex1 ' + new_var + ': ' + var + ' <= ' + new_var + ' & ' + new_var + \
+                           ' <= max($) & all1 ' + new_new_var + ': ' + var + ' <= ' + new_new_var + ' & ' + \
+                           new_new_var + ' <= ' + new_var + ' => ' + a + ' ) | (all1 ' + new_new_var + ': ' + var + \
+                           ' <= ' + new_new_var + ' & ' + new_new_var + ' <= max($) => ' + a + ' )'
                 elif a == 'true':
-                    return '( ' + 'ex1 ' + new_var + ': ' + var + ' <= ' + new_var + ' & ' + new_var + ' <= max($) & ' + b + ')'
+                    return '( ' + 'ex1 ' + new_var + ': ' + var + ' <= ' + new_var + ' & ' + new_var + ' <= max($) & ' \
+                           + b + ')'
                 elif b == 'false':
-                    return '(all1 ' + new_new_var + ': ' + var + ' <= ' + new_new_var + ' & ' + new_new_var + ' <= max($) => ' + a + ' )'
+                    return '(all1 ' + new_new_var + ': ' + var + ' <= ' + new_new_var + ' & ' + new_new_var + \
+                           ' <= max($) => ' + a + ' )'
                 else:
-                    return '( ' + 'ex1 ' + new_var + ': ' + var + ' <= ' + new_var + ' & ' + new_var + ' <= max($) & ' + b + ' & all1 ' + new_new_var + ': ' + var + ' <= ' + new_new_var + ' & ' + new_new_var + ' <= ' + new_var + ' => ' + a + ' ) |' \
-                                                                                                                                                                                                                                                  '(all1 ' + new_new_var + ': ' + var + ' <= ' + new_new_var + ' & ' + new_new_var + ' <= max($) => ' + a + ' )'
+                    return '( ' + 'ex1 ' + new_var + ': ' + var + ' <= ' + new_var + ' & ' + new_var + ' <= max($) & '\
+                           + b + ' & all1 ' + new_new_var + ': ' + var + ' <= ' + new_new_var + ' & ' + new_new_var + \
+                           ' <= ' + new_var + ' => ' + a + ' ) | (all1 ' + new_new_var + ': ' + var + ' <= ' + \
+                           new_new_var + ' & ' + new_new_var + ' <= max($) => ' + a + ' )'
 
         elif formula_tree[0] == 'Y':
             # print('computed tree: '+ str(self.parsed_formula))
@@ -425,7 +415,8 @@ def translate_bis(formula_tree, _type, var):
             if var == 'v_0':
                 return '(' + 'ex1 ' + new_var + ': ' + new_var + ' = max($) - 1 ' + '& max($) > 0 & ' + a + ')'
             else:
-                return '(' + 'ex1 ' + new_var + ': ' + new_var + ' = ' + var + ' - 1 ' + '& ' + new_var + ' > 0 & ' + a + ')'
+                return '(' + 'ex1 ' + new_var + ': ' + new_var + ' = ' + var + ' - 1 ' + '& ' + new_var + ' > 0 & ' + \
+                       a + ')'
         elif formula_tree[0] == 'S':
             # print('computed tree: '+ str(self.parsed_formula))
             new_var = _next(var)
@@ -437,20 +428,28 @@ def translate_bis(formula_tree, _type, var):
                 if b == 'true':
                     return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & ' + a + ' )'
                 elif a == 'true':
-                    return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & all1 ' + new_new_var + ': ' + new_var + ' < ' + new_new_var + ' & ' + new_new_var + ' <= max($) => ' + b + ' )'
+                    return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & all1 ' + \
+                           new_new_var + ': ' + new_var + ' < ' + new_new_var + ' & ' + new_new_var + ' <= max($) => ' \
+                           + b + ' )'
                 elif a == 'false':
                     return 'false'
                 else:
-                    return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & ' + a + ' & all1 ' + new_new_var + ': ' + new_var + ' < ' + new_new_var + ' & ' + new_new_var + ' <= max($) => ' + b + ' )'
+                    return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & ' + a + \
+                           ' & all1 ' + new_new_var + ': ' + new_var + ' < ' + new_new_var + ' & ' + new_new_var + \
+                           ' <= max($) => ' + b + ' )'
             else:
                 if b == 'true':
                     return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & ' + a + ' )'
                 elif a == 'true':
-                    return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= ' + var + ' & all1 ' + new_new_var + ': ' + new_var + ' < ' + new_new_var + ' & ' + new_new_var + ' <= ' + var + ' => ' + b + ' )'
+                    return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= ' + var + ' & all1 ' \
+                           + new_new_var + ': ' + new_var + ' < ' + new_new_var + ' & ' + new_new_var + ' <= ' + var + \
+                           ' => ' + b + ' )'
                 elif a == 'false':
                     return 'false'
                 else:
-                    return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= ' + var + ' & ' + a + ' & all1 ' + new_new_var + ': ' + new_var + ' < ' + new_new_var + ' & ' + new_new_var + ' <= ' + var + ' => ' + b + ' )'
+                    return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= ' + var + ' & ' + a +\
+                           ' & all1 ' + new_new_var + ': ' + new_var + ' < ' + new_new_var + ' & ' + new_new_var + \
+                           ' <= ' + var + ' => ' + b + ' )'
     else:
         # handling non-tuple cases
         if formula_tree == 'true':
@@ -480,6 +479,7 @@ def translate_bis(formula_tree, _type, var):
 
 
 def _next(var):
+    """Compute next variable."""
     if var == '0' or var == 'max($)':
         return 'v_1'
     else:
@@ -490,12 +490,11 @@ def _next(var):
 
 if __name__ == '__main__':
     formula = '! F a'
-    # formula = '(((G (false  | (~(X(grant0))) | (request0)))) & ((G (false  | (~(X(grant1))) | (request1)))) & ((G (false  | (~(X(grant2))) | (request2)))) & ((G (false  | (~(X(grant3))) | (request3)))) & ((G (false  | (~(X(grant4))) | (request4)))) & ((G (false  | (~(X(grant5))) | (request5)))) & ((G (true  & (false  | (~(X(grant0))) | (~(X(grant1)))) & (false  | (~(X(grant0))) | (~(X(grant2)))) & (false  | (~(X(grant0))) | (~(X(grant3)))) & (false  | (~(X(grant0))) | (~(X(grant4)))) & (false  | (~(X(grant0))) | (~(X(grant5)))) & (false  | (~(X(grant1))) | (~(X(grant0)))) & (false  | (~(X(grant1))) | (~(X(grant2)))) & (false  | (~(X(grant1))) | (~(X(grant3)))) & (false  | (~(X(grant1))) | (~(X(grant4)))) & (false  | (~(X(grant1))) | (~(X(grant5)))) & (false  | (~(X(grant2))) | (~(X(grant0)))) & (false  | (~(X(grant2))) | (~(X(grant1)))) & (false  | (~(X(grant2))) | (~(X(grant3)))) & (false  | (~(X(grant2))) | (~(X(grant4)))) & (false  | (~(X(grant2))) | (~(X(grant5)))) & (false  | (~(X(grant3))) | (~(X(grant0)))) & (false  | (~(X(grant3))) | (~(X(grant1)))) & (false  | (~(X(grant3))) | (~(X(grant2)))) & (false  | (~(X(grant3))) | (~(X(grant4)))) & (false  | (~(X(grant3))) | (~(X(grant5)))) & (false  | (~(X(grant4))) | (~(X(grant0)))) & (false  | (~(X(grant4))) | (~(X(grant1)))) & (false  | (~(X(grant4))) | (~(X(grant2)))) & (false  | (~(X(grant4))) | (~(X(grant3)))) & (false  | (~(X(grant4))) | (~(X(grant5)))) & (false  | (~(X(grant5))) | (~(X(grant0)))) & (false  | (~(X(grant5))) | (~(X(grant1)))) & (false  | (~(X(grant5))) | (~(X(grant2)))) & (false  | (~(X(grant5))) | (~(X(grant3)))) & (false  | (~(X(grant5))) | (~(X(grant4))))))) & ((false  | (~(G (F (request0)))) | (G (F (X(grant0)))))) & ((false  | (~(G (F (request1)))) | (G (F (X(grant1)))))) & ((false  | (~(G (F (request2)))) | (G (F (X(grant2)))))) & ((false  | (~(G (F (request3)))) | (G (F (X(grant3)))))) & ((false  | (~(G (F (request4)))) | (G (F (X(grant4)))))) & ((false  | (~(G (F (request5)))) | (G (F (X(grant5)))))))'
     declare_flag = False
 
     t = Translator(formula)
     t.formula_parser()
     t.translate()
     t.createMonafile(declare_flag)  # it creates automa.mona file
-    result = t.invoke_mona()  # it returns an intermediate automa.dot file
+    result = t.invoke_mona()
     print(t.output2dot(result))

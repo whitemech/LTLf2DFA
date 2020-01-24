@@ -1,10 +1,12 @@
+"""The Parser script."""
 import ply.yacc as yacc
 from ltlf2dfa.Lexer import MyLexer
 
 
 class MyParser(object):
-
+    """MyParser class."""
     def __init__(self):
+        """Init of MyParser."""
         self.lexer = MyLexer()
         self.lexer.build()
         self.tokens = self.lexer.tokens
@@ -18,6 +20,7 @@ class MyParser(object):
         )
 
     def __call__(self, s, **kwargs):
+        """The MyParser caller."""
         return self.parser.parse(s, lexer=self.lexer.lexer)
 
     def p_formula(self, p):
@@ -41,7 +44,6 @@ class MyParser(object):
                 | FALSE
                 | TERM
         """
-
         if len(p) == 2:
             p[0] = p[1]
         elif len(p) == 3:
@@ -72,4 +74,5 @@ class MyParser(object):
         p[0] = p[2]
 
     def p_error(self, p):
+        """The Parsing error."""
         raise ValueError("Syntax error in input! %s" % str(p))
