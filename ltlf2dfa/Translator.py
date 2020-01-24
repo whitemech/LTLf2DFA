@@ -6,7 +6,7 @@ import re
 import signal
 from sympy import symbols, And, Not, Or, simplify
 
-package_dir = os.path.dirname(os.path.abspath(__file__))
+PACKAGE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 UNSAT_DOT = '''digraph MONA_DFA {
  rankdir = LR;
@@ -30,7 +30,7 @@ def get_value(text, regex, value_type=float):
     if results:
         return value_type(results.group(1))
     else:
-        print("Could not find the value, {}, in the text provided".format(regex))
+        print("Could not find the value {}, in the text provided".format(regex))
         return value_type(0.0)
 
 
@@ -212,17 +212,17 @@ class Translator:
     def createMonafile(self, flag):
         program = self.buildMonaProgram(flag)
         try:
-            with open('{}/automa.mona'.format(package_dir), 'w+') as file:
+            with open('{}/automa.mona'.format(PACKAGE_DIR), 'w+') as file:
                 file.write(program)
         except IOError:
             print('[ERROR]: Problem in opening the automa.mona file!')
 
     def invoke_mona(self):
         # if sys.platform == 'linux':
-        #     package_dir = os.path.dirname(os.path.abspath(__file__))
+        #     PACKAGE_DIR = os.path.dirname(os.path.abspath(__file__))
         #     mona_path = pkg_resources.resource_filename('ltlf2dfa', 'mona')
         #     if os.access(mona_path, os.X_OK):  # check if mona is executable
-        #         command = package_dir + '/./mona -q -w ./automa.mona'
+        #         command = PACKAGE_DIR + '/./mona -q -w ./automa.mona'
         #         process = Popen(args=command, stdout=PIPE, stderr=PIPE, preexec_fn=os.setsid, shell=True,
         #                         encoding="utf-8")
         #         try:
@@ -232,8 +232,8 @@ class Translator:
         #         except TimeoutExpired:
         #             os.killpg(os.getpgid(process.pid), signal.SIGTERM)
         #             return False
-        #             # subprocess.call(package_dir+'/./mona -u -gw ./automa.mona > ' + path + '.dot', shell=True)
-        #             # output, error = subprocess.call(package_dir + '/./mona -q -w ./automa.mona', shell=True)
+        #             # subprocess.call(PACKAGE_DIR+'/./mona -u -gw ./automa.mona > ' + path + '.dot', shell=True)
+        #             # output, error = subprocess.call(PACKAGE_DIR + '/./mona -q -w ./automa.mona', shell=True)
         #         # except subprocess.CalledProcessError as e:
         #         #     print(e)
         #         #     exit()
@@ -260,7 +260,7 @@ class Translator:
         #     # except OSError as e:
         #     #     print(e)
         #     #     exit()
-        command = 'mona -q -w {}/automa.mona'.format(package_dir)
+        command = 'mona -q -w {}/automa.mona'.format(PACKAGE_DIR)
         process = Popen(args=command, stdout=PIPE, stderr=PIPE, preexec_fn=os.setsid, shell=True,
                         encoding="utf-8")
         try:
@@ -332,7 +332,7 @@ def translate_bis(formula_tree, _type, var):
                 return a
             else:
                 return '(' + a + ' | ' + b + ')'
-        elif formula_tree[0] == '~':
+        elif formula_tree[0] == '!':
             # print('computed tree: '+ str(self.parsed_formula))
             if var == 'v_0':
                 if _type == 2:
@@ -489,7 +489,7 @@ def _next(var):
 
 
 if __name__ == '__main__':
-    formula = 'Fa'
+    formula = '! F a'
     # formula = '(((G (false  | (~(X(grant0))) | (request0)))) & ((G (false  | (~(X(grant1))) | (request1)))) & ((G (false  | (~(X(grant2))) | (request2)))) & ((G (false  | (~(X(grant3))) | (request3)))) & ((G (false  | (~(X(grant4))) | (request4)))) & ((G (false  | (~(X(grant5))) | (request5)))) & ((G (true  & (false  | (~(X(grant0))) | (~(X(grant1)))) & (false  | (~(X(grant0))) | (~(X(grant2)))) & (false  | (~(X(grant0))) | (~(X(grant3)))) & (false  | (~(X(grant0))) | (~(X(grant4)))) & (false  | (~(X(grant0))) | (~(X(grant5)))) & (false  | (~(X(grant1))) | (~(X(grant0)))) & (false  | (~(X(grant1))) | (~(X(grant2)))) & (false  | (~(X(grant1))) | (~(X(grant3)))) & (false  | (~(X(grant1))) | (~(X(grant4)))) & (false  | (~(X(grant1))) | (~(X(grant5)))) & (false  | (~(X(grant2))) | (~(X(grant0)))) & (false  | (~(X(grant2))) | (~(X(grant1)))) & (false  | (~(X(grant2))) | (~(X(grant3)))) & (false  | (~(X(grant2))) | (~(X(grant4)))) & (false  | (~(X(grant2))) | (~(X(grant5)))) & (false  | (~(X(grant3))) | (~(X(grant0)))) & (false  | (~(X(grant3))) | (~(X(grant1)))) & (false  | (~(X(grant3))) | (~(X(grant2)))) & (false  | (~(X(grant3))) | (~(X(grant4)))) & (false  | (~(X(grant3))) | (~(X(grant5)))) & (false  | (~(X(grant4))) | (~(X(grant0)))) & (false  | (~(X(grant4))) | (~(X(grant1)))) & (false  | (~(X(grant4))) | (~(X(grant2)))) & (false  | (~(X(grant4))) | (~(X(grant3)))) & (false  | (~(X(grant4))) | (~(X(grant5)))) & (false  | (~(X(grant5))) | (~(X(grant0)))) & (false  | (~(X(grant5))) | (~(X(grant1)))) & (false  | (~(X(grant5))) | (~(X(grant2)))) & (false  | (~(X(grant5))) | (~(X(grant3)))) & (false  | (~(X(grant5))) | (~(X(grant4))))))) & ((false  | (~(G (F (request0)))) | (G (F (X(grant0)))))) & ((false  | (~(G (F (request1)))) | (G (F (X(grant1)))))) & ((false  | (~(G (F (request2)))) | (G (F (X(grant2)))))) & ((false  | (~(G (F (request3)))) | (G (F (X(grant3)))))) & ((false  | (~(G (F (request4)))) | (G (F (X(grant4)))))) & ((false  | (~(G (F (request5)))) | (G (F (X(grant5)))))))'
     declare_flag = False
 

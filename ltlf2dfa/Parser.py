@@ -1,6 +1,7 @@
 import ply.yacc as yacc
 from ltlf2dfa.Lexer import MyLexer
 
+
 class MyParser(object):
 
     def __init__(self):
@@ -20,7 +21,7 @@ class MyParser(object):
         return self.parser.parse(s, lexer=self.lexer.lexer)
 
     def p_formula(self, p):
-        '''
+        """
         formula : formula AND formula
                 | formula OR formula
                 | formula IMPLIES formula
@@ -39,18 +40,19 @@ class MyParser(object):
                 | TRUE
                 | FALSE
                 | TERM
-        '''
+        """
 
-        if len(p) == 2: p[0] = p[1]
+        if len(p) == 2:
+            p[0] = p[1]
         elif len(p) == 3:
-            if p[1] == 'F': # eventually A == true UNITL A
-                p[0] = ('U','true', p[2])
-            elif p[1] == 'G': # globally A == not( eventually (not A) )
-                p[0] = ('~',('U', 'true', ('~',p[2])))
-            elif p[1] == 'O': # pasteventually A = true SINCE A
-                p[0] = ('S','true', p[2])
-            elif p[1] == 'H': # pastglobally A == not( pasteventually (not A) )
-                p[0] = ('~',('S', 'true', ('~',p[2])))
+            if p[1] == 'F':  # eventually A == true UNITL A
+                p[0] = ('U', 'true', p[2])
+            elif p[1] == 'G':  # globally A == not( eventually (not A) )
+                p[0] = ('~', ('U', 'true', ('~', p[2])))
+            elif p[1] == 'O':  # pasteventually A = true SINCE A
+                p[0] = ('S', 'true', p[2])
+            elif p[1] == 'H':  # pastglobally A == not( pasteventually (not A) )
+                p[0] = ('~', ('S', 'true', ('~', p[2])))
             else:
                 p[0] = (p[1], p[2])
         elif len(p) == 4:
@@ -59,15 +61,15 @@ class MyParser(object):
             elif p[2] == '<->':
                 p[0] = ('&', ('|', ('~', p[1]), p[3]), ('|', ('~', p[3]), p[1]))
             else:
-                p[0] = (p[2],p[1],p[3])
-        else: raise ValueError
-
+                p[0] = (p[2], p[1], p[3])
+        else:
+            raise ValueError
 
     def p_expr_group(self, p):
-        '''
+        """
         formula : LPAR formula RPAR
-        '''
+        """
         p[0] = p[2]
 
     def p_error(self, p):
-        raise ValueError("Syntax error in input! %s" %str(p))
+        raise ValueError("Syntax error in input! %s" % str(p))

@@ -35,7 +35,7 @@ class MyLexer(object):
     t_OR = r'\|'
     t_IMPLIES = r'\->'
     t_DIMPLIES = r'\<->'
-    t_NOT = r'\~'
+    t_NOT = r'\!'
     t_LPAR = r'\('
     t_RPAR = r'\)'
     # FUTURE OPERATORS
