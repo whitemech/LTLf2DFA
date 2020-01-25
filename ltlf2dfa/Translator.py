@@ -62,7 +62,10 @@ def simp_guard(guards):
 def parse_mona(mona_output):
     """Parse mona output and construct a dot."""
     free_variables = get_value(mona_output, r'.*DFA for formula with free variables:[\s]*(.*?)\n.*', str)
-    free_variables = symbols(' '.join(x.strip().lower() for x in free_variables.split() if len(x.strip()) > 0))
+    if 'state' in free_variables:
+        free_variables = None
+    else:
+        free_variables = symbols(' '.join(x.strip().lower() for x in free_variables.split() if len(x.strip()) > 0))
 
     # initial_state = get_value(mona_output, '.*Initial state:[\s]*(\d+)\n.*', int)
     accepting_states = get_value(mona_output, r'.*Accepting states:[\s]*(.*?)\n.*', str)
@@ -85,7 +88,10 @@ def parse_mona(mona_output):
         if line.startswith("State "):
             orig_state = get_value(line, r'.*State[\s]*(\d+):\s.*', int)
             guard = get_value(line, r'.*:[\s](.*?)[\s]->.*', str)
-            guard = ter2symb(free_variables, guard)
+            if free_variables:
+                guard = ter2symb(free_variables, guard)
+            else:
+                guard = ter2symb(free_variables, "X")
             dest_state = get_value(line, r'.*state[\s]*(\d+)[\s]*.*', int)
             if orig_state:
                 if (orig_state, dest_state) in dot_trans.keys():
@@ -489,7 +495,7 @@ def _next(var):
 
 
 if __name__ == '__main__':
-    formula = '! F a'
+    formula = '! X true'
     declare_flag = False
 
     t = Translator(formula)
