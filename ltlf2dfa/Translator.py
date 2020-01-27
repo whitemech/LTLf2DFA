@@ -495,7 +495,7 @@ def _next(var):
 
 
 if __name__ == '__main__':
-    formula = '! X true'
+    formula = '!a'
     declare_flag = False
 
     t = Translator(formula)
