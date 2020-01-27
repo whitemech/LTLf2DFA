@@ -445,7 +445,8 @@ def translate_bis(formula_tree, _type, var):  # noqa: C901
                            ' <= max($) => ' + b + ' )'
             else:
                 if b == 'true':
-                    return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & ' + a + ' )'
+                    return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= ' + var + ' & ' + a \
+                           + ' )'
                 elif a == 'true':
                     return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= ' + var + ' & all1 ' \
                            + new_new_var + ': ' + new_var + ' < ' + new_new_var + ' & ' + new_new_var + ' <= ' + var + \
@@ -495,7 +496,7 @@ def _next(var):
 
 
 if __name__ == '__main__':
-    formula = '!a'
+    formula = 'H (a -> Ob)'
     declare_flag = False
 
     t = Translator(formula)
