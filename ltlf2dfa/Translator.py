@@ -419,9 +419,9 @@ def translate_bis(formula_tree, _type, var):  # noqa: C901
             new_var = _next(var)
             a = translate_bis(formula_tree[1], _type, new_var)
             if var == 'v_0':
-                return '(' + 'ex1 ' + new_var + ': ' + new_var + ' = max($) - 1 ' + '& max($) > 0 & ' + a + ')'
+                return '(' + 'ex1 ' + new_var + ': ' + new_var + ' = max($) - 1' + ' & ' + new_var + ' >= 0 & ' + a + ')'
             else:
-                return '(' + 'ex1 ' + new_var + ': ' + new_var + ' = ' + var + ' - 1 ' + '& ' + new_var + ' > 0 & ' + \
+                return '(' + 'ex1 ' + new_var + ': ' + new_var + ' = ' + var + ' - 1 ' + '& ' + new_var + ' >= 0 & ' + \
                        a + ')'
         elif formula_tree[0] == 'S':
             # print('computed tree: '+ str(self.parsed_formula))
@@ -496,7 +496,7 @@ def _next(var):
 
 
 if __name__ == '__main__':
-    formula = 'H (a -> Ob)'
+    formula = 'Ya'
     declare_flag = False
 
     t = Translator(formula)
