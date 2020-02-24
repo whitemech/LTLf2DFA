@@ -57,7 +57,6 @@ print(parsed_formula)
 - Translate an LTL<sub>f</sub> formula to the corresponding DFA automaton:
 ```python
 from ltlf2dfa.Translator import Translator
-from ltlf2dfa.DotHandler import DotHandler
 
 formula = "G(a->Xb)"
 declare_flag = False #True if you want to compute DECLARE assumption for the formula
