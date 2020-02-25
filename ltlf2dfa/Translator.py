@@ -432,6 +432,7 @@ def translate_bis(formula_tree, _type, var):  # noqa: C901
 
             if var == 'v_0':
                 if b == 'true':
+                    # return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & ' + a + ' )'
                     return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & ' + a + ' )'
                 elif a == 'true':
                     return '( ' + 'ex1 ' + new_var + ': 0 <= ' + new_var + ' & ' + new_var + ' <= max($) & all1 ' + \
