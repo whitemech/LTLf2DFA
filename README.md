@@ -98,7 +98,7 @@ Also parentheses `(` and `)` can be used.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/Francesco17/LTLf2FOL/blob/master/LICENSE) file for details
+This project is licensed under the GNU Lesser General Public License v3.0 - see the [LICENSE](https://github.com/whitemech/LTLf2DFA/blob/master/LICENSE) file for details
 
 ## Contacts
 
