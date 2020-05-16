@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """The Translator class."""
 from ltlf2dfa.Parser import MyParser
 import itertools as it

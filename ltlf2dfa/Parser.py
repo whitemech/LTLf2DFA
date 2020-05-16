@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """The Parser script."""
 import ply.yacc as yacc
 from ltlf2dfa.Lexer import MyLexer

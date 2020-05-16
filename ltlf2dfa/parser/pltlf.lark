@@ -1,0 +1,52 @@
+start: pltlf_formula
+
+?pltlf_formula:     pltlf_equivalence
+?pltlf_equivalence: pltlf_implication (EQUIVALENCE pltlf_implication)*
+?pltlf_implication: pltlf_or (IMPLY pltlf_or)*
+?pltlf_or:          pltlf_and (OR pltlf_and)*
+?pltlf_and:         pltlf_since (AND pltlf_since)*
+?pltlf_since:       pltlf_unaryop (SINCE pltlf_unaryop)*
+
+?pltlf_unaryop:    pltlf_historically
+             |     pltlf_once
+             |     pltlf_before
+             |     pltlf_not
+             |     pltlf_wrapped
+
+?pltlf_historically: HISTORICALLY pltlf_unaryop
+?pltlf_once:         ONCE pltlf_unaryop
+?pltlf_before:       BEFORE pltlf_unaryop
+?pltlf_not:          NOT pltlf_unaryop
+?pltlf_wrapped:      pltlf_atom
+             |       LSEPARATOR pltlf_formula RSEPARATOR
+?pltlf_atom:       pltlf_symbol
+           |       pltlf_true
+           |       pltlf_false
+           |       pltlf_last
+
+pltlf_symbol: SYMBOL_NAME
+pltlf_true: prop_true
+pltlf_false: prop_false
+pltlf_last: START
+
+// Operators must not be part of a word
+SINCE.2: /S(?=[^a-z]|$)/
+HISTORICALLY.2: /H(?=[^a-z]|$)/
+ONCE.2: /O(?=[^a-z]|$)/
+BEFORE.2: /Y(?=[^a-z]|$)/
+START.2: /(?i:start)/
+
+// Symbols cannot contain uppercase letters, because these are reserved
+SYMBOL_NAME: /[a-z][a-z0-9_]*/
+
+%ignore /\s+/
+
+%import .pl.prop_true -> prop_true
+%import .pl.prop_false -> prop_false
+%import .pl.NOT -> NOT
+%import .pl.OR -> OR
+%import .pl.AND -> AND
+%import .pl.EQUIVALENCE -> EQUIVALENCE
+%import .pl.IMPLY -> IMPLY
+%import .pl.LSEPARATOR -> LSEPARATOR
+%import .pl.RSEPARATOR -> RSEPARATOR
