@@ -34,11 +34,11 @@ class PLTLfTransformer(Transformer):
         assert len(args) == 1
         return args[0]
 
-    def ltlf_formula(self, args):
+    def pltlf_formula(self, args):
         assert len(args) == 1
         return args[0]
 
-    def ltlf_equivalence(self, args):
+    def pltlf_equivalence(self, args):
         if len(args) == 1:
             return args[0]
         elif (len(args) - 1) % 2 == 0:
@@ -47,7 +47,7 @@ class PLTLfTransformer(Transformer):
         else:
             raise ParsingError
 
-    def ltlf_implication(self, args):
+    def pltlf_implication(self, args):
         if len(args) == 1:
             return args[0]
         elif (len(args) - 1) % 2 == 0:
@@ -56,7 +56,7 @@ class PLTLfTransformer(Transformer):
         else:
             raise ParsingError
 
-    def ltlf_or(self, args):
+    def pltlf_or(self, args):
         if len(args) == 1:
             return args[0]
         elif (len(args) - 1) % 2 == 0:
@@ -65,7 +65,7 @@ class PLTLfTransformer(Transformer):
         else:
             raise ParsingError
 
-    def ltlf_and(self, args):
+    def pltlf_and(self, args):
         if len(args) == 1:
             return args[0]
         elif (len(args) - 1) % 2 == 0:
@@ -74,7 +74,7 @@ class PLTLfTransformer(Transformer):
         else:
             raise ParsingError
 
-    def ltlf_until(self, args):
+    def pltlf_since(self, args):
         if len(args) == 1:
             return args[0]
         elif (len(args) - 1) % 2 == 0:
@@ -83,16 +83,7 @@ class PLTLfTransformer(Transformer):
         else:
             raise ParsingError
 
-    def ltlf_release(self, args):
-        if len(args) == 1:
-            return args[0]
-        elif (len(args) - 1) % 2 == 0:
-            subformulas = args[::2]
-            return LTLfRelease(subformulas)
-        else:
-            raise ParsingError
-
-    def ltlf_always(self, args):
+    def pltlf_historically(self, args):
         if len(args) == 1:
             return args[0]
         else:
@@ -101,7 +92,7 @@ class PLTLfTransformer(Transformer):
                 f = PLTLfHistorically(f)
             return f
 
-    def ltlf_eventually(self, args):
+    def pltlf_once(self, args):
         if len(args) == 1:
             return args[0]
         else:
@@ -110,7 +101,7 @@ class PLTLfTransformer(Transformer):
                 f = PLTLfOnce(f)
             return f
 
-    def ltlf_next(self, args):
+    def pltlf_before(self, args):
         if len(args) == 1:
             return args[0]
         else:
@@ -119,16 +110,7 @@ class PLTLfTransformer(Transformer):
                 f = PLTLfBefore(f)
             return f
 
-    def ltlf_weak_next(self, args):
-        if len(args) == 1:
-            return args[0]
-        else:
-            f = args[-1]
-            for _ in args[:-1]:
-                f = LTLfWeakNext(f)
-            return f
-
-    def ltlf_not(self, args):
+    def pltlf_not(self, args):
         if len(args) == 1:
             return args[0]
         else:
@@ -137,7 +119,7 @@ class PLTLfTransformer(Transformer):
                 f = PLTLfNot(f)
             return f
 
-    def ltlf_wrapped(self, args):
+    def pltlf_wrapped(self, args):
         if len(args) == 1:
             return args[0]
         elif len(args) == 3:
@@ -146,33 +128,33 @@ class PLTLfTransformer(Transformer):
         else:
             raise ParsingError
 
-    def ltlf_atom(self, args):
+    def pltlf_atom(self, args):
         assert len(args) == 1
         return args[0]
 
-    def ltlf_true(self, args):
+    def pltlf_true(self, args):
         return PLTLfTrue()
 
-    def ltlf_false(self, args):
+    def pltlf_false(self, args):
         return PLTLfFalse()
 
-    def ltlf_last(self, args):
+    def pltlf_last(self, args):
         return PLTLfLast()
 
-    # def ltlf_end(self, args):
-    #     raise NotImplementedError("LTLf end not supported, yet")
+    # def pltlf_end(self, args):
+    #     raise NotImplementedError("PLTLf end not supported, yet")
 
-    def ltlf_symbol(self, args):
+    def pltlf_symbol(self, args):
         assert len(args) == 1
         token = args[0]
         symbol = str(token)
         return PLTLfAtomic(symbol)
 
 
-class LTLfParser:
+class PLTLfParser:
     def __init__(self):
-        self._transformer = LTLfTransformer()
-        self._parser = Lark(open(str(Path(CUR_DIR, "ltlf.lark"))), parser="lalr")
+        self._transformer = PLTLfTransformer()
+        self._parser = Lark(open(str(Path(CUR_DIR, "pltlf.lark"))), parser="lalr")
 
     def __call__(self, text):
         tree = self._parser.parse(text)
@@ -181,10 +163,10 @@ class LTLfParser:
 
 
 if __name__ == "__main__":
-    parser = LTLfParser()
+    parser = PLTLfParser()
     while True:
         try:
-            s = input("ltlf > ")
+            s = input("pltlf > ")
             if not s:
                 continue
             result = parser(s)
