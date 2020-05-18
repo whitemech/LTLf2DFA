@@ -40,7 +40,7 @@ class LTLfFormula(Formula, ABC):
 
     def to_mona(self, v: str) -> str:
         """
-        Tranform the formula into its encoding in MONA.
+        Tranform the LTLf formula into its encoding in MONA.
 
         :return: a string.
         """
@@ -145,12 +145,12 @@ class LTLfNot(LTLfUnaryOperator):
         """Negate the formula."""
         return self.f
 
+    def to_mona(self, v="v_0") -> str:
+        """Return the MONA encoding of an LTLf Not formula."""
+        return "~({})".format(self.f.to_mona(v))
+
     # def to_ldlf(self):
     #     return LDLfNot(self.f.to_ldlf())
-
-    def to_mona(self, v="v_0") -> str:
-        """Return the MONA encoding of an LTLf not formula."""
-        return "~({})".format(self.f.to_mona(v))
 
 
 class LTLfAnd(LTLfBinaryOperator):
@@ -165,12 +165,12 @@ class LTLfAnd(LTLfBinaryOperator):
         """Negate the formula."""
         return LTLfOr([f.negate() for f in self.formulas])
 
+    def to_mona(self, v="v_0") -> str:
+        """Return the MONA encoding of an LTLf And formula."""
+        return "({})".format(" & ".join([f.to_mona(v) for f in self.formulas]))
+
     # def to_ldlf(self):
     #     return LDLfAnd([f.to_ldlf() for f in self.formulas])
-
-    def to_mona(self, v="v_0") -> str:
-        """Return the MONA encoding of an LTLf and formula."""
-        return "({})".format(" & ".join([f.to_mona(v) for f in self.formulas]))
 
 
 class LTLfOr(LTLfBinaryOperator):
@@ -186,7 +186,7 @@ class LTLfOr(LTLfBinaryOperator):
         return LTLfAnd([f.negate() for f in self.formulas])
 
     def to_mona(self, v="v_0") -> str:
-        """Return the MONA encoding of an LTLf and formula."""
+        """Return the MONA encoding of an LTLf Or formula."""
         return "({})".format(" | ".join([f.to_mona(v) for f in self.formulas]))
 
 
@@ -212,6 +212,10 @@ class LTLfImplies(LTLfBinaryOperator):
             )
         return final_formula
 
+    def to_mona(self, v="v_0") -> str:
+        """Return the MONA encoding of an LTLf Implication formula."""
+        return self.to_nnf().to_mona(v)
+
 
 class LTLfEquivalence(LTLfBinaryOperator):
     """Class for the LTLf Equivalente formula."""
@@ -232,6 +236,10 @@ class LTLfEquivalence(LTLfBinaryOperator):
     def negate(self) -> LTLfFormula:
         """Negate the formula."""
         return self.to_nnf().negate()
+
+    def to_mona(self, v="v_0") -> str:
+        """Return the MONA encoding of an LTLf Equivalence formula."""
+        return self.to_nnf().to_mona(v)
 
 
 class LTLfNext(LTLfUnaryOperator):
