@@ -60,86 +60,79 @@ def test_names():
             str(PLTLfAtomic(name)) == name
 
 
-# def test_nnf():
-#     parser = LTLfParser()
-#     a, b, c = [LTLfAtomic(c) for c in "abc"]
-#
-#     f = parser("!(a & !b)")
-#     assert f.to_nnf() == LTLfOr([LTLfNot(a), b])
-#
-#     f = parser("!(!a | b)")
-#     assert f.to_nnf() == LTLfAnd([a, LTLfNot(b)])
-#
-#     f = parser("!(a <-> b)")
-#     assert f.to_nnf() == LTLfAnd([LTLfOr([LTLfNot(a), LTLfNot(b)]), LTLfOr([a, b])])
-#
-#     # Next and Weak Next
-#     f = parser("!(X (a & b))")
-#     assert f.to_nnf() == LTLfWeakNext(LTLfOr([LTLfNot(a), LTLfNot(b)]))
-#
-#     f = parser("!(WX (a & b))")
-#     assert f.to_nnf() == LTLfNext(LTLfOr([LTLfNot(a), LTLfNot(b)]))
-#
-#     # Eventually and Always
-#     f = parser("!(F (a | b))")
-#     assert f.to_nnf() == LTLfAlways(LTLfAnd([LTLfNot(a), LTLfNot(b)])).to_nnf()
-#
-#     # Until and Release
-#     f = parser("!(a U b)")
-#     assert f.to_nnf() == LTLfRelease([LTLfNot(a), LTLfNot(b)])
-#     f = parser("!(a R b)")
-#     assert f.to_nnf() == LTLfUntil([LTLfNot(a), LTLfNot(b)])
-#
-#     f = parser("!(F (a | b))")
-#     assert f.to_nnf() == LTLfAlways(LTLfAnd([LTLfNot(a), LTLfNot(b)])).to_nnf()
-#     f = parser("!(G (a | b))")
-#     assert f.to_nnf() == LTLfEventually(LTLfAnd([LTLfNot(a), LTLfNot(b)])).to_nnf()
-#
-#
-# def test_mona():
-#     parser = LTLfParser()
-#     a, b, c = [LTLfAtomic(c) for c in "abc"]
-#     tt = LTLfTrue()
-#     ff = LTLfFalse()
-#
-#     assert a.to_mona(v="v_0") == "(0 in A)"
-#     assert b.to_mona(v="v_0") == "(0 in B)"
-#     assert c.to_mona(v="v_0") == "(0 in C)"
-#     assert tt.to_mona(v="v_0") == "true"
-#     assert ff.to_mona(v="v_0") == "false"
-#
-#     f = parser("!(a & !b)")
-#     assert f.to_mona(v="v_0") == "~(((0 in A) & ~((0 in B))))"
-#
-#     f = parser("!(!a | b)")
-#     assert f.to_mona(v="v_0") == "~((~((0 in A)) | (0 in B)))"
-#
-#     # f = parser("!(a <-> b)")
-#     # assert f.to_nnf() == LTLfAnd([LTLfOr([LTLfNot(a), LTLfNot(b)]), LTLfOr([a, b])])
-#     #
-#     # Next and Weak Next
-#     f = parser("X(a & b)")
-#     assert f.to_mona(v="v_0") == "(ex1 v_1: v_1=1 & ((v_1 in A) & (v_1 in B)))"
-#
-#     f = parser("WX (a & b)")
-#     assert f.to_mona(v="v_0") == "((0 = max($)) | (ex1 v_1: v_1=1 & ((v_1 in A) & (v_1 in B))))"
-#
-#     # Until and Release
-#     f = parser("a U b")
-#     assert f.to_mona(v="v_0") == "(ex1 v_1: 0<=v_1&v_1<=max($) & (v_1 in B) & (all1 v_2: 0<=v_2&v_2<v_1" \
-#                                  " => (v_2 in A)))"
-#     f = parser("a R b")
-#     assert f.to_mona(v="v_0") == "((ex1 v_1: 0<=v_1&v_1<=max($) & (v_1 in A) & (all1 v_2: 0<=v_2&v_2<=v_1" \
-#                                  " => (v_2 in B))) | (all1 v_2: 0<=v_2&v_2<=max($) => (v_2 in B)))"
-#
-#     # Eventually and Always
-#     f = parser("F(a & b)")
-#     assert f.to_mona(v="v_0") == "(ex1 v_1: 0<=v_1&v_1<=max($) & ((v_1 in A) & (v_1 in B)) & (all1 v_2: " \
-#                                  "0<=v_2&v_2<v_1 => true))"
-#     f = parser("G(a | b)")
-#     assert f.to_mona(v="v_0") == "((ex1 v_1: 0<=v_1&v_1<=max($) & false & (all1 v_2: 0<=v_2&v_2<=v_1 => " \
-#                                  "((v_2 in A) | (v_2 in B)))) | (all1 v_2: 0<=v_2&v_2<=max($) => ((v_2 in A) " \
-#                                  "| (v_2 in B))))"
+def test_nnf():
+    parser = PLTLfParser()
+    a, b, c = [PLTLfAtomic(c) for c in "abc"]
+
+    f = parser("!(a & !b)")
+    assert f.to_nnf() == PLTLfOr([PLTLfNot(a), b])
+
+    f = parser("!(!a | b)")
+    assert f.to_nnf() == PLTLfAnd([a, PLTLfNot(b)])
+
+    f = parser("!(a <-> b)")
+    assert f.to_nnf() == PLTLfAnd([PLTLfOr([PLTLfNot(a), PLTLfNot(b)]), PLTLfOr([a, b])])
+
+    # Next and Weak Next
+    # f = parser("!(X (a & b))")
+    # assert f.to_nnf() == PLTLfWeakNext(PLTLfOr([PLTLfNot(a), PLTLfNot(b)]))
+
+    # f = parser("!(WX (a & b))")
+    # assert f.to_nnf() == PLTLfBefore(PLTLfOr([PLTLfNot(a), PLTLfNot(b)]))
+
+    # Once and Historically
+    # f = parser("!(O (a | b))")
+    # assert f.to_nnf() == PLTLfHistorically(PLTLfAnd([PLTLfNot(a), PLTLfNot(b)])).to_nnf()
+
+    # Since
+    # f = parser("!(a S b)")
+    # assert f.to_nnf() == PLTLfRelease([PLTLfNot(a), PLTLfNot(b)])
+    # f = parser("!(a R b)")
+    # assert f.to_nnf() == PLTLfSince([PLTLfNot(a), PLTLfNot(b)])
+    #
+    # f = parser("!(F (a | b))")
+    # assert f.to_nnf() == PLTLfHistorically(PLTLfAnd([PLTLfNot(a), PLTLfNot(b)])).to_nnf()
+    # f = parser("!(G (a | b))")
+    # assert f.to_nnf() == PLTLfOnce(PLTLfAnd([PLTLfNot(a), PLTLfNot(b)])).to_nnf()
+
+
+def test_mona():
+    parser = PLTLfParser()
+    a, b, c = [PLTLfAtomic(c) for c in "abc"]
+    tt = PLTLfTrue()
+    ff = PLTLfFalse()
+
+    assert a.to_mona(v="max($)") == "(max($) in A)"
+    assert b.to_mona(v="max($)") == "(max($) in B)"
+    assert c.to_mona(v="max($)") == "(max($) in C)"
+    assert tt.to_mona(v="max($)") == "true"
+    assert ff.to_mona(v="max($)") == "false"
+
+    f = parser("!(a & !b)")
+    assert f.to_mona(v="max($)") == "~(((max($) in A) & ~((max($) in B))))"
+
+    f = parser("!(!a | b)")
+    assert f.to_mona(v="max($)") == "~((~((max($) in A)) | (max($) in B)))"
+
+    # f = parser("!(a <-> b)")
+    # assert f.to_nnf() == LTLfAnd([LTLfOr([LTLfNot(a), LTLfNot(b)]), LTLfOr([a, b])])
+
+    # Before
+    f = parser("Y(a & b)")
+    assert f.to_mona(v="max($)") == "(ex1 v_1: v_1=max($)-1 & max($)>0 & ((v_1 in A) & (v_1 in B)))"
+
+    # Since
+    f = parser("a S b")
+    assert f.to_mona(v="max($)") == "(ex1 v_1: 0<=v_1&v_1<=max($) & (v_1 in B) & (all1 v_2: v_1<v_2&v_2<=max($)" \
+                                 " => (v_2 in A)))"
+
+    # Once and Historically
+    f = parser("O(a & b)")
+    assert f.to_mona(v="max($)") == "(ex1 v_1: 0<=v_1&v_1<=max($) & ((v_1 in A) & (v_1 in B)) & (all1 v_2: " \
+                                 "v_1<v_2&v_2<=max($) => true))"
+    f = parser("H(a | b)")
+    assert f.to_mona(v="max($)") == "~((ex1 v_1: 0<=v_1&v_1<=max($) & ~(((v_1 in A) | (v_1 in B))) & (all1 v_2: " \
+                                 "v_1<v_2&v_2<=max($) => true)))"
 
 
 # @pytest.fixture(scope="session", params=LTLfFixtures.ltlf_formulas)
