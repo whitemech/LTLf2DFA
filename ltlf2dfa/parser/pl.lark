@@ -16,10 +16,10 @@ atom: SYMBOL_NAME
 prop_true: TRUE
 prop_false: FALSE
 
-LSEPARATOR : "("
-RSEPARATOR : ")"
-EQUIVALENCE : "<->" | "<=>"
-IMPLY : "->" | "=>"
+LSEPARATOR: "("
+RSEPARATOR: ")"
+EQUIVALENCE: "<->" | "<=>"
+IMPLY: "->" | "=>"
 OR: "||" | "|"
 AND: "&&" | "&"
 NOT: "!" | "~"

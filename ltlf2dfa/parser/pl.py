@@ -5,10 +5,7 @@ from pathlib import Path
 
 from lark import Lark, Transformer
 
-# from ltlf2dfa.helpers import ParsingError
-ParsingError = ValueError("Parsing Error.")
-
-
+from ltlf2dfa.helpers import ParsingError
 from ltlf2dfa.parser import CUR_DIR
 from ltlf2dfa.pl import (
     PLNot,
