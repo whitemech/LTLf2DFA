@@ -29,6 +29,10 @@ class Formula(Hashable, ABC):
     def negate(self) -> "Formula":
         """Negate the formula. Used by 'to_nnf'."""
 
+    @abstractmethod
+    def to_mona(self, v: str) -> str:
+        """Transform the formula encoding in MONA."""
+
 
 class AtomicFormula(Formula, ABC):
     """An abstract atomic formula.
@@ -43,8 +47,8 @@ class AtomicFormula(Formula, ABC):
     def __init__(self, s: Union[AtomSymbol, Formula]):
         """Inintializes the atomic formula.
 
-        :param s: the atomic symbol. Formulae are implicitly converted to
-            quoted formulae.
+        :param s: the atomic symbol. Formulas are implicitly converted to
+            quoted formulas.
         """
         super().__init__()
 
@@ -70,6 +74,10 @@ class AtomicFormula(Formula, ABC):
     def find_labels(self) -> Set[AtomSymbol]:
         """Return the set of symbols."""
         return {self.s}
+    #
+    # def to_mona(self, v) -> str:
+    #     """Return the MONA encoding of an atomic formula"""
+    #     return "{} in {}".format(v, self.s.upper())
 
 
 class QuotedFormula(Wrapper):

@@ -137,6 +137,15 @@ class Wrapper(Hashable):
 #     for c in combs:
 #         yield c
 
+def new_var(prev_var: str) -> str:
+    """Compute next variable."""
+    if prev_var == "max($)":
+        return 'v_1'
+    else:
+        s = prev_var.split('_')
+        s[1] = str(int(s[1]) + 1)
+        return '_'.join(s)
+
 
 def sym2regexp(sym: Symbols):
     """Transform a symbol to regex."""

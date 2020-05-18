@@ -20,33 +20,11 @@ from ltlf2dfa.base import (
 # from ltlf2dfa.ltlf2dfa import to_automaton
 from ltlf2dfa.pl import PLFalse, PLTrue, PLAtomic, PLOr, PLAnd, PLFormula
 from ltlf2dfa.symbols import Symbols, OpSymbol
+from ltlf2dfa.helpers import new_var
 
 
 class LTLfFormula(Formula, ABC):
     """A class for the LTLf formula."""
-
-    # def delta(self, epsilon=False) -> PLFormula:
-    #     """Apply the delta function."""
-    #     f = self.to_nnf()
-    #     d = f._delta(i, epsilon=epsilon)
-    #     if epsilon:
-    #         # By definition, if epsilon=True, then the result must be either PLTrue or PLFalse
-    #         # Now, the output is a Propositional Formula with only PLTrue or PLFalse as atomics
-    #         # Hence, we just evaluate the formula with a dummy PropositionalInterpretation
-    #         d = PLTrue() if d.truth({}) else PLFalse()
-    #     return d
-
-    # @abstractmethod
-    # def _delta(self, i: PropositionalInterpretation, epsilon=False):
-    #     """Apply delta function, assuming that 'self' is a LTLf formula in Negative Normal Form."""
-
-    # # @abstractmethod
-    # def to_ldlf(self):
-    #     """
-    #     Tranform the formula into an equivalent LDLf formula.
-    #
-    #     :return: an LDLf formula.
-    #     """
 
     def to_nnf(self) -> "LTLfFormula":
         """Convert an LTLf formula in NNF."""
@@ -59,6 +37,20 @@ class LTLfFormula(Formula, ABC):
     def __repr__(self):
         """Get the representation."""
         return self.__str__()
+
+    def to_mona(self, v: str) -> str:
+        """
+        Tranform the formula into its encoding in MONA.
+
+        :return: a string.
+        """
+
+    # def to_ldlf(self):
+    #     """
+    #     Tranform the formula into an equivalent LDLf formula.
+    #
+    #     :return: an LDLf formula.
+    #     """
 
     # def to_automaton(self) -> SymbolicDFA:
     #     """Translate into an automaton."""
@@ -82,25 +74,16 @@ class LTLfAtomic(AtomicFormula, LTLfFormula):
         """Negate the formula."""
         return LTLfNot(self)
 
-    # def _delta(self, i: PropositionalInterpretation, epsilon: bool = False):
-    #     """Apply the delta function."""
-    #     if epsilon:
-    #         return PLFalse()
-    #     return PLTrue() if PLAtomic(self.s).truth(i) else PLFalse()
-    #
-    # def truth(self, i: FiniteTrace, pos: int = 0):
-    #     """Evaluate the formula."""
-    #     if len(i) > 0:
-    #         return PLAtomic(self.s).truth(i[pos])
-    #     else:
-    #         return False
-
     def find_labels(self) -> Set[AtomSymbol]:
         """Find the labels."""
         return PLAtomic(self.s).find_labels()
 
-    # def to_ldlf(self):
-    #     return LDLfPropositional(PLAtomic(self.s)).convert()
+    def to_mona(self, v="v_0") -> str:
+        """Return the MONA encoding of an LTLf atomic formula."""
+        if v == "v_0":
+            return "(0 in {})".format(self.s.upper())
+        else:
+            return "({} in {})".format(v, self.s.upper())
 
 
 class LTLfTrue(LTLfAtomic):
@@ -110,17 +93,6 @@ class LTLfTrue(LTLfAtomic):
         """Initialize the formula."""
         super().__init__(Symbols.TRUE.value)
 
-    # def _delta(self, i: PropositionalInterpretation, epsilon: bool = False):
-    #     """Apply the delta function."""
-    #     if epsilon:
-    #         return PLFalse()
-    #     else:
-    #         return PLTrue()
-    #
-    # def truth(self, i: FiniteTrace, pos: int = 0):
-    #     """Evaluate the formula."""
-    #     return len(i) > 0
-
     def negate(self):
         """Negate the formula."""
         return LTLfFalse()
@@ -128,6 +100,10 @@ class LTLfTrue(LTLfAtomic):
     def find_labels(self) -> Set[AtomSymbol]:
         """Find the labels."""
         return set()
+
+    def to_mona(self, v="v_0") -> str:
+        """Return the MONA encoding for False."""
+        return Symbols.TRUE.value
 
 
 class LTLfFalse(LTLfAtomic):
@@ -141,17 +117,13 @@ class LTLfFalse(LTLfAtomic):
         """Negate the formula."""
         return LTLfTrue()
 
-    # def _delta(self, i: PropositionalInterpretation, epsilon: bool = False):
-    #     """Apply the delta function."""
-    #     return PLFalse()
-    #
-    # def truth(self, i: FiniteTrace, pos: int = 0):
-    #     """Evaluate the formula."""
-    #     return False
-
     def find_labels(self) -> Set[AtomSymbol]:
         """Find the labels."""
         return set()
+
+    def to_mona(self, v="v_0") -> str:
+        """Return the MONA encoding for False."""
+        return Symbols.FALSE.value
 
 
 class LTLfNot(LTLfUnaryOperator):
@@ -173,29 +145,12 @@ class LTLfNot(LTLfUnaryOperator):
         """Negate the formula."""
         return self.f
 
-    # def _delta(self, i: PropositionalInterpretation, epsilon=False):
-    #     """Apply the delta function."""
-    #     if isinstance(self.f, LTLfAtomic) or isinstance(self.f, LTLfEnd):
-    #         if epsilon:
-    #             return PLFalse()
-    #         else:
-    #             return PLTrue() if self.f._delta(i, epsilon) == PLFalse() else PLFalse()
-    #     else:
-    #         # the formula must be in NNF form!!!
-    #         raise Exception
-    #
-    # def truth(self, i: FiniteTrace, pos: int = 0):
-    #     """Evaluate the formula."""
-    #     if len(i) == 0:
-    #         if isinstance(self.f, LTLfAtomic):
-    #             return False
-    #         else:
-    #             return self.to_nnf().truth(i, pos)
-    #     else:
-    #         return not self.f.truth(i, pos)
-
     # def to_ldlf(self):
     #     return LDLfNot(self.f.to_ldlf())
+
+    def to_mona(self, v="v_0") -> str:
+        """Return the MONA encoding of an LTLf not formula."""
+        return "~({})".format(self.f.to_mona(v))
 
 
 class LTLfAnd(LTLfBinaryOperator):
@@ -206,20 +161,16 @@ class LTLfAnd(LTLfBinaryOperator):
         """Get the operator symbol."""
         return Symbols.AND.value
 
-    # def _delta(self, i: PropositionalInterpretation, epsilon=False):
-    #     """Apply the delta function."""
-    #     return PLAnd([f._delta(i, epsilon) for f in self.formulas])
-    #
-    # def truth(self, i: FiniteTrace, pos: int = 0):
-    #     """Evaluate the formula."""
-    #     return all(f.truth(i, pos) for f in self.formulas)
-
     def negate(self) -> LTLfFormula:
         """Negate the formula."""
         return LTLfOr([f.negate() for f in self.formulas])
 
     # def to_ldlf(self):
     #     return LDLfAnd([f.to_ldlf() for f in self.formulas])
+
+    def to_mona(self, v="v_0") -> str:
+        """Return the MONA encoding of an LTLf and formula."""
+        return "({})".format(" & ".join([f.to_mona(v) for f in self.formulas]))
 
 
 class LTLfOr(LTLfBinaryOperator):
@@ -230,17 +181,13 @@ class LTLfOr(LTLfBinaryOperator):
         """Get the operator symbol."""
         return Symbols.OR.value
 
-    # def _delta(self, i: PropositionalInterpretation, epsilon=False):
-    #     """Apply the delta function."""
-    #     return PLOr([f._delta(i, epsilon) for f in self.formulas])
-    #
-    # def truth(self, i: FiniteTrace, pos: int = 0):
-    #     """Evaluate the formula."""
-    #     return any(f.truth(i, pos) for f in self.formulas)
-
     def negate(self) -> LTLfFormula:
         """Negate the formula."""
         return LTLfAnd([f.negate() for f in self.formulas])
+
+    def to_mona(self, v="v_0") -> str:
+        """Return the MONA encoding of an LTLf and formula."""
+        return "({})".format(" | ".join([f.to_mona(v) for f in self.formulas]))
 
 
 class LTLfImplies(LTLfBinaryOperator):
@@ -250,14 +197,6 @@ class LTLfImplies(LTLfBinaryOperator):
     def operator_symbol(self) -> OpSymbol:
         """Get the operator symbol."""
         return Symbols.IMPLIES.value
-
-    # def truth(self, i: FiniteTrace, pos: int = 0):
-    #     """Evaluate the formula."""
-    #     return self.to_nnf().truth(i, pos)
-    #
-    # def _delta(self, i: PropositionalInterpretation, epsilon=False):
-    #     """Apply the delta function."""
-    #     return self.to_nnf()._delta(i, epsilon=epsilon)
 
     def negate(self) -> LTLfFormula:
         """Negate the formula."""
@@ -281,14 +220,6 @@ class LTLfEquivalence(LTLfBinaryOperator):
     def operator_symbol(self) -> OpSymbol:
         """Get the operator symbol."""
         return Symbols.EQUIVALENCE.value
-
-    # def truth(self, i: FiniteTrace, pos: int = 0):
-    #     """Evaluate the formula."""
-    #     return self.to_nnf().truth(i, pos)
-    #
-    # def _delta(self, i: PropositionalInterpretation, epsilon=False):
-    #     """Apply the delta function."""
-    #     return self.to_nnf()._delta(i, epsilon=epsilon)
 
     def to_nnf(self) -> LTLfFormula:
         """Transform to NNF."""
@@ -319,16 +250,13 @@ class LTLfNext(LTLfUnaryOperator):
         """Negate the formula."""
         return LTLfWeakNext(self.f.negate())
 
-    # def truth(self, i: FiniteTrace, pos: int = 0):
-    #     """Evaluate the formula."""
-    #     return pos < len(i) - 1 and self.f.truth(i, pos + 1)
-    #
-    # def _delta(self, i: PropositionalInterpretation, epsilon=False):
-    #     """Apply the delta function."""
-    #     if epsilon:
-    #         return PLFalse()
-    #     else:
-    #         return PLAnd([PLAtomic(self.f), PLAtomic(LTLfNot(LTLfEnd()).to_nnf())])
+    def to_mona(self, v="v_0") -> str:
+        """Return the MONA encoding of an LTLf Next formula."""
+        ex_var = new_var(v)
+        if v == "v_0":
+            return "(ex1 {0}: {0}=1 & {1})".format(ex_var, self.f.to_mona(ex_var))
+        else:
+            return "(ex1 {0}: {0}={1}+1 & {2})".format(ex_var, v, self.f.to_mona(ex_var))
 
     # def to_ldlf(self):
     #     return LDLfDiamond(
@@ -353,16 +281,13 @@ class LTLfWeakNext(LTLfUnaryOperator):
         """Negate the formula."""
         return LTLfNext(self.f.negate())
 
-    # def truth(self, i: FiniteTrace, pos: int = 0):
-    #     """Evaluate the formula."""
-    #     return not (pos < len(i) - 1) or self.f.truth(i, pos + 1)
-    #
-    # def _delta(self, i: PropositionalInterpretation, epsilon=False):
-    #     """Apply the delta function."""
-    #     if epsilon:
-    #         return PLTrue()
-    #     else:
-    #         return PLOr([PLAtomic(self.f), PLAtomic(LTLfEnd().to_nnf())])
+    def to_mona(self, v="v_0") -> str:
+        """Return the MONA encoding of an LTLf WeakNext formula."""
+        ex_var = new_var(v)
+        if v == "v_0":
+            return "((0 = max($)) | (ex1 {0}: {0}=1 & {1}))".format(ex_var, self.f.to_mona(ex_var))
+        else:
+            return "((0 = max($)) | (ex1 {0}: {0}={1}+1 & {2}))".format(ex_var, v, self.f.to_mona(ex_var))
 
     # def to_ldlf(self):
     #     return self.convert().to_ldlf()
@@ -384,32 +309,22 @@ class LTLfUntil(LTLfBinaryOperator):
         """Negate the formula."""
         return LTLfRelease([f.negate() for f in self.formulas])
 
-    # def truth(self, i: FiniteTrace, pos: int = 0):
-    #     """Evaluate the formula."""
-    #     f1 = self.formulas[0]
-    #     f2 = (
-    #         LTLfUntil(self.formulas[1:]) if len(self.formulas) > 2 else self.formulas[1]
-    #     )
-    #
-    #     return any(
-    #         f2.truth(i, j) and all(f1.truth(i, k) for k in range(pos, j))
-    #         for j in range(pos, len(i))
-    #     )
-    #
-    # def _delta(self, i: PropositionalInterpretation, epsilon: bool = False):
-    #     """Apply the delta function."""
-    #     if epsilon:
-    #         return PLFalse()
-    #     f1 = self.formulas[0]
-    #     f2 = (
-    #         LTLfUntil(self.formulas[1:]) if len(self.formulas) > 2 else self.formulas[1]
-    #     )
-    #     return PLOr(
-    #         [
-    #             f2._delta(i, epsilon),
-    #             PLAnd([f1._delta(i, epsilon), LTLfNext(self)._delta(i, epsilon)]),
-    #         ]
-    #     )
+    def to_mona(self, v="v_0") -> str:
+        """Return the MONA encoding of an LTLf Until formula."""
+        ex_var = new_var(v)
+        all_var = new_var(ex_var)
+        f1 = self.formulas[0].to_mona(v=all_var)
+        f2 = (
+            LTLfUntil(self.formulas[1:]).to_mona(v=ex_var)
+            if len(self.formulas) > 2
+            else self.formulas[1].to_mona(v=ex_var)
+        )
+        if v == "v_0":
+            return "(ex1 {0}: 0<={0}&{0}<=max($) & {1} & " \
+                   "(all1 {2}: 0<={2}&{2}<{0} => {3}))".format(ex_var, f2, all_var, f1)
+        else:
+            return "(ex1 {0}: {1}<={0}&{0}<=max($) & {2} & " \
+                   "(all1 {3}: {1}<={3}&{3}<{0} => {4}))".format(ex_var, v, f2, all_var, f1)
 
     # def to_ldlf(self):
     #     f1 = self.formulas[0].to_ldlf()
@@ -440,35 +355,24 @@ class LTLfRelease(LTLfBinaryOperator):
         """Negate the formula."""
         return LTLfUntil([f.negate() for f in self.formulas])
 
-    # def truth(self, i: FiniteTrace, pos: int = 0):
-    #     """Evaluate the formula."""
-    #     f1 = self.formulas[0]
-    #     f2 = (
-    #         LTLfRelease(self.formulas[1:])
-    #         if len(self.formulas) > 2
-    #         else self.formulas[1]
-    #     )
-    #     return all(
-    #         f2.truth(i, j) or any(f1.truth(i, k) for k in range(pos, j))
-    #         for j in range(pos, len(i))
-    #     )
-    #
-    # def _delta(self, i: PropositionalInterpretation, epsilon=False):
-    #     """Apply the delta function."""
-    #     if epsilon:
-    #         return PLTrue()
-    #     f1 = self.formulas[0]
-    #     f2 = (
-    #         LTLfRelease(self.formulas[1:])
-    #         if len(self.formulas) > 2
-    #         else self.formulas[1]
-    #     )
-    #     return PLAnd(
-    #         [
-    #             f2._delta(i, epsilon),
-    #             PLOr([f1._delta(i, epsilon), LTLfWeakNext(self)._delta(i, epsilon)]),
-    #         ]
-    #     )
+    def to_mona(self, v="v_0") -> str:
+        """Return the MONA encoding of an LTLf Release formula."""
+        ex_var = new_var(v)
+        all_var = new_var(ex_var)
+        f1 = self.formulas[0].to_mona(v=ex_var)
+        f2 = (
+            LTLfRelease(self.formulas[1:]).to_mona(v=all_var)
+            if len(self.formulas) > 2
+            else self.formulas[1].to_mona(v=all_var)
+        )
+        if v == "v_0":
+            return "((ex1 {0}: 0<={0}&{0}<=max($) & {1} & " \
+                   "(all1 {2}: 0<={2}&{2}<={0} => {3})) | (all1 {2}: " \
+                   "0<={2}&{2}<=max($) => {3}))".format(ex_var, f1, all_var, f2)
+        else:
+            return "((ex1 {0}: {1}<={0}&{0}<=max($) & {2} & " \
+                   "(all1 {3}: {1}<={3}&{3}<={0} => {4})) | (all1 {3}: " \
+                   "{1}<={3}&{3}<=max($) => {4}))".format(ex_var, v, f1, all_var, f2)
 
 
 class LTLfEventually(LTLfUnaryOperator):
@@ -487,13 +391,9 @@ class LTLfEventually(LTLfUnaryOperator):
         """Negate the formula."""
         return self.to_nnf().negate()
 
-    # def truth(self, i: FiniteTrace, pos: int = 0):
-    #     """Evaluate the formula."""
-    #     return self.to_nnf().truth(i, pos)
-    #
-    # def _delta(self, i: PropositionalInterpretation, epsilon=False):
-    #     """Apply the delta function."""
-    #     return self.to_nnf()._delta(i, epsilon=epsilon)
+    def to_mona(self, v="v_0") -> str:
+        """Return the MONA encoding of an LTLf Eventually formula."""
+        return LTLfUntil([LTLfTrue(), self.f]).to_mona(v)
 
     # def to_ldlf(self):
     #     return LDLfDiamond(
@@ -518,25 +418,13 @@ class LTLfAlways(LTLfUnaryOperator):
         """Negate the formula."""
         return self.to_nnf().negate()
 
-    # def truth(self, i: FiniteTrace, pos: int = 0):
-    #     """Evaluate the formula."""
-    #     return self.to_nnf().truth(i, pos)
-    #
-    # def _delta(self, i: PropositionalInterpretation, epsilon=False):
-    #     """Apply the delta function."""
-    #     return self.to_nnf()._delta(i, epsilon=epsilon)
+    def to_mona(self, v="v_0") -> str:
+        """Return the MONA encoding of an LTLf Always formula."""
+        return LTLfRelease([LTLfFalse(), self.f]).to_mona(v)
 
 
 class LTLfLast(LTLfFormula):
     """Class for the LTLf Last formula."""
-
-    # def _delta(self, i: PropositionalInterpretation, epsilon=False):
-    #     """Apply the delta function."""
-    #     return self.to_nnf()._delta(i, epsilon=epsilon)
-    #
-    # def truth(self, i: FiniteTrace, pos: int = 0):
-    #     """Evaluate the formula."""
-    #     return self.to_nnf().truth(i, pos)
 
     def to_nnf(self) -> LTLfFormula:
         """Transform to NNF."""
@@ -560,14 +448,6 @@ class LTLfLast(LTLfFormula):
 
 class LTLfEnd(LTLfFormula):
     """Class for the LTLf End formula."""
-
-    # def _delta(self, i: PropositionalInterpretation, epsilon=False):
-    #     """Apply the delta function."""
-    #     return self.to_nnf()._delta(i, epsilon=epsilon)
-    #
-    # def truth(self, i: FiniteTrace, pos: int = 0):
-    #     """Evaluate the formula."""
-    #     return self.to_nnf().truth(i, pos)
 
     def find_labels(self) -> Set[AtomSymbol]:
         """Find the labels."""

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """The Translator class."""
 from ltlf2dfa.Parser import MyParser
+# from ltlf2dfa.parser.ltlf import LTLfParser
+# from ltlf2dfa.parser.pltlf import PLTLfParser
 import itertools as it
 from subprocess import PIPE, Popen, TimeoutExpired
 import os
@@ -255,7 +257,7 @@ class Translator:
 
 
 def translate_bis(formula_tree, _type, var):  # noqa: C901
-    """Where the actual translation happen."""
+    """Where the actual translation happens."""
     if type(formula_tree) == tuple:
         # enable this print to see the tree pruning
         # print(self.parsed_formula)
@@ -498,7 +500,7 @@ def _next(var):
 
 
 if __name__ == '__main__':
-    formula = 'Ya'
+    formula = 'Y a'
     declare_flag = False
 
     t = Translator(formula)
