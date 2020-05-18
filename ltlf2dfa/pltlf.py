@@ -45,6 +45,13 @@ class PLTLfFormula(Formula, ABC):
         """Get the representation."""
         return self.__str__()
 
+    def to_mona(self, v: str) -> str:
+        """
+        Tranform the formula into its encoding in MONA.
+
+        :return: a string.
+        """
+
     # def to_automaton(self) -> SymbolicDFA:
     #     """Translate into an automaton."""
     #     return to_automaton(self)
