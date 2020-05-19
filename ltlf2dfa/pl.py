@@ -175,10 +175,6 @@ class PLNot(UnaryOperator[PLFormula], PLFormula):
         """Get the operator symbol."""
         return Symbols.NOT.value
 
-    # def truth(self, i: PropositionalInterpretation):
-    #     """Evaluate the formula."""
-    #     return not self.f.truth(i)
-
     def to_nnf(self):
         """Transform in NNF."""
         if not isinstance(self.f, AtomicFormula):
@@ -202,10 +198,6 @@ class PLOr(PLBinaryOperator):
         """Get the operator symbol."""
         return Symbols.OR.value
 
-    # def truth(self, i: PropositionalInterpretation):
-    #     """Evaluate the formula."""
-    #     return any(f.truth(i) for f in self.formulas)
-
     def to_nnf(self):
         """Transform in NNF."""
         return PLOr([f.to_nnf() for f in self.formulas])
@@ -223,10 +215,6 @@ class PLAnd(PLBinaryOperator):
         """Get the operator symbol."""
         return Symbols.AND.value
 
-    # def truth(self, i: PropositionalInterpretation):
-    #     """Evaluate the formula."""
-    #     return all(f.truth(i) for f in self.formulas)
-
     def to_nnf(self):
         """Transform in NNF."""
         return PLAnd([f.to_nnf() for f in self.formulas])
@@ -243,10 +231,6 @@ class PLImplies(PLBinaryOperator):
     def operator_symbol(self) -> OpSymbol:
         """Get the operator symbol."""
         return Symbols.IMPLIES.value
-
-    # def truth(self, i: PropositionalInterpretation):
-    #     """Evaluate the formula."""
-    #     return self.to_nnf().truth(i)
 
     def negate(self) -> PLFormula:
         """Negate the formula."""
@@ -268,10 +252,6 @@ class PLEquivalence(PLBinaryOperator):
     def operator_symbol(self) -> OpSymbol:
         """Get the operator symbol."""
         return Symbols.EQUIVALENCE.value
-
-    # def truth(self, i: PropositionalInterpretation):
-    #     """Evaluate the formula."""
-    #     return self.to_nnf().truth(i)
 
     def to_nnf(self):
         """Transform in NNF."""

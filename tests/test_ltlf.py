@@ -109,42 +109,42 @@ def test_mona():
     tt = LTLfTrue()
     ff = LTLfFalse()
 
-    assert a.to_mona(v="v_0") == "(0 in A)"
-    assert b.to_mona(v="v_0") == "(0 in B)"
-    assert c.to_mona(v="v_0") == "(0 in C)"
-    assert tt.to_mona(v="v_0") == "true"
-    assert ff.to_mona(v="v_0") == "false"
+    assert a.to_mona(v="0") == "(0 in A)"
+    assert b.to_mona(v="0") == "(0 in B)"
+    assert c.to_mona(v="0") == "(0 in C)"
+    assert tt.to_mona(v="0") == "true"
+    assert ff.to_mona(v="0") == "false"
 
     f = parser("!(a & !b)")
-    assert f.to_mona(v="v_0") == "~(((0 in A) & ~((0 in B))))"
+    assert f.to_mona(v="0") == "~(((0 in A) & ~((0 in B))))"
 
     f = parser("!(!a | b)")
-    assert f.to_mona(v="v_0") == "~((~((0 in A)) | (0 in B)))"
+    assert f.to_mona(v="0") == "~((~((0 in A)) | (0 in B)))"
 
     f = parser("!(a <-> b)")
-    assert f.to_nnf().to_mona(v="v_0") == "((~((0 in A)) | ~((0 in B))) & ((0 in A) | (0 in B)))"
+    assert f.to_nnf().to_mona(v="0") == "((~((0 in A)) | ~((0 in B))) & ((0 in A) | (0 in B)))"
 
     # Next and Weak Next
     f = parser("X(a & b)")
-    assert f.to_mona(v="v_0") == "(ex1 v_1: v_1=1 & ((v_1 in A) & (v_1 in B)))"
+    assert f.to_mona(v="0") == "(ex1 v_1: v_1=1 & ((v_1 in A) & (v_1 in B)))"
 
     f = parser("WX (a & b)")
-    assert f.to_mona(v="v_0") == "((0 = max($)) | (ex1 v_1: v_1=1 & ((v_1 in A) & (v_1 in B))))"
+    assert f.to_mona(v="0") == "((0 = max($)) | (ex1 v_1: v_1=1 & ((v_1 in A) & (v_1 in B))))"
 
     # Until and Release
     f = parser("a U b")
-    assert f.to_mona(v="v_0") == "(ex1 v_1: 0<=v_1&v_1<=max($) & (v_1 in B) & (all1 v_2: 0<=v_2&v_2<v_1" \
+    assert f.to_mona(v="0") == "(ex1 v_1: 0<=v_1&v_1<=max($) & (v_1 in B) & (all1 v_2: 0<=v_2&v_2<v_1" \
                                  " => (v_2 in A)))"
     f = parser("a R b")
-    assert f.to_mona(v="v_0") == "((ex1 v_1: 0<=v_1&v_1<=max($) & (v_1 in A) & (all1 v_2: 0<=v_2&v_2<=v_1" \
+    assert f.to_mona(v="0") == "((ex1 v_1: 0<=v_1&v_1<=max($) & (v_1 in A) & (all1 v_2: 0<=v_2&v_2<=v_1" \
                                  " => (v_2 in B))) | (all1 v_2: 0<=v_2&v_2<=max($) => (v_2 in B)))"
 
     # Eventually and Always
     f = parser("F(a & b)")
-    assert f.to_mona(v="v_0") == "(ex1 v_1: 0<=v_1&v_1<=max($) & ((v_1 in A) & (v_1 in B)) & (all1 v_2: " \
+    assert f.to_mona(v="0") == "(ex1 v_1: 0<=v_1&v_1<=max($) & ((v_1 in A) & (v_1 in B)) & (all1 v_2: " \
                                  "0<=v_2&v_2<v_1 => true))"
     f = parser("G(a | b)")
-    assert f.to_mona(v="v_0") == "((ex1 v_1: 0<=v_1&v_1<=max($) & false & (all1 v_2: 0<=v_2&v_2<=v_1 => " \
+    assert f.to_mona(v="0") == "((ex1 v_1: 0<=v_1&v_1<=max($) & false & (all1 v_2: 0<=v_2&v_2<=v_1 => " \
                                  "((v_2 in A) | (v_2 in B)))) | (all1 v_2: 0<=v_2&v_2<=max($) => ((v_2 in A) " \
                                  "| (v_2 in B))))"
 

@@ -139,7 +139,7 @@ class Wrapper(Hashable):
 
 def new_var(prev_var: str) -> str:
     """Compute next variable."""
-    if prev_var == "max($)":
+    if prev_var == "0" or prev_var == "max($)":
         return 'v_1'
     else:
         s = prev_var.split('_')

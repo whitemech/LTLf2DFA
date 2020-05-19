@@ -1,4 +1,5 @@
-# Small helper class to check the correct parsing
+# -*- coding: utf-8 -*-
+"""Small helper class to check the correct parsing."""
 
 from lark import Lark
 from lark.lexer import Token
@@ -52,7 +53,7 @@ class ParsingCheck:
                         return False, err
                     token_i += 1
 
-        # Check lenght
+        # Check length
         if token_i != len(tokens):
             return False, "The input was too short"
 
