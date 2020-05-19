@@ -121,9 +121,9 @@ def test_mona():
     f = parser("!(!a | b)")
     assert f.to_mona(v="v_0") == "~((~((0 in A)) | (0 in B)))"
 
-    # f = parser("!(a <-> b)")
-    # assert f.to_nnf() == LTLfAnd([LTLfOr([LTLfNot(a), LTLfNot(b)]), LTLfOr([a, b])])
-    #
+    f = parser("!(a <-> b)")
+    assert f.to_nnf().to_mona(v="v_0") == "((~((0 in A)) | ~((0 in B))) & ((0 in A) | (0 in B)))"
+
     # Next and Weak Next
     f = parser("X(a & b)")
     assert f.to_mona(v="v_0") == "(ex1 v_1: v_1=1 & ((v_1 in A) & (v_1 in B)))"

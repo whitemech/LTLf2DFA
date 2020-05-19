@@ -114,8 +114,8 @@ def test_mona():
     f = parser("!(!a | b)")
     assert f.to_mona(v="max($)") == "~((~((max($) in A)) | (max($) in B)))"
 
-    # f = parser("!(a <-> b)")
-    # assert f.to_nnf() == LTLfAnd([LTLfOr([LTLfNot(a), LTLfNot(b)]), LTLfOr([a, b])])
+    f = parser("!(a <-> b)")
+    assert f.to_nnf().to_mona(v="max($)") == "((~((max($) in A)) | ~((max($) in B))) & ((max($) in A) | (max($) in B)))"
 
     # Before
     f = parser("Y(a & b)")
