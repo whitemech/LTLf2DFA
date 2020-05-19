@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 
 """Base classes for the implementation of a generic syntax tree."""
+
 from abc import abstractmethod, ABC
 from typing import Sequence, Set, Tuple, TypeVar, Generic, cast, Union
 import re
 
-# from pythomata import PropositionalInterpretation
-
 from ltlf2dfa.symbols import Symbols, OpSymbol
 from ltlf2dfa.helpers import Hashable, Wrapper
 
-# FiniteTrace = Sequence[PropositionalInterpretation]
 AtomSymbol = Union["QuotedFormula", str]
 
 

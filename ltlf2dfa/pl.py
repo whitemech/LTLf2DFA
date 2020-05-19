@@ -4,7 +4,7 @@
 
 import functools
 from abc import abstractmethod, ABC
-from typing import Set, Any, Dict, Optional
+from typing import Set, Any, Optional
 
 # import sympy
 # from sympy.logic.boolalg import Boolean, BooleanTrue, BooleanFalse

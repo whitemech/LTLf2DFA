@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
+
 """
 This module contains the implementation of Linear Temporal Logic on finite traces.
 """
+
 from abc import abstractmethod, ABC
 from typing import Set
 import re
-
-# from pythomata import PropositionalInterpretation
-# from pythomata.impl.symbolic import SymbolicDFA
 
 from ltlf2dfa.base import (
     Formula,
@@ -16,9 +15,8 @@ from ltlf2dfa.base import (
     BinaryOperator,
     AtomSymbol,
 )
-# from flloat.delta import Delta
-# from ltlf2dfa.ltlf2dfa import to_automaton
-from ltlf2dfa.pl import PLFalse, PLTrue, PLAtomic, PLOr, PLAnd, PLFormula
+from ltlf2dfa.ltlf2dfa import to_dfa
+from ltlf2dfa.pl import PLAtomic
 from ltlf2dfa.symbols import Symbols, OpSymbol
 from ltlf2dfa.helpers import new_var
 
@@ -52,9 +50,9 @@ class LTLfFormula(Formula, ABC):
         :return: an LDLf formula.
         """
 
-    # def to_automaton(self) -> SymbolicDFA:
-    #     """Translate into an automaton."""
-    #     return to_automaton(self)
+    def to_dfa(self) -> str:
+        """Translate into a DFA."""
+        return to_dfa(self)
 
 
 class LTLfUnaryOperator(UnaryOperator[LTLfFormula], LTLfFormula, ABC):
