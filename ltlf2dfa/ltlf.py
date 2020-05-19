@@ -45,12 +45,12 @@ class LTLfFormula(Formula, ABC):
         :return: a string.
         """
 
-    # def to_ldlf(self):
-    #     """
-    #     Tranform the formula into an equivalent LDLf formula.
-    #
-    #     :return: an LDLf formula.
-    #     """
+    def to_ldlf(self):
+        """
+        Tranform the formula into an equivalent LDLf formula.
+
+        :return: an LDLf formula.
+        """
 
     # def to_automaton(self) -> SymbolicDFA:
     #     """Translate into an automaton."""
@@ -85,6 +85,10 @@ class LTLfAtomic(AtomicFormula, LTLfFormula):
         else:
             return "({} in {})".format(v, self.s.upper())
 
+    # def to_ldlf(self):
+    #     """Convert the formula to LDLf."""
+    #     return LDLfDiamond(RegExpPropositional(PLAtomic(self.s)), LDLfLogicalTrue())
+
 
 class LTLfTrue(LTLfAtomic):
     """Class for the LTLf True formula."""
@@ -104,6 +108,10 @@ class LTLfTrue(LTLfAtomic):
     def to_mona(self, v="v_0") -> str:
         """Return the MONA encoding for False."""
         return Symbols.TRUE.value
+
+    # def to_ldlf(self):
+    #     """Convert the formula to LDLf."""
+    #     return LDLfDiamond(RegExpPropositional(PLTrue()), LDLfLogicalTrue())
 
 
 class LTLfFalse(LTLfAtomic):
@@ -150,6 +158,7 @@ class LTLfNot(LTLfUnaryOperator):
         return "~({})".format(self.f.to_mona(v))
 
     # def to_ldlf(self):
+    #     """Convert the formula to LDLf."""
     #     return LDLfNot(self.f.to_ldlf())
 
 
@@ -170,6 +179,7 @@ class LTLfAnd(LTLfBinaryOperator):
         return "({})".format(" & ".join([f.to_mona(v) for f in self.formulas]))
 
     # def to_ldlf(self):
+    #     """Convert the formula to LDLf."""
     #     return LDLfAnd([f.to_ldlf() for f in self.formulas])
 
 
@@ -188,6 +198,10 @@ class LTLfOr(LTLfBinaryOperator):
     def to_mona(self, v="v_0") -> str:
         """Return the MONA encoding of an LTLf Or formula."""
         return "({})".format(" | ".join([f.to_mona(v) for f in self.formulas]))
+
+    # def to_ldlf(self):
+    #     """Convert LTLf formula to LDLf."""
+    #     return LDLfOr([f.to_ldlf() for f in self.formulas])
 
 
 class LTLfImplies(LTLfBinaryOperator):
@@ -216,6 +230,16 @@ class LTLfImplies(LTLfBinaryOperator):
         """Return the MONA encoding of an LTLf Implication formula."""
         return self.to_nnf().to_mona(v)
 
+    # def to_ldlf(self):
+    #     """Convert the formula to LDLf."""
+    #     f1 = (
+    #         LTLfImplies(self.formulas[:-1]).to_ldlf()
+    #         if len(self.formulas) > 2
+    #         else self.formulas[0].to_ldlf()
+    #     )
+    #     f2 = self.formulas[-1].to_ldlf()
+    #     return LDLfOr([LDLfNot(f1), f2])
+
 
 class LTLfEquivalence(LTLfBinaryOperator):
     """Class for the LTLf Equivalente formula."""
@@ -240,6 +264,16 @@ class LTLfEquivalence(LTLfBinaryOperator):
     def to_mona(self, v="v_0") -> str:
         """Return the MONA encoding of an LTLf Equivalence formula."""
         return self.to_nnf().to_mona(v)
+
+    # def to_ldlf(self):
+    #     """Convert the formula to LDLf."""
+    #     f1 = (
+    #         LTLfImplies(self.formulas[:-1]).to_ldlf()
+    #         if len(self.formulas) > 2
+    #         else self.formulas[0].to_ldlf()
+    #     )
+    #     f2 = self.formulas[-1].to_ldlf()
+    #     return LDLfAnd([LDLfOr([LDLfNot(f1), f2]), LDLfOr([f1, LDLfNot(f2)])])
 
 
 class LTLfNext(LTLfUnaryOperator):
@@ -267,6 +301,7 @@ class LTLfNext(LTLfUnaryOperator):
             return "(ex1 {0}: {0}={1}+1 & {2})".format(ex_var, v, self.f.to_mona(ex_var))
 
     # def to_ldlf(self):
+    #     """Convert the formula to LDLf."""
     #     return LDLfDiamond(
     #         RegExpPropositional(PLTrue()),
     #         LDLfAnd([self.f.to_ldlf(), LDLfNot(LDLfEnd())]),
@@ -298,7 +333,10 @@ class LTLfWeakNext(LTLfUnaryOperator):
             return "((0 = max($)) | (ex1 {0}: {0}={1}+1 & {2}))".format(ex_var, v, self.f.to_mona(ex_var))
 
     # def to_ldlf(self):
-    #     return self.convert().to_ldlf()
+    #     """Convert the formula to LDLf."""
+    #     return LDLfBox(
+    #         RegExpPropositional(PLTrue()), LDLfOr([self.f.to_ldlf(), LDLfEnd()])
+    #     )
 
 
 class LTLfUntil(LTLfBinaryOperator):
@@ -335,6 +373,7 @@ class LTLfUntil(LTLfBinaryOperator):
                    "(all1 {3}: {1}<={3}&{3}<{0} => {4}))".format(ex_var, v, f2, all_var, f1)
 
     # def to_ldlf(self):
+    #     """Convert the formula to LDLf."""
     #     f1 = self.formulas[0].to_ldlf()
     #     f2 = (
     #         LTLfUntil(self.formulas[1:]).to_ldlf()
@@ -382,6 +421,21 @@ class LTLfRelease(LTLfBinaryOperator):
                    "(all1 {3}: {1}<={3}&{3}<={0} => {4})) | (all1 {3}: " \
                    "{1}<={3}&{3}<=max($) => {4}))".format(ex_var, v, f1, all_var, f2)
 
+    # def to_ldlf(self):
+    #     """Convert the formula to LDLf."""
+    #     f1 = self.formulas[0].to_ldlf()
+    #     f2 = (
+    #         LTLfRelease(self.formulas[1:]).to_ldlf()
+    #         if len(self.formulas) > 2
+    #         else self.formulas[1].to_ldlf()
+    #     )
+    #     return LDLfBox(
+    #         RegExpStar(
+    #             RegExpSequence([RegExpTest(LDLfNot(f1)), RegExpPropositional(PLTrue())])
+    #         ),
+    #         LDLfOr([f2, LDLfEnd()]),
+    #     )
+
 
 class LTLfEventually(LTLfUnaryOperator):
     """Class for the LTLf Eventually formula."""
@@ -404,6 +458,7 @@ class LTLfEventually(LTLfUnaryOperator):
         return LTLfUntil([LTLfTrue(), self.f]).to_mona(v)
 
     # def to_ldlf(self):
+    #     """Convert the formula to LDLf."""
     #     return LDLfDiamond(
     #         RegExpStar(RegExpPropositional(PLTrue())),
     #         LDLfAnd([self.f.to_ldlf(), LDLfNot(LDLfEnd())]),
@@ -430,6 +485,13 @@ class LTLfAlways(LTLfUnaryOperator):
         """Return the MONA encoding of an LTLf Always formula."""
         return LTLfRelease([LTLfFalse(), self.f]).to_mona(v)
 
+    # def to_ldlf(self):
+    #     """Convert the formula to LDLf."""
+    #     return LDLfBox(
+    #         RegExpStar(RegExpPropositional(PLTrue())),
+    #         LDLfOr([self.f.to_ldlf(), LDLfEnd()]),
+    #     )
+
 
 class LTLfLast(LTLfFormula):
     """Class for the LTLf Last formula."""
@@ -452,6 +514,10 @@ class LTLfLast(LTLfFormula):
     def __str__(self):
         """Get the string representation."""
         return Symbols.LAST.value
+
+    # def to_ldlf(self):
+    #     """Convert the formula to LDLf."""
+    #     return LDLfDiamond(RegExpPropositional(PLTrue()), LDLfEnd())
 
 
 class LTLfEnd(LTLfFormula):
