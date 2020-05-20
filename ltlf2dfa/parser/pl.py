@@ -20,15 +20,19 @@ from ltlf2dfa.pl import (
 
 
 class PLTransformer(Transformer):
+    """PL Transformer."""
+
     def start(self, args):
+        """Entry point."""
         return args[0]
 
     def propositional_formula(self, args):
-        """Parse the propositional formula."""
+        """Parse Propositional formula."""
         assert len(args) == 1
         return args[0]
 
     def prop_equivalence(self, args):
+        """Parse Propositional Equivalence."""
         if len(args) == 1:
             return args[0]
         elif (len(args) - 1) % 2 == 0:
@@ -38,6 +42,7 @@ class PLTransformer(Transformer):
             raise ParsingError
 
     def prop_implication(self, args):
+        """Parse Propositional Implication."""
         if len(args) == 1:
             return args[0]
         elif (len(args) - 1) % 2 == 0:
@@ -47,6 +52,7 @@ class PLTransformer(Transformer):
             raise ParsingError
 
     def prop_or(self, args):
+        """Parse Propositional Or."""
         if len(args) == 1:
             return args[0]
         elif (len(args) - 1) % 2 == 0:
@@ -56,6 +62,7 @@ class PLTransformer(Transformer):
             raise ParsingError
 
     def prop_and(self, args):
+        """Parse Propositional And."""
         if len(args) == 1:
             return args[0]
         elif (len(args) - 1) % 2 == 0:
@@ -65,6 +72,7 @@ class PLTransformer(Transformer):
             raise ParsingError
 
     def prop_not(self, args):
+        """Parse Propositional Not."""
         if len(args) == 1:
             return args[0]
         else:
@@ -74,6 +82,7 @@ class PLTransformer(Transformer):
             return f
 
     def prop_wrapped(self, args):
+        """Parse Propositional wrapped formula."""
         if len(args) == 1:
             return args[0]
         elif len(args) == 3:
@@ -83,28 +92,36 @@ class PLTransformer(Transformer):
             raise ParsingError
 
     def prop_atom(self, args):
+        """Parse Propositional Atom."""
         assert len(args) == 1
         return args[0]
 
     def prop_true(self, args):
+        """Parse Propositional True."""
         assert len(args) == 1
         return PLTrue()
 
     def prop_false(self, args):
+        """Parse Propositional False."""
         assert len(args) == 1
         return PLFalse()
 
     def atom(self, args):
+        """Parse Atom."""
         assert len(args) == 1
         return PLAtomic(str(args[0]))
 
 
 class PLParser:
+    """PL Parser class."""
+
     def __init__(self):
+        """Initialize."""
         self._transformer = PLTransformer()
         self._parser = Lark(open(str(Path(CUR_DIR, "pl.lark"))), parser="lalr")
 
     def __call__(self, text):
+        """Call."""
         tree = self._parser.parse(text)
         formula = self._transformer.transform(tree)
         return formula

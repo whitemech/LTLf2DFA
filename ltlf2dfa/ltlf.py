@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""
-This module contains the implementation of Linear Temporal Logic on finite traces.
-"""
+"""This module contains the implementation of Linear Temporal Logic on finite traces."""
 
 from abc import abstractmethod, ABC
 from typing import Set
@@ -294,7 +292,9 @@ class LTLfNext(LTLfUnaryOperator):
         """Return the MONA encoding of an LTLf Next formula."""
         ex_var = new_var(v)
         if v != "0":
-            return "(ex1 {0}: {0}={1}+1 & {2})".format(ex_var, v, self.f.to_mona(ex_var))
+            return "(ex1 {0}: {0}={1}+1 & {2})".format(
+                ex_var, v, self.f.to_mona(ex_var)
+            )
         else:
             return "(ex1 {0}: {0}=1 & {1})".format(ex_var, self.f.to_mona(ex_var))
 
@@ -326,9 +326,13 @@ class LTLfWeakNext(LTLfUnaryOperator):
         """Return the MONA encoding of an LTLf WeakNext formula."""
         ex_var = new_var(v)
         if v != "0":
-            return "((0 = max($)) | (ex1 {0}: {0}={1}+1 & {2}))".format(ex_var, v, self.f.to_mona(ex_var))
+            return "((0 = max($)) | (ex1 {0}: {0}={1}+1 & {2}))".format(
+                ex_var, v, self.f.to_mona(ex_var)
+            )
         else:
-            return "((0 = max($)) | (ex1 {0}: {0}=1 & {1}))".format(ex_var, self.f.to_mona(ex_var))
+            return "((0 = max($)) | (ex1 {0}: {0}=1 & {1}))".format(
+                ex_var, self.f.to_mona(ex_var)
+            )
 
     # def to_ldlf(self):
     #     """Convert the formula to LDLf."""
@@ -364,11 +368,17 @@ class LTLfUntil(LTLfBinaryOperator):
             else self.formulas[1].to_mona(v=ex_var)
         )
         if v != "0":
-            return "(ex1 {0}: {1}<={0}&{0}<=max($) & {2} & " \
-                   "(all1 {3}: {1}<={3}&{3}<{0} => {4}))".format(ex_var, v, f2, all_var, f1)
+            return (
+                "(ex1 {0}: {1}<={0}&{0}<=max($) & {2} & "
+                "(all1 {3}: {1}<={3}&{3}<{0} => {4}))".format(
+                    ex_var, v, f2, all_var, f1
+                )
+            )
         else:
-            return "(ex1 {0}: 0<={0}&{0}<=max($) & {1} & " \
-                   "(all1 {2}: 0<={2}&{2}<{0} => {3}))".format(ex_var, f2, all_var, f1)
+            return (
+                "(ex1 {0}: 0<={0}&{0}<=max($) & {1} & "
+                "(all1 {2}: 0<={2}&{2}<{0} => {3}))".format(ex_var, f2, all_var, f1)
+            )
 
     # def to_ldlf(self):
     #     """Convert the formula to LDLf."""
@@ -411,13 +421,17 @@ class LTLfRelease(LTLfBinaryOperator):
             else self.formulas[1].to_mona(v=all_var)
         )
         if v != "0":
-            return "((ex1 {0}: {1}<={0}&{0}<=max($) & {2} & " \
-                   "(all1 {3}: {1}<={3}&{3}<={0} => {4})) | (all1 {3}: " \
-                   "{1}<={3}&{3}<=max($) => {4}))".format(ex_var, v, f1, all_var, f2)
+            return (
+                "((ex1 {0}: {1}<={0}&{0}<=max($) & {2} & "
+                "(all1 {3}: {1}<={3}&{3}<={0} => {4})) | (all1 {3}: "
+                "{1}<={3}&{3}<=max($) => {4}))".format(ex_var, v, f1, all_var, f2)
+            )
         else:
-            return "((ex1 {0}: 0<={0}&{0}<=max($) & {1} & " \
-                   "(all1 {2}: 0<={2}&{2}<={0} => {3})) | (all1 {2}: " \
-                   "0<={2}&{2}<=max($) => {3}))".format(ex_var, f1, all_var, f2)
+            return (
+                "((ex1 {0}: 0<={0}&{0}<=max($) & {1} & "
+                "(all1 {2}: 0<={2}&{2}<={0} => {3})) | (all1 {2}: "
+                "0<={2}&{2}<=max($) => {3}))".format(ex_var, f1, all_var, f2)
+            )
 
     # def to_ldlf(self):
     #     """Convert the formula to LDLf."""

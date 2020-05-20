@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""
-This module contains the implementation of Past Linear Temporal Logic on finite traces.
-"""
+"""This module contains the implementation of Past Linear Temporal Logic on finite traces."""
 
 from abc import abstractmethod, ABC
 from typing import Set
@@ -263,9 +261,13 @@ class PLTLfBefore(PLTLfUnaryOperator):
         """Return the MONA encoding of a PLTLf Before formula."""
         ex_var = new_var(v)
         if v != "max($)":
-            return "(ex1 {0}: {0}={1}-1 & {0}>=0 & {2})".format(ex_var, v, self.f.to_mona(ex_var))
+            return "(ex1 {0}: {0}={1}-1 & {0}>=0 & {2})".format(
+                ex_var, v, self.f.to_mona(ex_var)
+            )
         else:
-            return "(ex1 {0}: {0}=max($)-1 & max($)>0 & {1})".format(ex_var, self.f.to_mona(ex_var))
+            return "(ex1 {0}: {0}=max($)-1 & max($)>0 & {1})".format(
+                ex_var, self.f.to_mona(ex_var)
+            )
 
     # def to_ldlf(self):
     #     return LDLfDiamond(
@@ -301,11 +303,19 @@ class PLTLfSince(PLTLfBinaryOperator):
             else self.formulas[1].to_mona(v=ex_var)
         )
         if v != "max($)":
-            return "(ex1 {0}: 0<={0}&{0}<={1} & {2} & " \
-                   "(all1 {3}: {0}<{3}&{3}<={1} => {4}))".format(ex_var, v, f2, all_var, f1)
+            return (
+                "(ex1 {0}: 0<={0}&{0}<={1} & {2} & "
+                "(all1 {3}: {0}<{3}&{3}<={1} => {4}))".format(
+                    ex_var, v, f2, all_var, f1
+                )
+            )
         else:
-            return "(ex1 {0}: 0<={0}&{0}<=max($) & {1} & " \
-                   "(all1 {2}: {0}<{2}&{2}<=max($) => {3}))".format(ex_var, f2, all_var, f1)
+            return (
+                "(ex1 {0}: 0<={0}&{0}<=max($) & {1} & "
+                "(all1 {2}: {0}<{2}&{2}<=max($) => {3}))".format(
+                    ex_var, f2, all_var, f1
+                )
+            )
 
     # def to_ldlf(self):
     #     f1 = self.formulas[0].to_ldlf()

@@ -18,7 +18,9 @@ from ltlf2dfa.pltlf import (
     PLTLfFalse,
 )
 from ltlf2dfa.parser.pltlf import PLTLfParser
-from ltlf2dfa.pl import PLAtomic, PLTrue, PLFalse, PLAnd, PLOr
+
+# from ltlf2dfa.pl import PLAtomic, PLTrue, PLFalse, PLAnd, PLOr
+
 # from .conftest import LTLfFixtures
 from .parsing import ParsingCheck
 
@@ -71,7 +73,9 @@ def test_nnf():
     assert f.to_nnf() == PLTLfAnd([a, PLTLfNot(b)])
 
     f = parser("!(a <-> b)")
-    assert f.to_nnf() == PLTLfAnd([PLTLfOr([PLTLfNot(a), PLTLfNot(b)]), PLTLfOr([a, b])])
+    assert f.to_nnf() == PLTLfAnd(
+        [PLTLfOr([PLTLfNot(a), PLTLfNot(b)]), PLTLfOr([a, b])]
+    )
 
     # Next and Weak Next
     # f = parser("!(X (a & b))")
@@ -115,24 +119,39 @@ def test_mona():
     assert f.to_mona(v="max($)") == "~((~((max($) in A)) | (max($) in B)))"
 
     f = parser("!(a <-> b)")
-    assert f.to_nnf().to_mona(v="max($)") == "((~((max($) in A)) | ~((max($) in B))) & ((max($) in A) | (max($) in B)))"
+    assert (
+        f.to_nnf().to_mona(v="max($)")
+        == "((~((max($) in A)) | ~((max($) in B))) & ((max($) in A) | (max($) in B)))"
+    )
 
     # Before
     f = parser("Y(a & b)")
-    assert f.to_mona(v="max($)") == "(ex1 v_1: v_1=max($)-1 & max($)>0 & ((v_1 in A) & (v_1 in B)))"
+    assert (
+        f.to_mona(v="max($)")
+        == "(ex1 v_1: v_1=max($)-1 & max($)>0 & ((v_1 in A) & (v_1 in B)))"
+    )
 
     # Since
     f = parser("a S b")
-    assert f.to_mona(v="max($)") == "(ex1 v_1: 0<=v_1&v_1<=max($) & (v_1 in B) & (all1 v_2: v_1<v_2&v_2<=max($)" \
-                                 " => (v_2 in A)))"
+    assert (
+        f.to_mona(v="max($)")
+        == "(ex1 v_1: 0<=v_1&v_1<=max($) & (v_1 in B) & (all1 v_2: v_1<v_2&v_2<=max($)"
+        " => (v_2 in A)))"
+    )
 
     # Once and Historically
     f = parser("O(a & b)")
-    assert f.to_mona(v="max($)") == "(ex1 v_1: 0<=v_1&v_1<=max($) & ((v_1 in A) & (v_1 in B)) & (all1 v_2: " \
-                                 "v_1<v_2&v_2<=max($) => true))"
+    assert (
+        f.to_mona(v="max($)")
+        == "(ex1 v_1: 0<=v_1&v_1<=max($) & ((v_1 in A) & (v_1 in B)) & (all1 v_2: "
+        "v_1<v_2&v_2<=max($) => true))"
+    )
     f = parser("H(a | b)")
-    assert f.to_mona(v="max($)") == "~((ex1 v_1: 0<=v_1&v_1<=max($) & ~(((v_1 in A) | (v_1 in B))) & (all1 v_2: " \
-                                 "v_1<v_2&v_2<=max($) => true)))"
+    assert (
+        f.to_mona(v="max($)")
+        == "~((ex1 v_1: 0<=v_1&v_1<=max($) & ~(((v_1 in A) | (v_1 in B))) & (all1 v_2: "
+        "v_1<v_2&v_2<=max($) => true)))"
+    )
 
 
 # @pytest.fixture(scope="session", params=LTLfFixtures.ltlf_formulas)

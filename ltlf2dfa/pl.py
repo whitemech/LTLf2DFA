@@ -10,13 +10,7 @@ from typing import Set, Any, Optional
 # from sympy.logic.boolalg import Boolean, BooleanTrue, BooleanFalse
 # from pythomata import PropositionalInterpretation
 
-from ltlf2dfa.base import (
-    Formula,
-    AtomicFormula,
-    BinaryOperator,
-    UnaryOperator,
-    AtomSymbol,
-)
+from ltlf2dfa.base import Formula, AtomicFormula, BinaryOperator, UnaryOperator
 from ltlf2dfa.symbols import Symbols, OpSymbol
 
 
@@ -51,6 +45,13 @@ class PLFormula(Formula):
     @abstractmethod
     def negate(self) -> "PLFormula":
         """Negate the formula. Used by 'to_nnf'."""
+
+    def to_mona(self, v: str) -> str:
+        """
+        Tranform the PL formula into its encoding in MONA.
+
+        :return: a string.
+        """
 
 
 # def to_sympy(

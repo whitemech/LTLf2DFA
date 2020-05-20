@@ -102,7 +102,7 @@ class MonaProgram:
     """Implements a MONA program."""
 
     header = "m2l-str"
-    vars = set()
+    vars: Set[str] = set()
 
     def __init__(self, f: Formula, i: str):
         """Initialize.
@@ -126,12 +126,17 @@ class MonaProgram:
     def mona_program(self) -> str:
         """Construct the MONA program."""
         if self.vars:
-            return "#{};\n{};\nvar2 {};\n{};\n".format(str(self.formula), self.header,
-                                                       ", ".join(self.vars), self.formula.to_mona(self.instant))
+            return "#{};\n{};\nvar2 {};\n{};\n".format(
+                str(self.formula),
+                self.header,
+                ", ".join(self.vars),
+                self.formula.to_mona(self.instant),
+            )
         else:
-            return "#{};\n{};\n{};\n".format(str(self.formula), self.header,
-                                             self.formula.to_mona(self.instant))
-        
+            return "#{};\n{};\n{};\n".format(
+                str(self.formula), self.header, self.formula.to_mona(self.instant)
+            )
+
 
 class Operator(Formula, ABC):
     """Implements an operator."""
