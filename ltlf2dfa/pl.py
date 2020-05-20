@@ -4,19 +4,13 @@
 
 import functools
 from abc import abstractmethod, ABC
-from typing import Set, Any, Dict, Optional
+from typing import Set, Any, Optional
 
-import sympy
-from sympy.logic.boolalg import Boolean, BooleanTrue, BooleanFalse
+# import sympy
+# from sympy.logic.boolalg import Boolean, BooleanTrue, BooleanFalse
 # from pythomata import PropositionalInterpretation
 
-from ltlf2dfa.base import (
-    Formula,
-    AtomicFormula,
-    BinaryOperator,
-    UnaryOperator,
-    AtomSymbol,
-)
+from ltlf2dfa.base import Formula, AtomicFormula, BinaryOperator, UnaryOperator
 from ltlf2dfa.symbols import Symbols, OpSymbol
 
 
@@ -52,55 +46,58 @@ class PLFormula(Formula):
     def negate(self) -> "PLFormula":
         """Negate the formula. Used by 'to_nnf'."""
 
+    def to_mona(self, v: Optional[Any] = None) -> str:
+        """
+        Tranform the PL formula into its encoding in MONA.
 
-def to_sympy(
-    formula: Formula, replace: Optional[Dict[AtomSymbol, sympy.Symbol]] = None
-) -> Boolean:
-    """
-    Translate a PLFormula object into a SymPy expression.
+        :return: a string.
+        """
 
-    :param formula: the formula to translate.
-    :param replace: an optional mapping from symbols to replace to other replacement symbols.
-    :return: the SymPy formula object equivalent to the formula.
-    """
-    if replace is None:
-        replace = {}
 
-    if isinstance(formula, PLTrue):
-        return BooleanTrue()
-    elif isinstance(formula, PLFalse):
-        return BooleanFalse()
-    elif isinstance(formula, PLAtomic):
-        symbol = replace.get(formula.s, formula.s)
-        return sympy.Symbol(symbol)
-    elif isinstance(formula, PLNot):
-        return sympy.Not(to_sympy(formula.f, replace=replace))
-    elif isinstance(formula, PLOr):
-        return sympy.simplify(
-            sympy.Or(*[to_sympy(f, replace=replace) for f in formula.formulas])
-        )
-    elif isinstance(formula, PLAnd):
-        return sympy.simplify(
-            sympy.And(*[to_sympy(f, replace=replace) for f in formula.formulas])
-        )
-    elif isinstance(formula, PLImplies):
-        return sympy.simplify(
-            sympy.Implies(*[to_sympy(f, replace=replace) for f in formula.formulas])
-        )
-    elif isinstance(formula, PLEquivalence):
-        return sympy.simplify(
-            sympy.Equivalent(*[to_sympy(f, replace=replace) for f in formula.formulas])
-        )
-    else:
-        raise ValueError("Formula is not valid.")
+# def to_sympy(
+#     formula: Formula, replace: Optional[Dict[AtomSymbol, sympy.Symbol]] = None
+# ) -> Boolean:
+#     """
+#     Translate a PLFormula object into a SymPy expression.
+#
+#     :param formula: the formula to translate.
+#     :param replace: an optional mapping from symbols to replace to other replacement symbols.
+#     :return: the SymPy formula object equivalent to the formula.
+#     """
+#     if replace is None:
+#         replace = {}
+#
+#     if isinstance(formula, PLTrue):
+#         return BooleanTrue()
+#     elif isinstance(formula, PLFalse):
+#         return BooleanFalse()
+#     elif isinstance(formula, PLAtomic):
+#         symbol = replace.get(formula.s, formula.s)
+#         return sympy.Symbol(symbol)
+#     elif isinstance(formula, PLNot):
+#         return sympy.Not(to_sympy(formula.f, replace=replace))
+#     elif isinstance(formula, PLOr):
+#         return sympy.simplify(
+#             sympy.Or(*[to_sympy(f, replace=replace) for f in formula.formulas])
+#         )
+#     elif isinstance(formula, PLAnd):
+#         return sympy.simplify(
+#             sympy.And(*[to_sympy(f, replace=replace) for f in formula.formulas])
+#         )
+#     elif isinstance(formula, PLImplies):
+#         return sympy.simplify(
+#             sympy.Implies(*[to_sympy(f, replace=replace) for f in formula.formulas])
+#         )
+#     elif isinstance(formula, PLEquivalence):
+#         return sympy.simplify(
+#             sympy.Equivalent(*[to_sympy(f, replace=replace) for f in formula.formulas])
+#         )
+#     else:
+#         raise ValueError("Formula is not valid.")
 
 
 class PLAtomic(AtomicFormula, PLFormula):
     """A class to represent propositional atomic formulas."""
-
-    # def truth(self, i: PropositionalInterpretation, *args):
-    #     """Evaluate the formula."""
-    #     return i.get(self.s, False)
 
     def find_labels(self) -> Set[Any]:
         """Return the set of symbols."""
@@ -179,10 +176,6 @@ class PLNot(UnaryOperator[PLFormula], PLFormula):
         """Get the operator symbol."""
         return Symbols.NOT.value
 
-    # def truth(self, i: PropositionalInterpretation):
-    #     """Evaluate the formula."""
-    #     return not self.f.truth(i)
-
     def to_nnf(self):
         """Transform in NNF."""
         if not isinstance(self.f, AtomicFormula):
@@ -206,10 +199,6 @@ class PLOr(PLBinaryOperator):
         """Get the operator symbol."""
         return Symbols.OR.value
 
-    # def truth(self, i: PropositionalInterpretation):
-    #     """Evaluate the formula."""
-    #     return any(f.truth(i) for f in self.formulas)
-
     def to_nnf(self):
         """Transform in NNF."""
         return PLOr([f.to_nnf() for f in self.formulas])
@@ -227,10 +216,6 @@ class PLAnd(PLBinaryOperator):
         """Get the operator symbol."""
         return Symbols.AND.value
 
-    # def truth(self, i: PropositionalInterpretation):
-    #     """Evaluate the formula."""
-    #     return all(f.truth(i) for f in self.formulas)
-
     def to_nnf(self):
         """Transform in NNF."""
         return PLAnd([f.to_nnf() for f in self.formulas])
@@ -247,10 +232,6 @@ class PLImplies(PLBinaryOperator):
     def operator_symbol(self) -> OpSymbol:
         """Get the operator symbol."""
         return Symbols.IMPLIES.value
-
-    # def truth(self, i: PropositionalInterpretation):
-    #     """Evaluate the formula."""
-    #     return self.to_nnf().truth(i)
 
     def negate(self) -> PLFormula:
         """Negate the formula."""
@@ -272,10 +253,6 @@ class PLEquivalence(PLBinaryOperator):
     def operator_symbol(self) -> OpSymbol:
         """Get the operator symbol."""
         return Symbols.EQUIVALENCE.value
-
-    # def truth(self, i: PropositionalInterpretation):
-    #     """Evaluate the formula."""
-    #     return self.to_nnf().truth(i)
 
     def to_nnf(self):
         """Transform in NNF."""

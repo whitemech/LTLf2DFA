@@ -4,12 +4,13 @@
 
 from abc import ABC, abstractmethod
 from copy import copy
+
 # from itertools import chain, combinations
 # from typing import Iterable, Set, FrozenSet, List
 
 # from pythomata import PropositionalInterpretation as PropInt
-from sympy import Symbol
-from sympy.logic.boolalg import Boolean, BooleanFalse, BooleanTrue
+# from sympy import Symbol
+# from sympy.logic.boolalg import Boolean, BooleanFalse, BooleanTrue
 
 from ltlf2dfa.symbols import Symbols
 
@@ -136,6 +137,16 @@ class Wrapper(Hashable):
 #     combs = chain.from_iterable(combinations(s_list, r) for r in range(len(s_list) + 1))
 #     for c in combs:
 #         yield c
+
+
+def new_var(prev_var: str) -> str:
+    """Compute next variable."""
+    if prev_var == "0" or prev_var == "max($)":
+        return "v_1"
+    else:
+        s = prev_var.split("_")
+        s[1] = str(int(s[1]) + 1)
+        return "_".join(s)
 
 
 def sym2regexp(sym: Symbols):

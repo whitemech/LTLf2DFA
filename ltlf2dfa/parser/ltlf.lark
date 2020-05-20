@@ -26,7 +26,6 @@ start: ltlf_formula
           |        ltlf_true
           |        ltlf_false
           |        ltlf_last
-          |        ltlf_end
 
 ltlf_symbol: SYMBOL_NAME
 ltlf_true: prop_true

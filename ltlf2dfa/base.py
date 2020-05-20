@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 
 """Base classes for the implementation of a generic syntax tree."""
-from abc import abstractmethod, ABC
-from typing import Sequence, Set, Tuple, TypeVar, Generic, cast, Union, Dict
-import re
 
-# from pythomata import PropositionalInterpretation
+from abc import abstractmethod, ABC
+from typing import Sequence, Set, Tuple, TypeVar, Generic, cast, Union, Optional, Any
+import re
 
 from ltlf2dfa.symbols import Symbols, OpSymbol
 from ltlf2dfa.helpers import Hashable, Wrapper
 
-# FiniteTrace = Sequence[PropositionalInterpretation]
 AtomSymbol = Union["QuotedFormula", str]
 
 
@@ -29,6 +27,10 @@ class Formula(Hashable, ABC):
     def negate(self) -> "Formula":
         """Negate the formula. Used by 'to_nnf'."""
 
+    @abstractmethod
+    def to_mona(self, v: Optional[Any] = None) -> str:
+        """Transform the formula in MONA."""
+
 
 class AtomicFormula(Formula, ABC):
     """An abstract atomic formula.
@@ -43,8 +45,8 @@ class AtomicFormula(Formula, ABC):
     def __init__(self, s: Union[AtomSymbol, Formula]):
         """Inintializes the atomic formula.
 
-        :param s: the atomic symbol. Formulae are implicitly converted to
-            quoted formulae.
+        :param s: the atomic symbol. Formulas are implicitly converted to
+            quoted formulas.
         """
         super().__init__()
 
@@ -94,6 +96,44 @@ class QuotedFormula(Wrapper):
     def __repr__(self):
         """Nice representation."""
         return str(self)
+
+
+class MonaProgram:
+    """Implements a MONA program."""
+
+    header = "m2l-str"
+    vars: Set[str] = set()
+
+    def __init__(self, f: Formula):
+        """Initialize.
+
+        :param f: formula to encode.
+        :param i: instant of evaluation in the trace.
+        """
+        self.formula = f
+        self._set_vars()
+
+    def _set_vars(self):
+        """Set MONA vars."""
+        self.vars = set([v.upper() for v in self.formula.find_labels()])
+
+    def __repr__(self):
+        """Nice representation."""
+        return str(self)
+
+    def mona_program(self) -> str:
+        """Construct the MONA program."""
+        if self.vars:
+            return "#{};\n{};\nvar2 {};\n{};\n".format(
+                str(self.formula),
+                self.header,
+                ", ".join(self.vars),
+                self.formula.to_mona(),
+            )
+        else:
+            return "#{};\n{};\n{};\n".format(
+                str(self.formula), self.header, self.formula.to_mona()
+            )
 
 
 class Operator(Formula, ABC):
@@ -177,89 +217,3 @@ class BinaryOperator(Generic[T], Operator, ABC):
     def to_nnf(self):
         """Transform in NNF."""
         return type(self)([f.to_nnf() for f in self.formulas])
-
-
-# class PropositionalTruth:
-#     """Interface for propositional formulas."""
-#
-#     @abstractmethod
-#     def truth(self, i: PropositionalInterpretation) -> bool:
-#         """
-#         Return the truth evaluation of the formula wrt the propositional interpretation.
-#
-#         :param i: the propositional interpretation.
-#         :return: True if the formula is satisfied by the interpretation, False otherwise.
-#         """
-
-#
-# class FiniteTraceTruth:
-#     """Interface for formulas that support the trace semantics."""
-#
-#     @abstractmethod
-#     def truth(self, i: FiniteTrace, pos: int = 0) -> bool:
-#         """
-#         Return the truth evaluation of the formula wrt the trace.
-#
-#         :param i: the trace.
-#         :param pos: the position from where to start the evaluation
-#         :return: True if the formula is satisfied by the trace, False otherwise.
-#         """
-
-
-# class RegExpTruth:
-#     """Interface for regular expression semantics."""
-#
-#     @abstractmethod
-#     def truth(self, tr: FiniteTrace, start: int = 0, end: int = 0) -> bool:
-#         """
-#         Return the truth evaluation of the regex wrt the trace.
-#
-#         :param tr: the trace.
-#         :param start: the start index.
-#         :param end: the end index.
-#         :return: True if the regex is satisfied by the trace, False otherwise.
-#         """
-
-
-# class FiniteTraceWrapper(Wrapper, PropositionalTruth, FiniteTraceTruth):
-#     """Allow to valuate propositional sentences on finite traces.
-#
-#     This class wraps any propositional sentence, with follows the
-#     PropositionalTruth interface, and adds support for the FiniteTraceTruth
-#     interface.
-#     """
-#
-#     def __init__(self, prop: PropositionalTruth):
-#         """Wrap a propositional sentence."""
-#         Wrapper.__init__(self, prop)
-#
-#     def truth(
-#         self, i: Union[FiniteTrace, PropositionalInterpretation], pos: int = 0
-#     ) -> bool:
-#         """Return the truth of a propositional sentence.
-#
-#         In logics over finite traces, propositionals are used as descriptions
-#         for a set of interpretations. Any propositional sentence (even `true`)
-#         can only be satisfied in a valid instant of the trace: a proposition is
-#         true if the current instant contains an interpretation which satisfy
-#         the formula. Outside the trace everything is false.
-#
-#         This object still support the original interface, PropositionalTruth.
-#
-#         :param i: a proporitional interpretation or a trace
-#         :param pos: a position on the trace (ignored with prop interpretations)
-#         :return: Truth of this sentence.
-#         """
-#         # If prop
-#         if isinstance(i, Dict):
-#             return self.wrapped.truth(i)
-#
-#         # If trace
-#         elif isinstance(i, Sequence):
-#             if not (0 <= pos < len(i)):
-#                 return False
-#             else:
-#                 return self.wrapped.truth(i[pos])
-#
-#         else:
-#             raise TypeError("Interpretation type")
