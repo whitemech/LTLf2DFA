@@ -11,8 +11,6 @@ import signal
 from sympy import symbols, And, Not, Or, simplify
 
 from ltlf2dfa.base import MonaProgram
-from ltlf2dfa.ltlf import LTLfFormula
-from ltlf2dfa.pltlf import PLTLfFormula
 
 PACKAGE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -190,13 +188,7 @@ def output2dot(mona_output):
 
 def to_dfa(f) -> str:
     """Translate to deterministic finite-state automaton."""
-    instant = "0"
-    # check if f is a PLTLf formula
-    if isinstance(f, PLTLfFormula):
-        instant = "max($)"
-    else:
-        assert isinstance(f, LTLfFormula)
-    p = MonaProgram(f, instant)
+    p = MonaProgram(f)
     mona_p_string = p.mona_program()
     createMonafile(mona_p_string)
     mona_dfa = invoke_mona()

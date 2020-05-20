@@ -104,15 +104,13 @@ class MonaProgram:
     header = "m2l-str"
     vars: Set[str] = set()
 
-    def __init__(self, f: Formula, i: str):
+    def __init__(self, f: Formula):
         """Initialize.
 
         :param f: formula to encode.
         :param i: instant of evaluation in the trace.
         """
         self.formula = f
-        assert i == "0" or i == "max($)"
-        self.instant = i
         self._set_vars()
 
     def _set_vars(self):
@@ -130,11 +128,11 @@ class MonaProgram:
                 str(self.formula),
                 self.header,
                 ", ".join(self.vars),
-                self.formula.to_mona(self.instant),
+                self.formula.to_mona(),
             )
         else:
             return "#{};\n{};\n{};\n".format(
-                str(self.formula), self.header, self.formula.to_mona(self.instant)
+                str(self.formula), self.header, self.formula.to_mona()
             )
 
 
