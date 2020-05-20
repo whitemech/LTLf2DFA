@@ -3,7 +3,7 @@
 """This module contains the implementation of Linear Temporal Logic on finite traces."""
 
 from abc import abstractmethod, ABC
-from typing import Set
+from typing import Set, Optional, Any
 import re
 
 from ltlf2dfa.base import (
@@ -34,7 +34,7 @@ class LTLfFormula(Formula, ABC):
         """Get the representation."""
         return self.__str__()
 
-    def to_mona(self, v: str) -> str:
+    def to_mona(self, v: Optional[Any] = None) -> str:
         """
         Tranform the LTLf formula into its encoding in MONA.
 

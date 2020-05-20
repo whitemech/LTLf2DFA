@@ -19,7 +19,7 @@ with open(os.path.join(here, 'ltlf2dfa', '__version__.py'), 'r') as f:
 
 
 install_requires = [
-    "ply",
+    "lark-parser",
     "sympy"
 ]
 
@@ -45,9 +45,6 @@ setup(
     license=about["__license__"],
     keywords='ltlf2dfa',
     packages=find_packages(include=['ltlf2dfa*']),
-    entry_points={
-        'console_scripts': ["ltlf2dfa=ltlf2dfa.__main__:main"],
-    },
     test_suite='tests',
     tests_require=["pytest"],
     zip_safe=False,

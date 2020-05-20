@@ -3,7 +3,7 @@
 """Base classes for the implementation of a generic syntax tree."""
 
 from abc import abstractmethod, ABC
-from typing import Sequence, Set, Tuple, TypeVar, Generic, cast, Union
+from typing import Sequence, Set, Tuple, TypeVar, Generic, cast, Union, Optional, Any
 import re
 
 from ltlf2dfa.symbols import Symbols, OpSymbol
@@ -28,7 +28,7 @@ class Formula(Hashable, ABC):
         """Negate the formula. Used by 'to_nnf'."""
 
     @abstractmethod
-    def to_mona(self, v: str) -> str:
+    def to_mona(self, v: Optional[Any] = None) -> str:
         """Transform the formula in MONA."""
 
 

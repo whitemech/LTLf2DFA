@@ -46,7 +46,7 @@ class PLFormula(Formula):
     def negate(self) -> "PLFormula":
         """Negate the formula. Used by 'to_nnf'."""
 
-    def to_mona(self, v: str) -> str:
+    def to_mona(self, v: Optional[Any] = None) -> str:
         """
         Tranform the PL formula into its encoding in MONA.
 
