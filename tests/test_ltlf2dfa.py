@@ -121,7 +121,7 @@ def test_ltlf_dfa():
 
     f = parser("a U b")
     dfa = f.to_dfa()
-    expected = """digraph MONA_DFA {
+    expected1 = """digraph MONA_DFA {
  rankdir = LR;
  center = true;
  size = "7.5,10.5";
@@ -140,32 +140,50 @@ def test_ltlf_dfa():
  4 -> 3 [label="b"];
  4 -> 4 [label="a & ~b"];
 }"""
+    expected2 = """digraph MONA_DFA {
+ rankdir = LR;
+ center = true;
+ size = "7.5,10.5";
+ edge [fontname = Courier];
+ node [height = .5, width = .5];
+ node [shape = doublecircle]; 3;
+ node [shape = circle]; 1;
+ init [shape = plaintext, label = ""];
+ init -> 1;
+ 1 -> 2 [label="~a & ~b"];
+ 1 -> 3 [label="a & ~b"];
+ 1 -> 4 [label="b"];
+ 2 -> 2 [label="true"];
+ 3 -> 2 [label="~a & ~b"];
+ 3 -> 3 [label="a & ~b"];
+ 3 -> 4 [label="b"];
+ 4 -> 4 [label="true"];
+}"""
+    assert dfa == expected1 or expected2
+
+    f = parser("G(a) & F(b)")
+    dfa = f.to_dfa()
+    expected = """digraph MONA_DFA {
+ rankdir = LR;
+ center = true;
+ size = "7.5,10.5";
+ edge [fontname = Courier];
+ node [height = .5, width = .5];
+ node [shape = doublecircle]; 4;
+ node [shape = circle]; 1;
+ init [shape = plaintext, label = ""];
+ init -> 1;
+ 1 -> 2 [label="~a"];
+ 1 -> 3 [label="a & ~b"];
+ 1 -> 4 [label="a & b"];
+ 2 -> 2 [label="true"];
+ 3 -> 2 [label="~a"];
+ 3 -> 3 [label="a & ~b"];
+ 3 -> 4 [label="a & b"];
+ 4 -> 2 [label="~a"];
+ 4 -> 4 [label="a"];
+}"""
     assert dfa == expected
-
-
-#     f = parser("G(a) & F(b)")
-#     dfa = f.to_dfa()
-#     expected = """digraph MONA_DFA {
-#  rankdir = LR;
-#  center = true;
-#  size = "7.5,10.5";
-#  edge [fontname = Courier];
-#  node [height = .5, width = .5];
-#  node [shape = doublecircle]; 4;
-#  node [shape = circle]; 1;
-#  init [shape = plaintext, label = ""];
-#  init -> 1;
-#  1 -> 2 [label="~a"];
-#  1 -> 3 [label="a & ~b"];
-#  1 -> 4 [label="a & b"];
-#  2 -> 2 [label="true"];
-#  3 -> 2 [label="~a"];
-#  3 -> 3 [label="a & ~b"];
-#  3 -> 4 [label="a & b"];
-#  4 -> 2 [label="~a"];
-#  4 -> 4 [label="a"];
-# }"""
-#     assert dfa == expected
 
 
 def test_pltlf_dfa():

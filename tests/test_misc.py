@@ -10,12 +10,11 @@ def test_ltlf_example_readme():
     formula = "G(a -> X b)"
     parsed_formula = parser(formula)
 
-    assert (
-        str(parsed_formula) == "G((a -> X(b)))"
-    )
+    assert str(parsed_formula) == "G((a -> X(b)))"
     assert parsed_formula.find_labels() == {c for c in "ab"}
 
     # dfa = parsed_formula.to_dfa()
+
 
 def test_pltlf_example_readme():
     from ltlf2dfa.parser.pltlf import PLTLfParser
@@ -24,9 +23,7 @@ def test_pltlf_example_readme():
     formula = "H(a -> Y b)"
     parsed_formula = parser(formula)
 
-    assert (
-        str(parsed_formula) == "H((a -> Y(b)))"
-    )
+    assert str(parsed_formula) == "H((a -> Y(b)))"
     assert parsed_formula.find_labels() == {c for c in "ab"}
 
     # dfa = parsed_formula.to_dfa()
