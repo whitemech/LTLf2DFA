@@ -1,0 +1,30 @@
+start: propositional_formula
+
+?propositional_formula: prop_equivalence
+?prop_equivalence: prop_implication (EQUIVALENCE prop_implication)*
+?prop_implication: prop_or (IMPLY prop_or)*
+?prop_or: prop_and (OR prop_and)*
+?prop_and: prop_not (AND prop_not)*
+?prop_not: NOT* prop_wrapped
+?prop_wrapped: prop_atom
+            | LSEPARATOR propositional_formula RSEPARATOR
+?prop_atom: atom
+	     | prop_true
+	     | prop_false
+
+atom: SYMBOL_NAME
+prop_true: TRUE
+prop_false: FALSE
+
+LSEPARATOR: "("
+RSEPARATOR: ")"
+EQUIVALENCE: "<->" | "<=>"
+IMPLY: "->" | "=>"
+OR: "||" | "|"
+AND: "&&" | "&"
+NOT: "!" | "~"
+SYMBOL_NAME: /(\w+)|(".*")/
+TRUE.2: /(?i:true)/
+FALSE.2: /(?i:false)/
+
+%ignore /\s+/

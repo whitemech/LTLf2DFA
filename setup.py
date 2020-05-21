@@ -1,32 +1,52 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""The setup script."""
+import os
+
 from setuptools import setup, find_packages
 
 with open('README.md') as readme_file:
     readme = readme_file.read()
 
-requirements = ['ply', 'dotpy']
+with open('HISTORY.md') as history_file:
+    history = history_file.read()
+
+here = os.path.abspath(os.path.dirname(__file__))
+about = {}
+with open(os.path.join(here, 'ltlf2dfa', '__version__.py'), 'r') as f:
+    exec(f.read(), about)
+
+
+install_requires = [
+    "lark-parser",
+    "sympy"
+]
 
 setup(
-    author="Francesco Fuggitti",
-    author_email='francesco.fuggitti@gmail.com',
+    name=about['__title__'],
+    description=about['__description__'],
+    version=about['__version__'],
+    author=about['__author__'],
+    url=about['__url__'],
+    author_email=about["__author_email__"],
+    long_description=readme + '\n\n' + history,
+    long_description_content_type="text/markdown",
     classifiers=[
-        'Development Status :: 1 - Planning',
+        'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Education',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: GNU General Public License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
-        'Operating System :: POSIX :: Linux',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
     ],
-    description="A tool for generating a DFA from an LTLf formula",
-    install_requires=requirements,
-    license="MIT license",
-    long_description=readme,
-    long_description_content_type="text/markdown",
-    include_package_data=True,
+    install_requires=install_requires,
+    license=about["__license__"],
     keywords='ltlf2dfa',
-    name='ltlf2dfa',
     packages=find_packages(include=['ltlf2dfa*']),
-    url='https://github.com/Francesco17/LTLf2DFA',
-    version='0.2.2.post0',
+    test_suite='tests',
+    tests_require=["pytest"],
+    zip_safe=False,
 )
