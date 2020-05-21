@@ -110,6 +110,13 @@ class PLAtomic(AtomicFormula, PLFormula):
         """Negate the formula."""
         return PLNot(self)
 
+    def to_mona(self, v="0") -> str:
+        """Return the MONA encoding of a PL atomic formula."""
+        if v != "0":
+            return "({} in {})".format(v, self.s.upper())
+        else:
+            return "(0 in {})".format(self.s.upper())
+
 
 class PLBinaryOperator(BinaryOperator[PLFormula], PLFormula, ABC):
     """An operator for Propositional Logic."""
@@ -126,10 +133,6 @@ class PLTrue(PLAtomic):
     def __init__(self):
         """Initialize the PL true formula."""
         PLAtomic.__init__(self, Symbols.TRUE.value)
-
-    def truth(self, *args):
-        """Evaluate the formula."""
-        return True
 
     def negate(self) -> "PLFalse":
         """Negate the formula."""
@@ -150,10 +153,6 @@ class PLFalse(PLAtomic):
     def __init__(self):
         """Initialize the formula."""
         PLAtomic.__init__(self, Symbols.FALSE.value)
-
-    def truth(self, *args):
-        """Evaluate the formula."""
-        return False
 
     def negate(self) -> "PLTrue":
         """Negate the formula."""

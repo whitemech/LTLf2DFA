@@ -30,7 +30,6 @@ UNSAT_DOT = """digraph MONA_DFA {
 
 def get_value(text, regex, value_type=float):
     """Dump a value from a file based on a regex passed in."""
-    # Get the text of the time
     pattern = re.compile(regex, re.MULTILINE)
     results = pattern.search(text)
     if results:
@@ -56,7 +55,7 @@ def ter2symb(ap, ternary):
     return expr
 
 
-def simp_guard(guards):
+def simplify_guard(guards):
     """Make a big OR among guards and simplify them."""
     final = Or()
     for g in guards:
@@ -113,7 +112,7 @@ def parse_mona(mona_output):
                     dot_trans[(orig_state, dest_state)] = [guard]
 
     for c, guards in dot_trans.items():
-        simplified_guard = simp_guard(guards)
+        simplified_guard = simplify_guard(guards)
         dot += ' {} -> {} [label="{}"];\n'.format(
             c[0], c[1], str(simplified_guard).lower()
         )

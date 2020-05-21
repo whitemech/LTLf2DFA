@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Test PLTLf."""
 import pytest
 import os
 import lark
@@ -106,22 +107,22 @@ def test_mona():
     tt = PLTLfTrue()
     ff = PLTLfFalse()
 
-    assert a.to_mona(v="max($)") == "(max($) in A)"
-    assert b.to_mona(v="max($)") == "(max($) in B)"
-    assert c.to_mona(v="max($)") == "(max($) in C)"
+    assert a.to_mona(v="max($)") == "(0 in A)"
+    assert b.to_mona(v="max($)") == "(0 in B)"
+    assert c.to_mona(v="max($)") == "(0 in C)"
     assert tt.to_mona(v="max($)") == "true"
     assert ff.to_mona(v="max($)") == "false"
 
     f = parser("!(a & !b)")
-    assert f.to_mona(v="max($)") == "~(((max($) in A) & ~((max($) in B))))"
+    assert f.to_mona(v="max($)") == "~(((0 in A) & ~((0 in B))))"
 
     f = parser("!(!a | b)")
-    assert f.to_mona(v="max($)") == "~((~((max($) in A)) | (max($) in B)))"
+    assert f.to_mona(v="max($)") == "~((~((0 in A)) | (0 in B)))"
 
     f = parser("!(a <-> b)")
     assert (
         f.to_nnf().to_mona(v="max($)")
-        == "((~((max($) in A)) | ~((max($) in B))) & ((max($) in A) | (max($) in B)))"
+        == "((~((0 in A)) | ~((0 in B))) & ((0 in A) | (0 in B)))"
     )
 
     # Before
