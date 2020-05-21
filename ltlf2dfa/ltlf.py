@@ -79,7 +79,7 @@ class LTLfAtomic(AtomicFormula, LTLfFormula):
         if v != "0":
             return "({} in {})".format(v, self.s.upper())
         else:
-            return "(0 in {})".format(self.s.upper())
+            return PLAtomic(self.s).to_mona()
 
     # def to_ldlf(self):
     #     """Convert the formula to LDLf."""

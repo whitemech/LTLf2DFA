@@ -142,6 +142,7 @@ def test_ltlf_dfa():
 }"""
     assert dfa == expected
 
+
 #     f = parser("G(a) & F(b)")
 #     dfa = f.to_dfa()
 #     expected = """digraph MONA_DFA {
@@ -165,9 +166,6 @@ def test_ltlf_dfa():
 #  4 -> 4 [label="a"];
 # }"""
 #     assert dfa == expected
-
-
-
 
 
 def test_pltlf_dfa():

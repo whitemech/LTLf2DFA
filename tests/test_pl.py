@@ -40,83 +40,10 @@ def test_parser():
     assert a_and_false_and_true == true_a_and_false_and_true
 
 
-# class TestTruth:
-#     @classmethod
-#     def setup_class(cls):
-#         cls.sa, cls.sb = "a", "b"
-#
-#         cls.i_ = {}
-#         cls.i_a = {cls.sa: True}
-#         cls.i_b = {cls.sb: True}
-#         cls.i_ab = {cls.sa: True, cls.sb: True}
-#
-#         cls.a, cls.b = PLAtomic(cls.sa), PLAtomic(cls.sb)
-#
-#     def test_atomic(self):
-#         a, b = self.a, self.b
-#         i_, i_a, i_b, i_ab = self.i_, self.i_a, self.i_b, self.i_ab
-#
-#         assert not a.truth(i_)
-#         assert a.truth(i_a)
-#         assert not a.truth(i_b)
-#         assert a.truth(i_ab)
-#
-#         assert not b.truth(i_)
-#         assert not b.truth(i_a)
-#         assert b.truth(i_b)
-#         assert b.truth(i_ab)
-#
-#     def test_and(self):
-#         a, b = self.a, self.b
-#         i_, i_a, i_b, i_ab = self.i_, self.i_a, self.i_b, self.i_ab
-#
-#         a_and_b = PLAnd([a, b])
-#         assert not a_and_b.truth(i_)
-#         assert not a_and_b.truth(i_a)
-#         assert not a_and_b.truth(i_b)
-#         assert a_and_b.truth(i_ab)
-#
-#         not_a_and_not_b = PLAnd([PLNot(a), PLNot(b)])
-#         assert not_a_and_not_b.truth(i_)
-#         assert not not_a_and_not_b.truth(i_a)
-#         assert not not_a_and_not_b.truth(i_b)
-#         assert not not_a_and_not_b.truth(i_ab)
-#
-#     def test_misc(self):
-#         a, b = self.a, self.b
-#         i_, i_a, i_b, i_ab = self.i_, self.i_a, self.i_b, self.i_ab
-#
-#         material_implication = PLEquivalence(
-#             [PLOr([PLNot(a), b]), PLNot(PLAnd([a, PLNot(b)])), PLImplies([a, b])]
-#         )
-#
-#         # the equivalence is valid (i.e. satisfied for every interpretation)
-#         assert material_implication.truth(i_)
-#         assert material_implication.truth(i_a)
-#         assert material_implication.truth(i_b)
-#         assert material_implication.truth(i_ab)
-#
-#         a_and_false_and_true = PLAnd([a, PLFalse(), PLTrue()])
-#         assert not a_and_false_and_true.truth(i_)
-#         assert not a_and_false_and_true.truth(i_a)
-#         assert not a_and_false_and_true.truth(i_b)
-#         assert not a_and_false_and_true.truth(i_ab)
-#
-#         a_or_false_or_true = PLOr([a, PLFalse(), PLTrue()])
-#         assert a_or_false_or_true.truth(i_)
-#         assert a_or_false_or_true.truth(i_a)
-#         assert a_or_false_or_true.truth(i_b)
-#         assert a_or_false_or_true.truth(i_ab)
-
-
 def test_nnf():
     parser = PLParser()
     sa, sb = "A", "B"
     a, b = PLAtomic(sa), PLAtomic(sb)
-    i_ = {}
-    i_a = {sa: True}
-    i_b = {sb: True}
-    i_ab = {sa: True, sb: True}
 
     not_a_and_b = parser("!(A&B)")
     nnf_not_a_and_b = parser("!A | !B")
@@ -133,31 +60,6 @@ def test_nnf():
     )
     nnf_m = material_implication.to_nnf()
     assert nnf_m == nnf_material_implication.to_nnf()
-
-    # assert (
-    #     nnf_m.truth(i_)
-    #     == material_implication.truth(i_)
-    #     == nnf_material_implication.truth(i_)
-    #     == True
-    # )
-    # assert (
-    #     nnf_m.truth(i_a)
-    #     == material_implication.truth(i_a)
-    #     == nnf_material_implication.truth(i_a)
-    #     == True
-    # )
-    # assert (
-    #     nnf_m.truth(i_b)
-    #     == material_implication.truth(i_b)
-    #     == nnf_material_implication.truth(i_b)
-    #     == True
-    # )
-    # assert (
-    #     nnf_m.truth(i_ab)
-    #     == material_implication.truth(i_ab)
-    #     == nnf_material_implication.truth(i_ab)
-    #     == True
-    # )
 
 
 def test_find_labels():
