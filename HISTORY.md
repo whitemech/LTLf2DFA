@@ -1,6 +1,11 @@
 # History
 
-## 0.3.0 (2020-05-20)
+## 1.0.0.post0 (2020-06-05)
+
+* Include *.lark files in the package build
+* New online version: [http://ltlf2dfa.diag.uniroma1.it/](http://ltlf2dfa.diag.uniroma1.it).
+
+## 1.0.0 (2020-05-20)
 
 * Refinement of all the grammars. Extensive improvement of the parsing.
 * Introduce interfaces and class hierarchy for the logic modules.

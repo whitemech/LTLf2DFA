@@ -3,6 +3,7 @@
 
 """The setup script."""
 import os
+import glob
 
 from setuptools import setup, find_packages
 
@@ -44,6 +45,10 @@ setup(
     ],
     install_requires=install_requires,
     license=about["__license__"],
+    include_package_data=True,
+    data_files=[
+        ("ltlf2dfa/parser", glob.glob("ltlf2dfa/parser/*.lark")),
+    ],
     keywords='ltlf2dfa',
     packages=find_packages(include=['ltlf2dfa*']),
     test_suite='tests',
