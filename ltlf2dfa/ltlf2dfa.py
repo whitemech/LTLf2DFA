@@ -185,10 +185,14 @@ def output2dot(mona_output):
         return parse_mona(mona_output)
 
 
-def to_dfa(f) -> str:
+def to_dfa(f, mona_dfa_out=False) -> str:
     """Translate to deterministic finite-state automaton."""
     p = MonaProgram(f)
     mona_p_string = p.mona_program()
     createMonafile(mona_p_string)
     mona_dfa = invoke_mona()
-    return output2dot(mona_dfa)
+    if mona_dfa_out:
+        return mona_dfa
+    else:
+        assert mona_dfa_out is False
+        return output2dot(mona_dfa)
