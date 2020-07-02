@@ -23,8 +23,8 @@ your system following the instructions [here](http://www.brics.dk/mona/download.
 
 This tool is also based on the following libraries:
 
-- [lark-parser 0.8.5](https://pypi.org/project/lark-parser/)
-- [sympy 1.5.1](https://pypi.org/project/sympy/)
+- [lark-parser 0.9.0](https://pypi.org/project/lark-parser/)
+- [sympy 1.6](https://pypi.org/project/sympy/)
 
 They are automatically added while installing LTL<sub>f</sub>2DFA.
 
@@ -41,7 +41,7 @@ pip install git+https://github.com/whitemech/LTLf2DFA.git
 
 - or, clone the repository and install:
 ```
-git clone htts://github.com/whitemech/LTLf2DFA.git
+git clone https://github.com/whitemech/LTLf2DFA.git
 cd ltlf2dfa
 pip install .
 ```
