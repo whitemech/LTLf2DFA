@@ -29,6 +29,7 @@ class Symbols(Enum):
     ROUND_BRACKET_LEFT = "("
     ROUND_BRACKET_RIGHT = ")"
     LAST = "last"
+    START = "start"
     END = "end"
     TRUE = "true"
     FALSE = "false"
