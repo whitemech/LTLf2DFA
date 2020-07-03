@@ -19,6 +19,7 @@ from ltlf2dfa.ltlf import (
     LTLfWeakNext,
     LTLfTrue,
     LTLfFalse,
+    LTLfLast,
 )
 from ltlf2dfa.parser.ltlf import LTLfParser
 
@@ -55,6 +56,8 @@ def test_parser():
             LTLfNot(LTLfRelease([LTLfNot(a), LTLfNot(b), LTLfNot(c)])),
         ]
     )
+
+    assert parser("a & last") == LTLfAnd([a, LTLfLast()])
 
 
 def test_names():

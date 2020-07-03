@@ -17,6 +17,7 @@ from ltlf2dfa.pltlf import (
     PLTLfBefore,
     PLTLfTrue,
     PLTLfFalse,
+    PLTLfStart,
 )
 from ltlf2dfa.parser.pltlf import PLTLfParser
 
@@ -48,6 +49,8 @@ def test_parser():
     )
 
     assert parser("(a S b S !c)") == PLTLfSince([a, b, PLTLfNot(c)])
+
+    assert parser("a & start") == PLTLfAnd([a, PLTLfStart()])
 
 
 def test_negate():

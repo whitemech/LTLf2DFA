@@ -371,7 +371,7 @@ class PLTLfHistorically(PLTLfUnaryOperator):
 
     def to_nnf(self) -> PLTLfFormula:
         """Transform to NNF."""
-        return PLTLfNot(PLTLfSince([PLTLfTrue(),  PLTLfNot(self.f.to_nnf())]))
+        return PLTLfNot(PLTLfSince([PLTLfTrue(), PLTLfNot(self.f.to_nnf())]))
 
     def negate(self) -> PLTLfFormula:
         """Negate the formula."""
