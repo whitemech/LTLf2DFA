@@ -71,6 +71,10 @@ def test_negate():
     not_true_since_a = PLTLfNot(PLTLfSince([PLTLfTrue(), a]))
     assert once_a.negate() == not_true_since_a
 
+    historically_a = PLTLfHistorically(a)
+    true_since_not_a = PLTLfSince([PLTLfTrue(), PLTLfNot(a)])
+    assert historically_a.negate() == true_since_not_a
+
 
 def test_names():
 

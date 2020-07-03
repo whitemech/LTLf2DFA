@@ -369,9 +369,9 @@ class PLTLfHistorically(PLTLfUnaryOperator):
         """Get the operator symbol."""
         return Symbols.HISTORICALLY.value
 
-    # def to_nnf(self) -> PLTLfFormula:
-    #     """Transform to NNF."""
-    #     return PLTLfRelease([PLTLfFalse(), self.f.to_nnf()])
+    def to_nnf(self) -> PLTLfFormula:
+        """Transform to NNF."""
+        return PLTLfNot(PLTLfSince([PLTLfTrue(),  PLTLfNot(self.f.to_nnf())]))
 
     def negate(self) -> PLTLfFormula:
         """Negate the formula."""
