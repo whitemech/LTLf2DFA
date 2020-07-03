@@ -48,9 +48,13 @@ class LTLfFormula(Formula, ABC):
         :return: an LDLf formula.
         """
 
-    def to_dfa(self) -> str:
-        """Translate into a DFA."""
-        return to_dfa(self)
+    def to_dfa(self, mona_dfa_out: bool = False) -> str:
+        """
+        Translate into a DFA.
+
+        :param mona_dfa_out: flag for DFA output in MONA syntax.
+        """
+        return to_dfa(self, mona_dfa_out)
 
 
 class LTLfUnaryOperator(UnaryOperator[LTLfFormula], LTLfFormula, ABC):
@@ -526,6 +530,10 @@ class LTLfLast(LTLfFormula):
     def __str__(self):
         """Get the string representation."""
         return Symbols.LAST.value
+
+    def to_mona(self, v="0") -> str:
+        """Return the MONA encoding of an LTLf Last formula."""
+        return LTLfWeakNext(LTLfFalse()).to_mona(v)
 
     # def to_ldlf(self):
     #     """Convert the formula to LDLf."""

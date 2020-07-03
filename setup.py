@@ -3,6 +3,7 @@
 
 """The setup script."""
 import os
+import glob
 
 from setuptools import setup, find_packages
 
@@ -35,7 +36,7 @@ setup(
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Education',
-        'License :: OSI Approved :: GNU General Public License',
+        'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
@@ -44,6 +45,10 @@ setup(
     ],
     install_requires=install_requires,
     license=about["__license__"],
+    include_package_data=True,
+    data_files=[
+        ("ltlf2dfa/parser", glob.glob("ltlf2dfa/parser/*.lark")),
+    ],
     keywords='ltlf2dfa',
     packages=find_packages(include=['ltlf2dfa*']),
     test_suite='tests',

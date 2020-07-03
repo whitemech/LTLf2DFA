@@ -22,12 +22,12 @@ start: pltlf_formula
 ?pltlf_atom:       pltlf_symbol
            |       pltlf_true
            |       pltlf_false
-           |       pltlf_last
+           |       pltlf_start
 
 pltlf_symbol: SYMBOL_NAME
 pltlf_true: prop_true
 pltlf_false: prop_false
-pltlf_last: START
+pltlf_start: START
 
 // Operators must not be part of a word
 SINCE.2: /S(?=[^a-z]|$)/

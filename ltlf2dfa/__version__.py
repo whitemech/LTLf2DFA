@@ -3,9 +3,9 @@
 
 __title__ = "ltlf2dfa"
 __description__ = "LTLf and PLTLf to Deterministic Finite-state Automata (DFA)"
-__url__ = "https://github.com/francescofuggitti/ltlf2dfa.git"
-__version__ = "0.3.0"
+__url__ = "https://github.com/whitemech/ltlf2dfa.git"
+__version__ = "1.0.1"
 __author__ = "Francesco Fuggitti"
 __author_email__ = "fuggitti@eecs.yorku.ca"
-__license__ = "MIT License"
-__copyright__ = "2019 Francesco Fuggitti"
+__license__ = "GNU Lesser General Public License v3 or later (LGPLv3+)"
+__copyright__ = "2018-2020 WhiteMech"

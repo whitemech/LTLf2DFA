@@ -19,6 +19,7 @@ from ltlf2dfa.ltlf import (
     LTLfWeakNext,
     LTLfTrue,
     LTLfFalse,
+    LTLfLast,
 )
 from ltlf2dfa.parser.ltlf import LTLfParser
 
@@ -55,6 +56,8 @@ def test_parser():
             LTLfNot(LTLfRelease([LTLfNot(a), LTLfNot(b), LTLfNot(c)])),
         ]
     )
+
+    assert parser("a & last") == LTLfAnd([a, LTLfLast()])
 
 
 def test_names():
@@ -129,6 +132,9 @@ def test_mona():
         f.to_nnf().to_mona(v="0")
         == "((~((0 in A)) | ~((0 in B))) & ((0 in A) | (0 in B)))"
     )
+
+    f = parser("a & last")
+    assert f.to_mona(v="0") == "((0 in A) & ((0 = max($)) | (ex1 v_1: v_1=1 & false)))"
 
     # Next and Weak Next
     f = parser("X(a & b)")

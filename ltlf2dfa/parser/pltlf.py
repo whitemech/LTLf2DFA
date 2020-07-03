@@ -19,7 +19,7 @@ from ltlf2dfa.pltlf import (
     PLTLfAtomic,
     PLTLfTrue,
     PLTLfFalse,
-    PLTLfLast,
+    PLTLfStart,
 )
 from ltlf2dfa.parser import CUR_DIR
 from ltlf2dfa.parser.pl import PLTransformer
@@ -156,9 +156,9 @@ class PLTLfTransformer(Transformer):
         """Parse PLTLf False."""
         return PLTLfFalse()
 
-    def pltlf_last(self, args):
+    def pltlf_start(self, args):
         """Parse PLTLf Last."""
-        return PLTLfLast()
+        return PLTLfStart()
 
     # def pltlf_end(self, args):
     #     raise NotImplementedError("PLTLf end not supported, yet")
