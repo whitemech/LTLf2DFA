@@ -146,6 +146,10 @@ class PLTrue(PLAtomic):
         """Transform in NNF."""
         return self
 
+    def to_mona(self, v="0") -> str:
+        """Return the MONA encoding of a PL atomic formula."""
+        return Symbols.TRUE.value
+
 
 class PLFalse(PLAtomic):
     """Propositional false."""
@@ -165,6 +169,10 @@ class PLFalse(PLAtomic):
     def to_nnf(self):
         """Transform in NNF."""
         return self
+
+    def to_mona(self, v="0") -> str:
+        """Return the MONA encoding of a PL atomic formula."""
+        return Symbols.FALSE.value
 
 
 class PLNot(UnaryOperator[PLFormula], PLFormula):

@@ -20,24 +20,59 @@ from .parsing import ParsingCheck
 
 def test_parser():
     parser = PLParser()
-    sa, sb = "A", "B"
-    a, b = PLAtomic(sa), PLAtomic(sb)
+    sa, sb, sc = "A", "B", "C"
+    a, b, c = PLAtomic(sa), PLAtomic(sb), PLAtomic(sc)
+    parsed_a = parser("A")
+    assert parsed_a == a
+
+    parsed_b = parser("B")
+    assert parsed_b == b
+
+    parsed_not_a = parser("~A")
+    assert parsed_not_a == PLNot(a)
 
     a_and_b = parser("A & B")
     true_a_and_b = PLAnd([a, b])
     assert a_and_b == true_a_and_b
 
+    a_or_b = parser("A | B")
+    true_a_or_b = PLOr([a, b])
+    assert a_or_b == true_a_or_b
+
     material_implication = parser("!A | B <-> !(A & !B) <-> A->B")
     true_material_implication = PLEquivalence(
         [PLOr([PLNot(a), b]), PLNot(PLAnd([a, PLNot(b)])), PLImplies([a, b])]
     )
-
     assert material_implication == true_material_implication
+
+    a_imply_b = parser("A -> B")
+    true_a_imply_b = PLImplies([a, b])
+    assert a_imply_b == true_a_imply_b
+
+    a_imply_b_imply_c = parser("A -> B -> C")
+    true_a_imply_b_imply_c = PLImplies([a, b, c])
+    assert a_imply_b_imply_c == true_a_imply_b_imply_c
 
     true_a_and_false_and_true = PLAnd([a, PLFalse(), PLTrue()])
     a_and_false_and_true = parser("A & false & true")
-
     assert a_and_false_and_true == true_a_and_false_and_true
+
+
+def test_negate():
+    sa, sb, sc = "A", "B", "c"
+    a, b, c = PLAtomic(sa), PLAtomic(sb), PLAtomic(sc)
+
+    a_and_b = PLAnd([a, b])
+    not_a_or_not_b = PLOr([PLNot(a), PLNot(b)])
+    assert a_and_b.negate() == not_a_or_not_b
+
+    a_and_b_and_c = PLAnd([a, b, c])
+    not_a_or_not_b_or_not_c = PLOr([PLNot(a), PLNot(b), PLNot(c)])
+    assert a_and_b_and_c.negate() == not_a_or_not_b_or_not_c
+
+    a_or_b = PLOr([a, b])
+    not_a_and_not_b = PLAnd([PLNot(a), PLNot(b)])
+    assert a_or_b.negate() == not_a_and_not_b
 
 
 def test_nnf():
@@ -74,6 +109,35 @@ def test_find_labels():
     f = "!A & (!AB & !A0)"
     formula = parser(f)
     assert formula.find_labels() == {c for c in {"A", "AB", "A0"}}
+
+
+def test_find_atomics():
+    parser = PLParser()
+    sa, sb, sab, sa0 = "A", "B", "AB", "A0"
+    a, b, ab, a0 = PLAtomic(sa), PLAtomic(sb), PLAtomic(sab), PLAtomic(sa0)
+
+    # complete formula
+    f = "!A | B <-> !(A & !B) <-> A->B"
+    formula = parser(f)
+    assert formula.find_atomics() == {a, b}
+
+    # more than one character
+    f = "!A & (!AB & !A0)"
+    formula = parser(f)
+    assert formula.find_atomics() == {c for c in {a, ab, a0}}
+
+
+def test_mona():
+    # parser = PLParser()
+    a, b, c = [PLAtomic(c) for c in "abc"]
+    true = PLTrue()
+    false = PLFalse()
+
+    assert a.to_mona(v="0") == "(0 in A)"
+    assert b.to_mona(v="0") == "(0 in B)"
+    assert c.to_mona(v="0") == "(0 in C)"
+    assert true.to_mona(v="0") == "true"
+    assert false.to_mona(v="0") == "false"
 
 
 def test_names():
