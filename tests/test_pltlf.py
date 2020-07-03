@@ -50,6 +50,28 @@ def test_parser():
     assert parser("(a S b S !c)") == PLTLfSince([a, b, PLTLfNot(c)])
 
 
+def test_negate():
+    parser = PLTLfParser()
+    sa, sb, sc = "a", "b", "c"
+    a, b, c = PLTLfAtomic(sa), PLTLfAtomic(sb), PLTLfAtomic(sc)
+
+    a_and_b = PLTLfAnd([a, b])
+    not_a_or_not_b = PLTLfOr([PLTLfNot(a), PLTLfNot(b)])
+    assert a_and_b.negate() == not_a_or_not_b
+
+    a_and_b_and_c = PLTLfAnd([a, b, c])
+    not_a_or_not_b_or_not_c = PLTLfOr([PLTLfNot(a), PLTLfNot(b), PLTLfNot(c)])
+    assert a_and_b_and_c.negate() == not_a_or_not_b_or_not_c
+
+    before_a = PLTLfBefore(a)
+    not_before_a = PLTLfNot(PLTLfBefore(a))
+    assert before_a.negate() == not_before_a
+
+    once_a = PLTLfOnce(a)
+    not_true_since_a = PLTLfNot(PLTLfSince([PLTLfTrue(), a]))
+    assert once_a.negate() == not_true_since_a
+
+
 def test_names():
 
     good = ["a", "b", "name", "complex_name", "proposition10"]
