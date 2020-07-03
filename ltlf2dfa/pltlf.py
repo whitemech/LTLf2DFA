@@ -259,7 +259,7 @@ class PLTLfBefore(PLTLfUnaryOperator):
 
     def negate(self) -> PLTLfFormula:
         """Negate the formula."""
-        return PLTLfNot(self.f.negate())
+        return PLTLfNot(self)
 
     def to_mona(self, v="max($)") -> str:
         """Return the MONA encoding of a PLTLf Before formula."""
@@ -294,7 +294,7 @@ class PLTLfSince(PLTLfBinaryOperator):
 
     def negate(self):
         """Negate the formula."""
-        return PLTLfNot([f.negate() for f in self.formulas])
+        return PLTLfNot(self)
 
     def to_mona(self, v="max($)") -> str:
         """Return the MONA encoding of a PLTLf Since formula."""
@@ -382,8 +382,8 @@ class PLTLfHistorically(PLTLfUnaryOperator):
         return PLTLfNot(PLTLfOnce(PLTLfNot(self.f))).to_mona(v)
 
 
-class PLTLfLast(PLTLfFormula):
-    """Class for the PLTLf Last formula."""
+class PLTLfStart(PLTLfFormula):
+    """Class for the PLTLf Start formula."""
 
     # def to_nnf(self) -> PLTLfFormula:
     #     """Transform to NNF."""
@@ -398,11 +398,15 @@ class PLTLfLast(PLTLfFormula):
         return set()
 
     def _members(self):
-        return (Symbols.LAST.value,)
+        return (Symbols.START.value,)
 
     def __str__(self):
         """Get the string representation."""
-        return Symbols.LAST.value
+        return Symbols.START.value
+
+    def to_mona(self, v="max($)") -> str:
+        """Return the MONA encoding of an LTLf Last formula."""
+        return PLTLfNot(PLTLfBefore(PLTLfTrue())).to_mona(v)
 
 
 # class PLTLfEnd(PLTLfFormula):

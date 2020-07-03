@@ -531,6 +531,10 @@ class LTLfLast(LTLfFormula):
         """Get the string representation."""
         return Symbols.LAST.value
 
+    def to_mona(self, v="0") -> str:
+        """Return the MONA encoding of an LTLf Last formula."""
+        return LTLfWeakNext(LTLfFalse()).to_mona(v)
+
     # def to_ldlf(self):
     #     """Convert the formula to LDLf."""
     #     return LDLfDiamond(RegExpPropositional(PLTrue()), LDLfEnd())
