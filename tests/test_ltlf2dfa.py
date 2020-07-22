@@ -3,6 +3,8 @@
 
 from ltlf2dfa.parser.ltlf import LTLfParser
 from ltlf2dfa.parser.pltlf import PLTLfParser
+from sympy import symbols, And, Not, Or, simplify, Symbol
+from ltlf2dfa.ltlf2dfa import ter2symb, simplify_guard
 
 
 def test_ltlf_dfa():
@@ -479,3 +481,159 @@ def test_pltlf_dfa():
  4 -> 4 [label="a"];
 }"""
     assert dfa == expected
+
+
+def test_ter2symb():
+    ap = symbols("a b c")
+
+    tern_0 = "X"
+    actual = ter2symb(None, tern_0)
+    expected = And()
+    assert expected == actual
+
+    tern_1 = "0X"
+    actual = ter2symb(ap, tern_1)
+    expected = And(Not(Symbol("a")))
+    assert expected == actual
+
+    tern_2 = "10"
+    actual = ter2symb(ap, tern_2)
+    expected = And(Symbol("a"), Not(Symbol("b")))
+    assert expected == actual
+
+    tern_3 = "0X1"
+    actual = ter2symb(ap, tern_3)
+    expected = And(Not(Symbol("a")), Symbol("c"))
+    assert expected == actual
+
+    ap = symbols("a b c d e f g h i")
+    tern_4 = "0X110XX01"
+    actual = ter2symb(ap, tern_4)
+    expected = And(
+        Not(Symbol("a")),
+        Symbol("c"),
+        Symbol("d"),
+        Not(Symbol("e")),
+        Not(Symbol("h")),
+        Symbol("i"),
+    )
+    assert expected == actual
+
+
+def test_simplify_guard():
+    ap = symbols("a b c")
+
+    tern_1 = "0XX"
+    tern_2 = "10X"
+    tern_3 = "110"
+    sym_1 = ter2symb(ap, tern_1)
+    sym_2 = ter2symb(ap, tern_2)
+    sym_3 = ter2symb(ap, tern_3)
+
+    actual = simplify_guard([sym_1, sym_2, sym_3])
+    expected = Or(Not(Symbol("a")), Not(Symbol("b")), Not(Symbol("c")))
+    assert expected == actual
+
+    ap = symbols("a b c d e f g h")
+
+    tern_1 = "0XXXXXXX"
+    tern_2 = "10XXXXXX"
+    tern_3 = "110XXXXX"
+    tern_4 = "1110XXXX"
+    tern_5 = "11110XXX"
+    tern_6 = "111110XX"
+    tern_7 = "1111110X"
+    tern_8 = "11111110"
+    sym_1 = ter2symb(ap, tern_1)
+    sym_2 = ter2symb(ap, tern_2)
+    sym_3 = ter2symb(ap, tern_3)
+    sym_4 = ter2symb(ap, tern_4)
+    sym_5 = ter2symb(ap, tern_5)
+    sym_6 = ter2symb(ap, tern_6)
+    sym_7 = ter2symb(ap, tern_7)
+    sym_8 = ter2symb(ap, tern_8)
+
+    actual = simplify_guard([sym_1, sym_2, sym_3, sym_4, sym_5, sym_6, sym_7, sym_8])
+    expected = Or(
+        Not(Symbol("a")),
+        Not(Symbol("b")),
+        Not(Symbol("c")),
+        Not(Symbol("d")),
+        Not(Symbol("e")),
+        Not(Symbol("f")),
+        Not(Symbol("g")),
+        Not(Symbol("h")),
+    )
+    assert expected == actual
+
+    sym_1 = Not(Symbol("a"))
+    sym_2 = And(Symbol("a"), Not(Symbol("b")))
+    sym_3 = And(Symbol("a"), Symbol("b"), Not(Symbol("c")))
+    sym_4 = And(Symbol("a"), Symbol("b"), Symbol("c"), Not(Symbol("d")))
+    sym_5 = And(Symbol("a"), Symbol("b"), Symbol("c"), Symbol("d"), Not(Symbol("e")))
+    sym_6 = And(
+        Symbol("a"),
+        Symbol("b"),
+        Symbol("c"),
+        Symbol("d"),
+        Symbol("e"),
+        Not(Symbol("f")),
+    )
+    sym_7 = And(
+        Symbol("a"),
+        Symbol("b"),
+        Symbol("c"),
+        Symbol("d"),
+        Symbol("e"),
+        Symbol("f"),
+        Not(Symbol("g")),
+    )
+    sym_8 = And(
+        Symbol("a"),
+        Symbol("b"),
+        Symbol("c"),
+        Symbol("d"),
+        Symbol("e"),
+        Symbol("f"),
+        Symbol("g"),
+        Not(Symbol("h")),
+    )
+
+    actual = simplify_guard([sym_1, sym_2, sym_3, sym_4, sym_5, sym_6, sym_7, sym_8])
+    expected = Or(
+        Not(Symbol("a")),
+        Not(Symbol("b")),
+        Not(Symbol("c")),
+        Not(Symbol("d")),
+        Not(Symbol("e")),
+        Not(Symbol("f")),
+        Not(Symbol("g")),
+        Not(Symbol("h")),
+    )
+    assert expected == actual
+
+    # ap = symbols("a b c d e f g h i")
+    #
+    # tern_1 = "0XXXXXXXX"
+    # tern_2 = "10XXXXXXX"
+    # tern_3 = "110XXXXXX"
+    # tern_4 = "1110XXXXX"
+    # tern_5 = "11110XXXX"
+    # tern_6 = "111110XXX"
+    # tern_7 = "1111110XX"
+    # tern_8 = "11111110X"
+    # tern_9 = "111111110"
+    # sym_1 = ter2symb(ap, tern_1)
+    # sym_2 = ter2symb(ap, tern_2)
+    # sym_3 = ter2symb(ap, tern_3)
+    # sym_4 = ter2symb(ap, tern_4)
+    # sym_5 = ter2symb(ap, tern_5)
+    # sym_6 = ter2symb(ap, tern_6)
+    # sym_7 = ter2symb(ap, tern_7)
+    # sym_8 = ter2symb(ap, tern_8)
+    # sym_9 = ter2symb(ap, tern_9)
+    #
+    # actual = simplify_guard([sym_1, sym_2, sym_3, sym_4, sym_5, sym_6, sym_7, sym_8, sym_9])
+    # expected = Or(Not(Symbol("a")), Not(Symbol("b")), Not(Symbol("c")), Not(Symbol("d")), Not(Symbol("e")),
+    #               Not(Symbol("f")), Not(Symbol("g")), Not(Symbol("h")), Not(Symbol("i")))
+    # assert expected == actual

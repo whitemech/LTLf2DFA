@@ -57,10 +57,7 @@ def ter2symb(ap, ternary):
 
 def simplify_guard(guards):
     """Make a big OR among guards and simplify them."""
-    final = Or()
-    for g in guards:
-        final = Or(final, g)
-    return simplify(final)
+    return simplify(Or(*guards))
 
 
 def parse_mona(mona_output):
