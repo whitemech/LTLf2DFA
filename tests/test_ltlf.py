@@ -134,16 +134,24 @@ def test_mona():
     )
 
     f = parser("a & last")
-    assert f.to_mona(v="0") == "((0 in A) & ((0 = max($)) | (ex1 v_1: v_1=1 & false)))"
+    assert (
+        f.to_mona(v="0") == "((0 in A) & (((0 = max($)) | (ex1 v_1: v_1=1 & false))))"
+    )
 
     # Next and Weak Next
     f = parser("X(a & b)")
     assert f.to_mona(v="0") == "(ex1 v_1: v_1=1 & ((v_1 in A) & (v_1 in B)))"
 
+    f = parser("WX(a)")
+    assert f.to_mona(v="0") == "(((0 = max($)) | (ex1 v_1: v_1=1 & (v_1 in A))))"
+
+    # f = parser("F(b & WX false) -> F(a & (WX false | X(WX false)))")
+    # assert f.to_mona(v="0") == ""
+
     f = parser("WX (a & b)")
     assert (
         f.to_mona(v="0")
-        == "((0 = max($)) | (ex1 v_1: v_1=1 & ((v_1 in A) & (v_1 in B))))"
+        == "(((0 = max($)) | (ex1 v_1: v_1=1 & ((v_1 in A) & (v_1 in B)))))"
     )
 
     # Until and Release
