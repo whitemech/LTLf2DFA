@@ -10,6 +10,7 @@
 [![](https://img.shields.io/badge/flake8-checked-blueviolet)](https://img.shields.io/badge/flake8-checked-blueviolet)
 [![](https://img.shields.io/badge/mypy-checked-blue)](https://img.shields.io/badge/mypy-checked-blue)
 [![](https://img.shields.io/badge/license-LGPLv3%2B-blue)](https://img.shields.io/badge/license-LGPLv3%2B-blue)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3888410.svg)](https://doi.org/10.5281/zenodo.3888410)
 
 LTL<sub>f</sub>2DFA is a tool that transforms an LTL<sub>f</sub> or a PLTL<sub>f</sub> formula into a minimal 
 Deterministic Finite state Automaton (DFA) using [MONA](http://www.brics.dk/mona/).
@@ -24,7 +25,7 @@ your system following the instructions [here](http://www.brics.dk/mona/download.
 This tool is also based on the following libraries:
 
 - [lark-parser 0.9.0](https://pypi.org/project/lark-parser/)
-- [sympy 1.6](https://pypi.org/project/sympy/)
+- [sympy 1.6.1](https://pypi.org/project/sympy/)
 
 They are automatically added while installing LTL<sub>f</sub>2DFA.
 
@@ -103,7 +104,10 @@ and then go to [http://localhost:8000](http://localhost:8000)
 
 LTL<sub>f</sub>2DFA is released under the GNU Lesser General Public License v3.0 or later (LGPLv3+).
 
-Copyright 2018-2020 WhiteMech
+Copyright 2018-2020 WhiteMech @ Sapienza University
+
+## Citing
+If you are interested in this tool, and you use it in your own work, please consider citing it.
 
 ## Author
 
