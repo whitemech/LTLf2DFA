@@ -330,11 +330,11 @@ class LTLfWeakNext(LTLfUnaryOperator):
         """Return the MONA encoding of an LTLf WeakNext formula."""
         ex_var = new_var(v)
         if v != "0":
-            return "((0 = max($)) | (ex1 {0}: {0}={1}+1 & {2}))".format(
+            return "((({1} = max($)) | (ex1 {0}: {0}={1}+1 & {2})))".format(
                 ex_var, v, self.f.to_mona(ex_var)
             )
         else:
-            return "((0 = max($)) | (ex1 {0}: {0}=1 & {1}))".format(
+            return "(((0 = max($)) | (ex1 {0}: {0}=1 & {1})))".format(
                 ex_var, self.f.to_mona(ex_var)
             )
 

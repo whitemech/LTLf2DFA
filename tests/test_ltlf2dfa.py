@@ -301,6 +301,20 @@ A               X 1
 A = {0}"""
     assert mona_dfa == expected_mona
 
+    f1 = parser("F(WX(false))")
+    f2 = parser("F(!(X(!(false))))")
+    mona_dfa_1 = f1.to_dfa(mona_dfa_out=True)
+    mona_dfa_2 = f2.to_dfa(mona_dfa_out=True)
+    assert mona_dfa_1 == mona_dfa_2
+
+    f1 = parser("F(b & WX false) -> F(a & (WX false | X(WX false)))")
+    f2 = parser(
+        "((! (F (! ((! b) || (X (! false)))))) || (F (! ((! a) || (! ((! (X (! false))) || (X (! (X (! false))))))))))"
+    )
+    mona_dfa_1 = f1.to_dfa(mona_dfa_out=True)
+    mona_dfa_2 = f2.to_dfa(mona_dfa_out=True)
+    assert mona_dfa_1 == mona_dfa_2
+
 
 def test_pltlf_dfa():
     parser = PLTLfParser()
