@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 """Base classes for the implementation of a generic syntax tree."""
-
+import functools
 from abc import abstractmethod, ABC
-from typing import Sequence, Set, Tuple, TypeVar, Generic, cast, Union, Optional, Any
+from typing import Sequence, Tuple, TypeVar, Generic, cast, Union, Optional, Any, List
 import re
 
 from ltlf2dfa.symbols import Symbols, OpSymbol
@@ -16,8 +16,8 @@ class Formula(Hashable, ABC):
     """Abstract class for a formula."""
 
     @abstractmethod
-    def find_labels(self) -> Set[AtomSymbol]:
-        """Return the set of symbols."""
+    def find_labels(self) -> List[AtomSymbol]:
+        """Return the list of symbols."""
 
     def to_nnf(self) -> "Formula":
         """Transform the formula in NNF."""
@@ -69,9 +69,9 @@ class AtomicFormula(Formula, ABC):
         """Get the string representation."""
         return str(self.s)
 
-    def find_labels(self) -> Set[AtomSymbol]:
-        """Return the set of symbols."""
-        return {self.s}
+    def find_labels(self) -> List[AtomSymbol]:
+        """Return the list of symbols."""
+        return [self.s]
 
 
 class QuotedFormula(Wrapper):
@@ -101,8 +101,8 @@ class QuotedFormula(Wrapper):
 class MonaProgram:
     """Implements a MONA program."""
 
-    header = "m2l-str"
-    vars: Set[str] = set()
+    HEADER = "m2l-str"
+    vars: List[str] = list()
 
     def __init__(self, f: Formula):
         """Initialize.
@@ -111,11 +111,11 @@ class MonaProgram:
         :param i: instant of evaluation in the trace.
         """
         self.formula = f
-        self._set_vars()
+        self._vars()
 
-    def _set_vars(self):
-        """Set MONA vars."""
-        self.vars = set([v.upper() for v in self.formula.find_labels()])
+    def _vars(self):
+        """List MONA vars."""
+        self.vars = [v.upper() for v in self.formula.find_labels()]
 
     def __repr__(self):
         """Nice representation."""
@@ -126,13 +126,13 @@ class MonaProgram:
         if self.vars:
             return "#{};\n{};\nvar2 {};\n{};\n".format(
                 str(self.formula),
-                self.header,
+                self.HEADER,
                 ", ".join(self.vars),
                 self.formula.to_mona(),
             )
         else:
             return "#{};\n{};\n{};\n".format(
-                str(self.formula), self.header, self.formula.to_mona()
+                str(self.formula), self.HEADER, self.formula.to_mona()
             )
 
 
@@ -181,8 +181,8 @@ class UnaryOperator(Generic[T], Operator, ABC):
         """Compare the formula with another formula."""
         return self.f.__lt__(other.f)
 
-    def find_labels(self) -> Set[AtomSymbol]:
-        """Return the set of symbols."""
+    def find_labels(self) -> List[AtomSymbol]:
+        """Return the list of symbols."""
         return cast(Formula, self.f).find_labels()
 
 
@@ -210,10 +210,43 @@ class BinaryOperator(Generic[T], Operator, ABC):
     def _members(self) -> Tuple[OpSymbol, OperatorChildren]:
         return self.operator_symbol, self.formulas
 
-    def find_labels(self) -> Set[AtomSymbol]:
-        """Return the set of symbols."""
-        return set.union(*map(lambda f: f.find_labels(), self.formulas))
+    def find_labels(self) -> List[AtomSymbol]:
+        """Return the list of symbols."""
+        # return set.union(*map(lambda f: f.find_labels(), self.formulas))))
+        # seen = set()
+        # result = []
+        # for f in self.formulas:
+        #     for lab in f.find_labels():
+        #         if lab not in seen:
+        #             result.append(lab)
+        #             seen.add(lab)
+        # return result
+        return flatten(self.formulas)
 
     def to_nnf(self):
         """Transform in NNF."""
         return type(self)([f.to_nnf() for f in self.formulas])
+
+
+@functools.singledispatch
+def flatten(lst) -> List:
+    """Flatten a list of lists."""
+    return [item for sublist in lst for item in sublist.find_labels()]
+
+
+def _flatten_as_set(lst):
+    """Flatten a list of lists removing duplicates."""
+    seen = set()
+    result = []
+    for f in lst:
+        for lab in f.find_labels():
+            if lab not in seen:
+                result.append(lab)
+                seen.add(lab)
+    return result
+
+
+@flatten.register(tuple)
+def _(lst: Tuple[Formula]):
+    """Flatten a list of lists of formulas."""
+    return _flatten_as_set(lst)
