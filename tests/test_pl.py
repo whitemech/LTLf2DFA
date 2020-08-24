@@ -103,12 +103,17 @@ def test_find_labels():
     # complete formula
     f = "!A | B <-> !(A & !B) <-> A->B"
     formula = parser(f)
-    assert formula.find_labels() == {"A", "B"}
+    assert formula.find_labels() == ["A", "B"]
 
     # more than one character
     f = "!A & (!AB & !A0)"
     formula = parser(f)
-    assert formula.find_labels() == {c for c in {"A", "AB", "A0"}}
+    assert formula.find_labels() == [c for c in ["A", "AB", "A0"]]
+
+    # another formula
+    f = "!A | B <-> !(C & !B) <-> C->A"
+    formula = parser(f)
+    assert formula.find_labels() == ["A", "B", "C"]
 
 
 def test_find_atomics():
