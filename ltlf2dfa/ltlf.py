@@ -3,7 +3,7 @@
 """This module contains the implementation of Linear Temporal Logic on finite traces."""
 
 from abc import abstractmethod, ABC
-from typing import Set, Optional, Any
+from typing import Optional, Any, List
 import re
 
 from ltlf2dfa.base import (
@@ -74,7 +74,7 @@ class LTLfAtomic(AtomicFormula, LTLfFormula):
         """Negate the formula."""
         return LTLfNot(self)
 
-    def find_labels(self) -> Set[AtomSymbol]:
+    def find_labels(self) -> List[AtomSymbol]:
         """Find the labels."""
         return PLAtomic(self.s).find_labels()
 
@@ -101,9 +101,9 @@ class LTLfTrue(LTLfAtomic):
         """Negate the formula."""
         return LTLfFalse()
 
-    def find_labels(self) -> Set[AtomSymbol]:
+    def find_labels(self) -> List[AtomSymbol]:
         """Find the labels."""
-        return set()
+        return list()
 
     def to_mona(self, v="0") -> str:
         """Return the MONA encoding for False."""
@@ -125,9 +125,9 @@ class LTLfFalse(LTLfAtomic):
         """Negate the formula."""
         return LTLfTrue()
 
-    def find_labels(self) -> Set[AtomSymbol]:
+    def find_labels(self) -> List[AtomSymbol]:
         """Find the labels."""
-        return set()
+        return list()
 
     def to_mona(self, v="0") -> str:
         """Return the MONA encoding for False."""
@@ -520,9 +520,9 @@ class LTLfLast(LTLfFormula):
         """Negate the formula."""
         return self.to_nnf().negate()
 
-    def find_labels(self) -> Set[AtomSymbol]:
+    def find_labels(self) -> List[AtomSymbol]:
         """Find the labels."""
-        return set()
+        return list()
 
     def _members(self):
         return (Symbols.LAST.value,)
@@ -543,9 +543,9 @@ class LTLfLast(LTLfFormula):
 class LTLfEnd(LTLfFormula):
     """Class for the LTLf End formula."""
 
-    def find_labels(self) -> Set[AtomSymbol]:
+    def find_labels(self) -> List[AtomSymbol]:
         """Find the labels."""
-        return set()
+        return list()
 
     def _members(self):
         return (Symbols.END.value,)
