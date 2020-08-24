@@ -4,7 +4,7 @@
 
 import functools
 from abc import abstractmethod, ABC
-from typing import Set, Any, Optional
+from typing import Set, Any, Optional, List
 
 # import sympy
 # from sympy.logic.boolalg import Boolean, BooleanTrue, BooleanFalse
@@ -99,9 +99,9 @@ class PLFormula(Formula):
 class PLAtomic(AtomicFormula, PLFormula):
     """A class to represent propositional atomic formulas."""
 
-    def find_labels(self) -> Set[Any]:
-        """Return the set of symbols."""
-        return {self.s}
+    def find_labels(self) -> List[Any]:
+        """Return the list of symbols."""
+        return [self.s]
 
     def _find_atomics(self):
         return {self}
@@ -138,9 +138,9 @@ class PLTrue(PLAtomic):
         """Negate the formula."""
         return PLFalse()
 
-    def find_labels(self) -> Set[Any]:
-        """Return the set of symbols."""
-        return set()
+    def find_labels(self) -> List[Any]:
+        """Return the list of symbols."""
+        return list()
 
     def to_nnf(self):
         """Transform in NNF."""
@@ -162,9 +162,9 @@ class PLFalse(PLAtomic):
         """Negate the formula."""
         return PLTrue()
 
-    def find_labels(self) -> Set[Any]:
-        """Return the set of symbols."""
-        return set()
+    def find_labels(self) -> List[Any]:
+        """Return the list of symbols."""
+        return list()
 
     def to_nnf(self):
         """Transform in NNF."""
