@@ -4,6 +4,7 @@ nav:
     - Credits: authors.md
     - How to contribute: contributing.md
     - Grammars: grammars.md
+    - Change Log: history.md
     - References: references.md
 
 theme: readthedocs
