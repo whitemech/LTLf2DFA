@@ -1,30 +1,48 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#
+# This file is part of ltlf2dfa.
+#
+# ltlf2dfa is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# ltlf2dfa is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with ltlf2dfa.  If not, see <https://www.gnu.org/licenses/>.
+#
 """Test PLTLf."""
-import pytest
 import os
+
 import lark
+import pytest
 
-from ltlf2dfa.pltlf import (
-    PLTLfAtomic,
-    PLTLfAnd,
-    PLTLfEquivalence,
-    PLTLfOr,
-    PLTLfNot,
-    PLTLfImplies,
-    PLTLfOnce,
-    PLTLfHistorically,
-    PLTLfSince,
-    PLTLfBefore,
-    PLTLfTrue,
-    PLTLfFalse,
-    PLTLfStart,
-)
 from ltlf2dfa.parser.pltlf import PLTLfParser
-
-# from ltlf2dfa.pl import PLAtomic, PLTrue, PLFalse, PLAnd, PLOr
+from ltlf2dfa.pltlf import (
+    PLTLfAnd,
+    PLTLfAtomic,
+    PLTLfBefore,
+    PLTLfEquivalence,
+    PLTLfFalse,
+    PLTLfHistorically,
+    PLTLfImplies,
+    PLTLfNot,
+    PLTLfOnce,
+    PLTLfOr,
+    PLTLfSince,
+    PLTLfStart,
+    PLTLfTrue,
+)
 
 # from .conftest import LTLfFixtures
 from .parsing import ParsingCheck
+
+# from ltlf2dfa.pl import PLAtomic, PLTrue, PLFalse, PLAnd, PLOr
 
 
 def test_parser():

@@ -1,21 +1,70 @@
-# LTL<sub>f</sub>2DFA
-[![](https://img.shields.io/pypi/v/ltlf2dfa.svg)](https://pypi.python.org/pypi/ltlf2dfa)
-[![](https://img.shields.io/pypi/pyversions/ltlf2dfa.svg)](https://pypi.python.org/pypi/ltlf2dfa)
-[![LTLf2DFA CI pipeline](
-  https://github.com/whitemech/LTLf2DFA/workflows/LTLf2DFA%20CI%20pipeline./badge.svg)](
-  https://github.com/whitemech/LTLf2DFA/actions?query=workflow%3A%22LTLf2DFA+CI+pipeline.%22)
-[![](https://img.shields.io/badge/docs-mkdocs-9cf)](https://www.mkdocs.org/)
-[![](https://img.shields.io/badge/status-development-orange.svg)](https://img.shields.io/badge/status-development-orange.svg)
-[![codecov](https://codecov.io/gh/whitemech/LTLf2DFA/branch/master/graph/badge.svg)](https://codecov.io/gh/whitemech/LTLf2DFA)
-[![](https://img.shields.io/badge/flake8-checked-blueviolet)](https://img.shields.io/badge/flake8-checked-blueviolet)
-[![](https://img.shields.io/badge/mypy-checked-blue)](https://img.shields.io/badge/mypy-checked-blue)
-[![](https://img.shields.io/badge/license-LGPLv3%2B-blue)](https://img.shields.io/badge/license-LGPLv3%2B-blue)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3888410.svg)](https://doi.org/10.5281/zenodo.3888410)
+<h1 align="center">
+  <img src="http://ltlf2dfa.diag.uniroma1.it/static/images/logo-ltlf2dfa.svg">
+</h1>
+
+<p align="center">
+  <a href="https://pypi.org/project/ltlf2dfa">
+    <img alt="PyPI" src="https://img.shields.io/pypi/v/ltlf2dfa">
+  </a>
+  <a href="https://pypi.org/project/ltlf2dfa">
+    <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/ltlf2dfa" />
+  </a>
+  <a href="">
+    <img alt="PyPI - Implementation" src="https://img.shields.io/pypi/implementation/ltlf2dfa">
+  </a>
+  <a href="https://github.com/whitemech/ltlf2dfa/blob/master/LICENSE">
+    <img alt="GitHub" src="https://img.shields.io/badge/license-LGPLv3%2B-blue">
+  </a>  
+  <a href="">
+    <img alt="PyPI - Wheel" src="https://img.shields.io/pypi/wheel/ltlf2dfa">
+  </a>
+</p>
+<p align="center">
+  <a href="">
+    <img alt="test" src="https://github.com/whitemech/ltlf2dfa/workflows/test/badge.svg">
+  </a>
+  <a href="">
+    <img alt="lint" src="https://github.com/whitemech/ltlf2dfa/workflows/lint/badge.svg">
+  </a>
+  <a href="">
+    <img alt="docs" src="https://github.com/whitemech/ltlf2dfa/workflows/docs/badge.svg">
+  </a>
+  <a href="https://codecov.io/gh/whitemech/pddl">
+    <img alt="codecov" src="https://codecov.io/gh/whitemech/ltlf2dfa/branch/master/graph/badge.svg">
+  </a>
+  <a href="">
+    <img alt="PyPI - Status" src="https://img.shields.io/pypi/status/ltlf2dfa" />
+  </a>
+</p>
+<p align="center">
+  <a href="https://img.shields.io/badge/flake8-checked-blueviolet">
+    <img alt="" src="https://img.shields.io/badge/flake8-checked-blueviolet">
+  </a>
+  <a href="https://img.shields.io/badge/mypy-checked-blue">
+    <img alt="" src="https://img.shields.io/badge/mypy-checked-blue">
+  </a>
+  <a href="https://img.shields.io/badge/isort-checked-yellow">
+    <img alt="isort" src="https://img.shields.io/badge/isort-checked-yellow" />
+  </a>
+  <a href="https://img.shields.io/badge/code%20style-black-black">
+    <img alt="black" src="https://img.shields.io/badge/code%20style-black-black" />
+  </a>
+  <a href="https://www.mkdocs.org/">
+    <img alt="" src="https://img.shields.io/badge/docs-mkdocs-9cf">
+</p>
+<p align="center">
+  </a>
+    <a href="https://zenodo.org/badge/DOI/10.5281/zenodo.3888410.svg">
+    <img alt="" src="https://zenodo.org/badge/DOI/10.5281/zenodo.3888410.svg">
+  </a>
+</p>
+
+---
 
 LTL<sub>f</sub>2DFA is a tool that transforms an LTL<sub>f</sub> or a PLTL<sub>f</sub> formula into a minimal 
 Deterministic Finite state Automaton (DFA) using [MONA](http://www.brics.dk/mona/).
 
-It is also available online at [ltlf2dfa.diag.uniroma1.it](http://ltlf2dfa.diag.uniroma1.it).
+It is also available online at [http://ltlf2dfa.diag.uniroma1.it](http://ltlf2dfa.diag.uniroma1.it).
 
 ## Prerequisites
 
@@ -89,7 +138,7 @@ have only past, only future or none operators.
 
 To run tests: `tox`
 
-To run only the code tests: `tox -e py37`
+To run only the code tests: `tox -e py3.7`
 
 To run only the code style checks: `tox -e flake8`
 

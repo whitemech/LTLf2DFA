@@ -1,4 +1,21 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#
+# This file is part of ltlf2dfa.
+#
+# ltlf2dfa is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# ltlf2dfa is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with ltlf2dfa.  If not, see <https://www.gnu.org/licenses/>.
+#
 """Misc tests."""
 import os
 
@@ -30,8 +47,9 @@ def test_pltlf_example_readme():
 
 
 def test_hash_consistency_after_pickling():
-    from ltlf2dfa.parser.ltlf import LTLfParser
     import pickle
+
+    from ltlf2dfa.parser.ltlf import LTLfParser
 
     parser = LTLfParser()
     formula = "F (a & !b)"
@@ -49,8 +67,8 @@ def test_hash_consistency_after_pickling():
 
 def test_QuotedFormula():
     from ltlf2dfa.base import QuotedFormula
+    from ltlf2dfa.ltlf import LTLfAnd, LTLfAtomic
     from ltlf2dfa.parser.ltlf import LTLfParser
-    from ltlf2dfa.ltlf import LTLfAtomic, LTLfAnd
 
     f = LTLfParser()("!(G a)")
     qf = QuotedFormula(f)

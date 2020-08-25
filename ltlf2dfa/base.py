@@ -1,13 +1,30 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#
+# This file is part of ltlf2dfa.
+#
+# ltlf2dfa is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# ltlf2dfa is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with ltlf2dfa.  If not, see <https://www.gnu.org/licenses/>.
+#
 
 """Base classes for the implementation of a generic syntax tree."""
 import functools
-from abc import abstractmethod, ABC
-from typing import Sequence, Tuple, TypeVar, Generic, cast, Union, Optional, Any, List
 import re
+from abc import ABC, abstractmethod
+from typing import Any, Generic, List, Optional, Sequence, Tuple, TypeVar, Union, cast
 
-from ltlf2dfa.symbols import Symbols, OpSymbol
 from ltlf2dfa.helpers import Hashable, Wrapper
+from ltlf2dfa.symbols import OpSymbol, Symbols
 
 AtomSymbol = Union["QuotedFormula", str]
 
