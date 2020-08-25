@@ -21,7 +21,7 @@
 from typing import List, Optional, Tuple
 
 from lark import Lark
-from lark.lexer import Token # type: ignore
+from lark.lexer import Token  # type: ignore
 
 
 class ParsingCheck:
