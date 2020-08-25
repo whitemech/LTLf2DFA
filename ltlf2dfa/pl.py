@@ -20,15 +20,15 @@
 """This module provides support for Propositional Logic."""
 
 import functools
-from abc import abstractmethod, ABC
-from typing import Set, Any, Optional, List
+from abc import ABC, abstractmethod
+from typing import Any, List, Optional, Set
+
+from ltlf2dfa.base import AtomicFormula, BinaryOperator, Formula, UnaryOperator
+from ltlf2dfa.symbols import OpSymbol, Symbols
 
 # import sympy
 # from sympy.logic.boolalg import Boolean, BooleanTrue, BooleanFalse
 # from pythomata import PropositionalInterpretation
-
-from ltlf2dfa.base import Formula, AtomicFormula, BinaryOperator, UnaryOperator
-from ltlf2dfa.symbols import Symbols, OpSymbol
 
 
 class PLFormula(Formula):

@@ -47,8 +47,9 @@ def test_pltlf_example_readme():
 
 
 def test_hash_consistency_after_pickling():
-    from ltlf2dfa.parser.ltlf import LTLfParser
     import pickle
+
+    from ltlf2dfa.parser.ltlf import LTLfParser
 
     parser = LTLfParser()
     formula = "F (a & !b)"
@@ -66,8 +67,8 @@ def test_hash_consistency_after_pickling():
 
 def test_QuotedFormula():
     from ltlf2dfa.base import QuotedFormula
+    from ltlf2dfa.ltlf import LTLfAnd, LTLfAtomic
     from ltlf2dfa.parser.ltlf import LTLfParser
-    from ltlf2dfa.ltlf import LTLfAtomic, LTLfAnd
 
     f = LTLfParser()("!(G a)")
     qf = QuotedFormula(f)

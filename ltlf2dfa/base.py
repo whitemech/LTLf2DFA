@@ -19,12 +19,12 @@
 
 """Base classes for the implementation of a generic syntax tree."""
 import functools
-from abc import abstractmethod, ABC
-from typing import Sequence, Tuple, TypeVar, Generic, cast, Union, Optional, Any, List
 import re
+from abc import ABC, abstractmethod
+from typing import Any, Generic, List, Optional, Sequence, Tuple, TypeVar, Union, cast
 
-from ltlf2dfa.symbols import Symbols, OpSymbol
 from ltlf2dfa.helpers import Hashable, Wrapper
+from ltlf2dfa.symbols import OpSymbol, Symbols
 
 AtomSymbol = Union["QuotedFormula", str]
 

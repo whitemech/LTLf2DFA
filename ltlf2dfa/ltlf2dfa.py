@@ -20,12 +20,12 @@
 """Main module of the pakage."""
 
 import itertools as it
-from subprocess import PIPE, Popen, TimeoutExpired
 import os
 import re
 import signal
+from subprocess import PIPE, Popen, TimeoutExpired
 
-from sympy import symbols, And, Not, Or, simplify
+from sympy import And, Not, Or, simplify, symbols
 
 from ltlf2dfa.base import MonaProgram
 

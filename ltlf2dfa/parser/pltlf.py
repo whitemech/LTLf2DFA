@@ -1,4 +1,21 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#
+# This file is part of ltlf2dfa.
+#
+# ltlf2dfa is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# ltlf2dfa is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with ltlf2dfa.  If not, see <https://www.gnu.org/licenses/>.
+#
 """Implementation of the PLTLf parser."""
 
 from pathlib import Path
@@ -6,23 +23,23 @@ from pathlib import Path
 from lark import Lark, Transformer
 
 from ltlf2dfa.helpers import ParsingError
-from ltlf2dfa.pltlf import (
-    PLTLfEquivalence,
-    PLTLfImplies,
-    PLTLfOr,
-    PLTLfAnd,
-    PLTLfNot,
-    PLTLfSince,
-    PLTLfHistorically,
-    PLTLfOnce,
-    PLTLfBefore,
-    PLTLfAtomic,
-    PLTLfTrue,
-    PLTLfFalse,
-    PLTLfStart,
-)
 from ltlf2dfa.parser import CUR_DIR
 from ltlf2dfa.parser.pl import PLTransformer
+from ltlf2dfa.pltlf import (
+    PLTLfAnd,
+    PLTLfAtomic,
+    PLTLfBefore,
+    PLTLfEquivalence,
+    PLTLfFalse,
+    PLTLfHistorically,
+    PLTLfImplies,
+    PLTLfNot,
+    PLTLfOnce,
+    PLTLfOr,
+    PLTLfSince,
+    PLTLfStart,
+    PLTLfTrue,
+)
 
 
 class PLTLfTransformer(Transformer):

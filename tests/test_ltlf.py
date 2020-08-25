@@ -17,33 +17,34 @@
 # along with ltlf2dfa.  If not, see <https://www.gnu.org/licenses/>.
 #
 """Test LTLf."""
-import pytest
 import os
+
 import lark
+import pytest
 
 from ltlf2dfa.ltlf import (
-    LTLfAtomic,
-    LTLfAnd,
-    LTLfEquivalence,
-    LTLfOr,
-    LTLfNot,
-    LTLfImplies,
-    LTLfEventually,
     LTLfAlways,
-    LTLfUntil,
-    LTLfRelease,
-    LTLfNext,
-    LTLfWeakNext,
-    LTLfTrue,
+    LTLfAnd,
+    LTLfAtomic,
+    LTLfEquivalence,
+    LTLfEventually,
     LTLfFalse,
+    LTLfImplies,
     LTLfLast,
+    LTLfNext,
+    LTLfNot,
+    LTLfOr,
+    LTLfRelease,
+    LTLfTrue,
+    LTLfUntil,
+    LTLfWeakNext,
 )
 from ltlf2dfa.parser.ltlf import LTLfParser
 
-# from ltlf2dfa.pl import PLAtomic, PLTrue, PLFalse, PLAnd, PLOr
-
 # from .conftest import LTLfFixtures
 from .parsing import ParsingCheck
+
+# from ltlf2dfa.pl import PLAtomic, PLTrue, PLFalse, PLAnd, PLOr
 
 
 def test_parser():

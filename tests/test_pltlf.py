@@ -17,31 +17,32 @@
 # along with ltlf2dfa.  If not, see <https://www.gnu.org/licenses/>.
 #
 """Test PLTLf."""
-import pytest
 import os
+
 import lark
+import pytest
 
-from ltlf2dfa.pltlf import (
-    PLTLfAtomic,
-    PLTLfAnd,
-    PLTLfEquivalence,
-    PLTLfOr,
-    PLTLfNot,
-    PLTLfImplies,
-    PLTLfOnce,
-    PLTLfHistorically,
-    PLTLfSince,
-    PLTLfBefore,
-    PLTLfTrue,
-    PLTLfFalse,
-    PLTLfStart,
-)
 from ltlf2dfa.parser.pltlf import PLTLfParser
-
-# from ltlf2dfa.pl import PLAtomic, PLTrue, PLFalse, PLAnd, PLOr
+from ltlf2dfa.pltlf import (
+    PLTLfAnd,
+    PLTLfAtomic,
+    PLTLfBefore,
+    PLTLfEquivalence,
+    PLTLfFalse,
+    PLTLfHistorically,
+    PLTLfImplies,
+    PLTLfNot,
+    PLTLfOnce,
+    PLTLfOr,
+    PLTLfSince,
+    PLTLfStart,
+    PLTLfTrue,
+)
 
 # from .conftest import LTLfFixtures
 from .parsing import ParsingCheck
+
+# from ltlf2dfa.pl import PLAtomic, PLTrue, PLFalse, PLAnd, PLOr
 
 
 def test_parser():

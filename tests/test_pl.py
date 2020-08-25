@@ -18,20 +18,22 @@
 #
 """Test the Propositional Logic."""
 import os
-import pytest
+
 import lark
+import pytest
 
 from ltlf2dfa.parser.pl import PLParser
 from ltlf2dfa.pl import (
     PLAnd,
     PLAtomic,
-    PLNot,
     PLEquivalence,
-    PLOr,
-    PLImplies,
     PLFalse,
+    PLImplies,
+    PLNot,
+    PLOr,
     PLTrue,
 )
+
 from .parsing import ParsingCheck
 
 

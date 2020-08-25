@@ -18,9 +18,10 @@
 #
 """Small helper class to check the correct parsing."""
 
+from typing import List, Optional, Tuple
+
 from lark import Lark
 from lark.lexer import Token
-from typing import List, Tuple, Optional
 
 
 class ParsingCheck:

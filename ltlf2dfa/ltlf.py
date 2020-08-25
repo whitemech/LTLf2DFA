@@ -19,21 +19,21 @@
 
 """This module contains the implementation of Linear Temporal Logic on finite traces."""
 
-from abc import abstractmethod, ABC
-from typing import Optional, Any, List
 import re
+from abc import ABC, abstractmethod
+from typing import Any, List, Optional
 
 from ltlf2dfa.base import (
-    Formula,
     AtomicFormula,
-    UnaryOperator,
-    BinaryOperator,
     AtomSymbol,
+    BinaryOperator,
+    Formula,
+    UnaryOperator,
 )
+from ltlf2dfa.helpers import new_var
 from ltlf2dfa.ltlf2dfa import to_dfa
 from ltlf2dfa.pl import PLAtomic
-from ltlf2dfa.symbols import Symbols, OpSymbol
-from ltlf2dfa.helpers import new_var
+from ltlf2dfa.symbols import OpSymbol, Symbols
 
 
 class LTLfFormula(Formula, ABC):

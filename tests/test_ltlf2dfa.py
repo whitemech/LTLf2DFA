@@ -18,10 +18,11 @@
 #
 """Test the ltlf2dfa tool."""
 
+from sympy import And, Not, Or, Symbol, simplify, symbols
+
+from ltlf2dfa.ltlf2dfa import simplify_guard, ter2symb
 from ltlf2dfa.parser.ltlf import LTLfParser
 from ltlf2dfa.parser.pltlf import PLTLfParser
-from sympy import symbols, And, Not, Or, simplify, Symbol
-from ltlf2dfa.ltlf2dfa import ter2symb, simplify_guard
 
 
 def test_ltlf_dfa():
