@@ -339,24 +339,24 @@ A = {0}"""
 def test_pltlf_dfa():
     parser = PLTLfParser()
 
-    f = parser("a")
-    dfa = f.to_dfa(mona_dfa_out=False)
-    expected = """digraph MONA_DFA {
- rankdir = LR;
- center = true;
- size = "7.5,10.5";
- edge [fontname = Courier];
- node [height = .5, width = .5];
- node [shape = doublecircle]; 3;
- node [shape = circle]; 1;
- init [shape = plaintext, label = ""];
- init -> 1;
- 1 -> 2 [label="~a"];
- 1 -> 3 [label="a"];
- 2 -> 2 [label="true"];
- 3 -> 3 [label="true"];
-}"""
-    assert dfa == expected
+    #     f = parser("a")
+    #     dfa = f.to_dfa(mona_dfa_out=False)
+    #     expected = """digraph MONA_DFA {
+    #  rankdir = LR;
+    #  center = true;
+    #  size = "7.5,10.5";
+    #  edge [fontname = Courier];
+    #  node [height = .5, width = .5];
+    #  node [shape = doublecircle]; 3;
+    #  node [shape = circle]; 1;
+    #  init [shape = plaintext, label = ""];
+    #  init -> 1;
+    #  1 -> 2 [label="~a"];
+    #  1 -> 3 [label="a"];
+    #  2 -> 2 [label="true"];
+    #  3 -> 3 [label="true"];
+    # }"""
+    #     assert dfa == expected
 
     f = parser("true")
     dfa = f.to_dfa(mona_dfa_out=False)
@@ -496,6 +496,32 @@ def test_pltlf_dfa():
  3 -> 3 [label="a & ~b"];
  3 -> 4 [label="a & b"];
  4 -> 2 [label="~a"];
+ 4 -> 4 [label="a"];
+}"""
+    assert dfa == expected
+
+    f = parser("a & O(b)")
+
+    dfa = f.to_dfa(mona_dfa_out=False)
+    expected = """digraph MONA_DFA {
+ rankdir = LR;
+ center = true;
+ size = "7.5,10.5";
+ edge [fontname = Courier];
+ node [height = .5, width = .5];
+ node [shape = doublecircle]; 4;
+ node [shape = circle]; 1;
+ init [shape = plaintext, label = ""];
+ init -> 1;
+ 1 -> 2 [label="~b"];
+ 1 -> 3 [label="b & ~a"];
+ 1 -> 4 [label="a & b"];
+ 2 -> 2 [label="~b"];
+ 2 -> 3 [label="b & ~a"];
+ 2 -> 4 [label="a & b"];
+ 3 -> 3 [label="~a"];
+ 3 -> 4 [label="a"];
+ 4 -> 3 [label="~a"];
  4 -> 4 [label="a"];
 }"""
     assert dfa == expected

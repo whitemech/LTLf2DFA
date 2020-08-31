@@ -59,6 +59,8 @@ def test_parser():
 
     assert parser("(Y a)") == PLTLfBefore(a)
 
+    assert parser("a & O(b)") == PLTLfAnd([a, PLTLfOnce(b)])
+
     assert parser("(O (a&b)) <-> !(H (!a | !b) )") == PLTLfEquivalence(
         [
             PLTLfOnce(PLTLfAnd([a, b])),
@@ -154,22 +156,22 @@ def test_mona():
     tt = PLTLfTrue()
     ff = PLTLfFalse()
 
-    assert a.to_mona(v="max($)") == "(0 in A)"
-    assert b.to_mona(v="max($)") == "(0 in B)"
-    assert c.to_mona(v="max($)") == "(0 in C)"
+    assert a.to_mona(v="max($)") == "(max($) in A)"
+    assert b.to_mona(v="max($)") == "(max($) in B)"
+    assert c.to_mona(v="max($)") == "(max($) in C)"
     assert tt.to_mona(v="max($)") == "true"
     assert ff.to_mona(v="max($)") == "false"
 
     f = parser("!(a & !b)")
-    assert f.to_mona(v="max($)") == "~(((0 in A) & ~((0 in B))))"
+    assert f.to_mona(v="max($)") == "~(((max($) in A) & ~((max($) in B))))"
 
     f = parser("!(!a | b)")
-    assert f.to_mona(v="max($)") == "~((~((0 in A)) | (0 in B)))"
+    assert f.to_mona(v="max($)") == "~((~((max($) in A)) | (max($) in B)))"
 
     f = parser("!(a <-> b)")
     assert (
         f.to_nnf().to_mona(v="max($)")
-        == "((~((0 in A)) | ~((0 in B))) & ((0 in A) | (0 in B)))"
+        == "((~((max($) in A)) | ~((max($) in B))) & ((max($) in A) | (max($) in B)))"
     )
 
     # Before
@@ -193,6 +195,12 @@ def test_mona():
         f.to_mona(v="max($)")
         == "(ex1 v_1: 0<=v_1&v_1<=max($) & ((v_1 in A) & (v_1 in B)) & (all1 v_2: "
         "v_1<v_2&v_2<=max($) => true))"
+    )
+    f = parser("a & O(b)")
+    assert (
+        f.to_mona(v="max($)")
+        == "((max($) in A) & (ex1 v_1: 0<=v_1&v_1<=max($) & (v_1 in B) & (all1 v_2: v_1<v_2&v_2<=max($) => "
+        "true)))"
     )
     f = parser("H(a | b)")
     assert (
