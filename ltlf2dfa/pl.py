@@ -129,10 +129,7 @@ class PLAtomic(AtomicFormula, PLFormula):
 
     def to_mona(self, v="0") -> str:
         """Return the MONA encoding of a PL atomic formula."""
-        if v != "0":
-            return "({} in {})".format(v, self.s.upper())
-        else:
-            return "(0 in {})".format(self.s.upper())
+        return f"({v} in {self.s.upper()})"
 
 
 class PLBinaryOperator(BinaryOperator[PLFormula], PLFormula, ABC):
