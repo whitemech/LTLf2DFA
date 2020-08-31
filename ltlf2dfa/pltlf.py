@@ -100,7 +100,7 @@ class PLTLfAtomic(AtomicFormula, PLTLfFormula):
         if v != "max($)":
             return "({} in {})".format(v, self.s.upper())
         else:
-            return PLAtomic(self.s).to_mona()
+            return PLAtomic(self.s).to_mona(v="max($)")
 
     # def to_ldlf(self):
     #     return LDLfPropositional(PLAtomic(self.s)).convert()
