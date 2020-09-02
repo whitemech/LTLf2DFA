@@ -30,7 +30,12 @@ jobs:
         tox -e black-check
         tox -e isort-check
         tox -e flake8
+        tox -e vulture
     - name: Static type check
       run: tox -e mypy
     - name: Check copyright
       run: tox -e check-copyright
+    - name: Misc checks
+      run: |
+        tox -e bandit
+        tox -e safety

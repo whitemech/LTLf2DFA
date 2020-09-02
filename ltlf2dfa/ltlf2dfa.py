@@ -174,7 +174,7 @@ def createMonafile(p: str):
 
 def invoke_mona():
     """Execute the MONA tool."""
-    command = "mona -q -w {}/automa.mona".format(PACKAGE_DIR)
+    command = "mona -q -u -w {}/automa.mona".format(PACKAGE_DIR)
     process = Popen(
         args=command,
         stdout=PIPE,
