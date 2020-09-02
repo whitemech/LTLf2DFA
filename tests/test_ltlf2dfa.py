@@ -49,8 +49,7 @@ def test_ltlf_dfa():
     expected_mona = """DFA for formula with free variables: A 
 Initial state: 0
 Accepting states: 3 
-Rejecting states: 1 2 
-Don't-care states: 0 
+Rejecting states: 0 1 2 
 
 Automaton has 4 states and 4 BDD-nodes
 Transitions:
@@ -132,15 +131,13 @@ A = {0}"""
  size = "7.5,10.5";
  edge [fontname = Courier];
  node [height = .5, width = .5];
- node [shape = doublecircle]; 3;
+ node [shape = doublecircle]; 2;
  node [shape = circle]; 1;
  init [shape = plaintext, label = ""];
  init -> 1;
- 1 -> 2 [label="~a | ~b"];
- 1 -> 3 [label="a & b"];
- 2 -> 2 [label="~a | ~b"];
- 2 -> 3 [label="a & b"];
- 3 -> 3 [label="true"];
+ 1 -> 1 [label="~a | ~b"];
+ 1 -> 2 [label="a & b"];
+ 2 -> 2 [label="true"];
 }"""
     assert dfa == expected
 
@@ -214,19 +211,16 @@ A = {0}"""
  size = "7.5,10.5";
  edge [fontname = Courier];
  node [height = .5, width = .5];
- node [shape = doublecircle]; 4;
+ node [shape = doublecircle]; 3;
  node [shape = circle]; 1;
  init [shape = plaintext, label = ""];
  init -> 1;
  1 -> 2 [label="~a"];
- 1 -> 3 [label="a & ~b"];
- 1 -> 4 [label="a & b"];
+ 1 -> 1 [label="a & ~b"];
+ 1 -> 3 [label="a & b"];
  2 -> 2 [label="true"];
  3 -> 2 [label="~a"];
- 3 -> 3 [label="a & ~b"];
- 3 -> 4 [label="a & b"];
- 4 -> 2 [label="~a"];
- 4 -> 4 [label="a"];
+ 3 -> 3 [label="a"];
 }"""
     assert dfa == expected
 
@@ -239,8 +233,7 @@ def test_ltlf_mona_dfa():
     expected_mona = """DFA for formula with free variables: A 
 Initial state: 0
 Accepting states: 3 
-Rejecting states: 1 2 
-Don't-care states: 0 
+Rejecting states: 0 1 2 
 
 Automaton has 4 states and 4 BDD-nodes
 Transitions:
@@ -266,8 +259,7 @@ A = {0}"""
     expected_mona = """DFA for formula with free variables: 
 Initial state: 0
 Accepting states: 1 
-Rejecting states: 
-Don't-care states: 0 
+Rejecting states: 0 
 
 Automaton has 2 states and 1 BDD-node
 Transitions:
@@ -282,13 +274,11 @@ A satisfying example of least length (0) is:"""
     expected_mona = """DFA for formula with free variables: 
 Initial state: 0
 Accepting states: 
-Rejecting states: 1 
-Don't-care states: 0 
+Rejecting states: 0 
 
-Automaton has 2 states and 1 BDD-node
+Automaton has 1 state and 1 BDD-node
 Transitions:
-State 0:  -> state 1
-State 1:  -> state 1
+State 0:  -> state 0
 Formula is unsatisfiable
 
 A counter-example of least length (0) is:"""
@@ -299,8 +289,7 @@ A counter-example of least length (0) is:"""
     expected_mona = """DFA for formula with free variables: A 
 Initial state: 0
 Accepting states: 3 
-Rejecting states: 2 
-Don't-care states: 0 1 
+Rejecting states: 0 1 2 
 
 Automaton has 4 states and 4 BDD-nodes
 Transitions:
@@ -418,15 +407,13 @@ def test_pltlf_dfa():
  size = "7.5,10.5";
  edge [fontname = Courier];
  node [height = .5, width = .5];
- node [shape = doublecircle]; 3;
+ node [shape = doublecircle]; 2;
  node [shape = circle]; 1;
  init [shape = plaintext, label = ""];
  init -> 1;
- 1 -> 2 [label="~a | ~b"];
- 1 -> 3 [label="a & b"];
- 2 -> 2 [label="~a | ~b"];
- 2 -> 3 [label="a & b"];
- 3 -> 3 [label="true"];
+ 1 -> 1 [label="~a | ~b"];
+ 1 -> 2 [label="a & b"];
+ 2 -> 2 [label="true"];
 }"""
     assert dfa == expected
 
@@ -438,20 +425,18 @@ def test_pltlf_dfa():
  size = "7.5,10.5";
  edge [fontname = Courier];
  node [height = .5, width = .5];
- node [shape = doublecircle]; 4; 5;
+ node [shape = doublecircle]; 3; 4;
  node [shape = circle]; 1;
  init [shape = plaintext, label = ""];
  init -> 1;
- 1 -> 2 [label="~a"];
- 1 -> 3 [label="a"];
- 2 -> 2 [label="~a"];
- 2 -> 3 [label="a"];
- 3 -> 4 [label="~a"];
- 3 -> 5 [label="a"];
- 4 -> 2 [label="~a"];
- 4 -> 3 [label="a"];
- 5 -> 4 [label="~a"];
- 5 -> 5 [label="a"];
+ 1 -> 1 [label="~a"];
+ 1 -> 2 [label="a"];
+ 2 -> 3 [label="~a"];
+ 2 -> 4 [label="a"];
+ 3 -> 1 [label="~a"];
+ 3 -> 2 [label="a"];
+ 4 -> 3 [label="~a"];
+ 4 -> 4 [label="a"];
 }"""
     assert dfa == expected
 
@@ -463,16 +448,14 @@ def test_pltlf_dfa():
  size = "7.5,10.5";
  edge [fontname = Courier];
  node [height = .5, width = .5];
- node [shape = doublecircle]; 3;
+ node [shape = doublecircle]; 2;
  node [shape = circle]; 1;
  init [shape = plaintext, label = ""];
  init -> 1;
- 1 -> 2 [label="~b"];
- 1 -> 3 [label="b"];
- 2 -> 2 [label="~b"];
- 2 -> 3 [label="b"];
- 3 -> 2 [label="~a & ~b"];
- 3 -> 3 [label="a | b"];
+ 1 -> 1 [label="~b"];
+ 1 -> 2 [label="b"];
+ 2 -> 1 [label="~a & ~b"];
+ 2 -> 2 [label="a | b"];
 }"""
     assert dfa == expected
 
@@ -484,19 +467,16 @@ def test_pltlf_dfa():
  size = "7.5,10.5";
  edge [fontname = Courier];
  node [height = .5, width = .5];
- node [shape = doublecircle]; 4;
+ node [shape = doublecircle]; 3;
  node [shape = circle]; 1;
  init [shape = plaintext, label = ""];
  init -> 1;
  1 -> 2 [label="~a"];
- 1 -> 3 [label="a & ~b"];
- 1 -> 4 [label="a & b"];
+ 1 -> 1 [label="a & ~b"];
+ 1 -> 3 [label="a & b"];
  2 -> 2 [label="true"];
  3 -> 2 [label="~a"];
- 3 -> 3 [label="a & ~b"];
- 3 -> 4 [label="a & b"];
- 4 -> 2 [label="~a"];
- 4 -> 4 [label="a"];
+ 3 -> 3 [label="a"];
 }"""
     assert dfa == expected
 
@@ -509,20 +489,17 @@ def test_pltlf_dfa():
  size = "7.5,10.5";
  edge [fontname = Courier];
  node [height = .5, width = .5];
- node [shape = doublecircle]; 4;
+ node [shape = doublecircle]; 3;
  node [shape = circle]; 1;
  init [shape = plaintext, label = ""];
  init -> 1;
- 1 -> 2 [label="~b"];
- 1 -> 3 [label="b & ~a"];
- 1 -> 4 [label="a & b"];
- 2 -> 2 [label="~b"];
- 2 -> 3 [label="b & ~a"];
- 2 -> 4 [label="a & b"];
- 3 -> 3 [label="~a"];
- 3 -> 4 [label="a"];
- 4 -> 3 [label="~a"];
- 4 -> 4 [label="a"];
+ 1 -> 1 [label="~b"];
+ 1 -> 2 [label="b & ~a"];
+ 1 -> 3 [label="a & b"];
+ 2 -> 2 [label="~a"];
+ 2 -> 3 [label="a"];
+ 3 -> 2 [label="~a"];
+ 3 -> 3 [label="a"];
 }"""
     assert dfa == expected
 
