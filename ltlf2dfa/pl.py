@@ -63,7 +63,7 @@ class PLFormula(Formula):
     def negate(self) -> "PLFormula":
         """Negate the formula. Used by 'to_nnf'."""
 
-    def to_mona(self, v: Optional[Any] = None) -> str:
+    def to_mona(self, v: Optional[Any] = None, w: Optional[Any] = None) -> str:
         """
         Tranform the PL formula into its encoding in MONA.
 
@@ -127,7 +127,7 @@ class PLAtomic(AtomicFormula, PLFormula):
         """Negate the formula."""
         return PLNot(self)
 
-    def to_mona(self, v="0") -> str:
+    def to_mona(self, v="0", w="max($)") -> str:
         """Return the MONA encoding of a PL atomic formula."""
         return f"({v} in {self.s.upper()})"
 
@@ -160,7 +160,7 @@ class PLTrue(PLAtomic):
         """Transform in NNF."""
         return self
 
-    def to_mona(self, v="0") -> str:
+    def to_mona(self, v="0", w="max($)") -> str:
         """Return the MONA encoding of a PL atomic formula."""
         return Symbols.TRUE.value
 
@@ -184,7 +184,7 @@ class PLFalse(PLAtomic):
         """Transform in NNF."""
         return self
 
-    def to_mona(self, v="0") -> str:
+    def to_mona(self, v="0", w="max($)") -> str:
         """Return the MONA encoding of a PL atomic formula."""
         return Symbols.FALSE.value
 

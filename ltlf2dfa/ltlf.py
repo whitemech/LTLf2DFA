@@ -100,7 +100,7 @@ class LTLfAtomic(AtomicFormula, LTLfFormula):
         if v != "0":
             return "({} in {})".format(v, self.s.upper())
         else:
-            return PLAtomic(self.s).to_mona()
+            return PLAtomic(self.s).to_mona(v, w)
 
     # def to_ldlf(self):
     #     """Convert the formula to LDLf."""
@@ -382,11 +382,11 @@ class LTLfUntil(LTLfBinaryOperator):
         """Return the MONA encoding of an LTLf Until formula."""
         ex_var = new_var(v)
         all_var = new_var(ex_var)
-        f1 = self.formulas[0].to_mona(v=all_var)
+        f1 = self.formulas[0].to_mona(v=all_var, w=w)
         f2 = (
-            LTLfUntil(self.formulas[1:]).to_mona(v=ex_var)
+            LTLfUntil(self.formulas[1:]).to_mona(v=ex_var, w=w)
             if len(self.formulas) > 2
-            else self.formulas[1].to_mona(v=ex_var)
+            else self.formulas[1].to_mona(v=ex_var, w=w)
         )
         if v != "0":
             return (
@@ -435,11 +435,11 @@ class LTLfRelease(LTLfBinaryOperator):
         """Return the MONA encoding of an LTLf Release formula."""
         ex_var = new_var(v)
         all_var = new_var(ex_var)
-        f1 = self.formulas[0].to_mona(v=ex_var)
+        f1 = self.formulas[0].to_mona(v=ex_var, w=w)
         f2 = (
-            LTLfRelease(self.formulas[1:]).to_mona(v=all_var)
+            LTLfRelease(self.formulas[1:]).to_mona(v=all_var, w=w)
             if len(self.formulas) > 2
-            else self.formulas[1].to_mona(v=all_var)
+            else self.formulas[1].to_mona(v=all_var, w=w)
         )
         if v != "0":
             return (

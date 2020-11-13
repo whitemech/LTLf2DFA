@@ -100,7 +100,7 @@ class PLTLfAtomic(AtomicFormula, PLTLfFormula):
         if v != "max($)":
             return "({} in {})".format(v, self.s.upper())
         else:
-            return PLAtomic(self.s).to_mona(v="max($)")
+            return PLAtomic(self.s).to_mona(v="max($)", w=w)
 
     # def to_ldlf(self):
     #     return LDLfPropositional(PLAtomic(self.s)).convert()
@@ -317,11 +317,11 @@ class PLTLfSince(PLTLfBinaryOperator):
         """Return the MONA encoding of a PLTLf Since formula."""
         ex_var = new_var(v)
         all_var = new_var(ex_var)
-        f1 = self.formulas[0].to_mona(v=all_var)
+        f1 = self.formulas[0].to_mona(v=all_var, w=w)
         f2 = (
-            PLTLfSince(self.formulas[1:]).to_mona(v=ex_var)
+            PLTLfSince(self.formulas[1:]).to_mona(v=ex_var, w=w)
             if len(self.formulas) > 2
-            else self.formulas[1].to_mona(v=ex_var)
+            else self.formulas[1].to_mona(v=ex_var, w=w)
         )
         if v != "max($)":
             return (
