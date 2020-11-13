@@ -51,7 +51,7 @@ class LTLfFormula(Formula, ABC):
         """Get the representation."""
         return self.__str__()
 
-    def to_mona(self, v: Optional[Any] = None) -> str:
+    def to_mona(self, v: Optional[Any] = None, w: Optional[Any] = None) -> str:
         """
         Tranform the LTLf formula into its encoding in MONA.
 
@@ -95,7 +95,7 @@ class LTLfAtomic(AtomicFormula, LTLfFormula):
         """Find the labels."""
         return PLAtomic(self.s).find_labels()
 
-    def to_mona(self, v="0") -> str:
+    def to_mona(self, v="0", w="max($)") -> str:
         """Return the MONA encoding of an LTLf atomic formula."""
         if v != "0":
             return "({} in {})".format(v, self.s.upper())
@@ -122,7 +122,7 @@ class LTLfTrue(LTLfAtomic):
         """Find the labels."""
         return list()
 
-    def to_mona(self, v="0") -> str:
+    def to_mona(self, v="0", w="max($)") -> str:
         """Return the MONA encoding for False."""
         return Symbols.TRUE.value
 
@@ -146,7 +146,7 @@ class LTLfFalse(LTLfAtomic):
         """Find the labels."""
         return list()
 
-    def to_mona(self, v="0") -> str:
+    def to_mona(self, v="0", w="max($)") -> str:
         """Return the MONA encoding for False."""
         return Symbols.FALSE.value
 
@@ -170,9 +170,9 @@ class LTLfNot(LTLfUnaryOperator):
         """Negate the formula."""
         return self.f
 
-    def to_mona(self, v="0") -> str:
+    def to_mona(self, v="0", w="max($)") -> str:
         """Return the MONA encoding of an LTLf Not formula."""
-        return "~({})".format(self.f.to_mona(v))
+        return "~({})".format(self.f.to_mona(v, w))
 
     # def to_ldlf(self):
     #     """Convert the formula to LDLf."""
@@ -191,9 +191,9 @@ class LTLfAnd(LTLfBinaryOperator):
         """Negate the formula."""
         return LTLfOr([f.negate() for f in self.formulas])
 
-    def to_mona(self, v="0") -> str:
+    def to_mona(self, v="0", w="max($)") -> str:
         """Return the MONA encoding of an LTLf And formula."""
-        return "({})".format(" & ".join([f.to_mona(v) for f in self.formulas]))
+        return "({})".format(" & ".join([f.to_mona(v, w) for f in self.formulas]))
 
     # def to_ldlf(self):
     #     """Convert the formula to LDLf."""
@@ -212,9 +212,9 @@ class LTLfOr(LTLfBinaryOperator):
         """Negate the formula."""
         return LTLfAnd([f.negate() for f in self.formulas])
 
-    def to_mona(self, v="0") -> str:
+    def to_mona(self, v="0", w="max($)") -> str:
         """Return the MONA encoding of an LTLf Or formula."""
-        return "({})".format(" | ".join([f.to_mona(v) for f in self.formulas]))
+        return "({})".format(" | ".join([f.to_mona(v, w) for f in self.formulas]))
 
     # def to_ldlf(self):
     #     """Convert LTLf formula to LDLf."""
@@ -243,9 +243,9 @@ class LTLfImplies(LTLfBinaryOperator):
             )
         return final_formula
 
-    def to_mona(self, v="0") -> str:
+    def to_mona(self, v="0", w="max($)") -> str:
         """Return the MONA encoding of an LTLf Implication formula."""
-        return self.to_nnf().to_mona(v)
+        return self.to_nnf().to_mona(v, w)
 
     # def to_ldlf(self):
     #     """Convert the formula to LDLf."""
@@ -278,9 +278,9 @@ class LTLfEquivalence(LTLfBinaryOperator):
         """Negate the formula."""
         return self.to_nnf().negate()
 
-    def to_mona(self, v="0") -> str:
+    def to_mona(self, v="0", w="max($)") -> str:
         """Return the MONA encoding of an LTLf Equivalence formula."""
-        return self.to_nnf().to_mona(v)
+        return self.to_nnf().to_mona(v, w)
 
     # def to_ldlf(self):
     #     """Convert the formula to LDLf."""
@@ -309,15 +309,15 @@ class LTLfNext(LTLfUnaryOperator):
         """Negate the formula."""
         return LTLfWeakNext(self.f.negate())
 
-    def to_mona(self, v="0") -> str:
+    def to_mona(self, v="0", w="max($)") -> str:
         """Return the MONA encoding of an LTLf Next formula."""
         ex_var = new_var(v)
         if v != "0":
             return "(ex1 {0}: {0}={1}+1 & {2})".format(
-                ex_var, v, self.f.to_mona(ex_var)
+                ex_var, v, self.f.to_mona(ex_var, w)
             )
         else:
-            return "(ex1 {0}: {0}=1 & {1})".format(ex_var, self.f.to_mona(ex_var))
+            return "(ex1 {0}: {0}=1 & {1})".format(ex_var, self.f.to_mona(ex_var, w))
 
     # def to_ldlf(self):
     #     """Convert the formula to LDLf."""
@@ -343,16 +343,16 @@ class LTLfWeakNext(LTLfUnaryOperator):
         """Negate the formula."""
         return LTLfNext(self.f.negate())
 
-    def to_mona(self, v="0") -> str:
+    def to_mona(self, v="0", w="max($)") -> str:
         """Return the MONA encoding of an LTLf WeakNext formula."""
         ex_var = new_var(v)
         if v != "0":
-            return "((({1} = max($)) | (ex1 {0}: {0}={1}+1 & {2})))".format(
-                ex_var, v, self.f.to_mona(ex_var)
+            return "((({1} = {2}) | (ex1 {0}: {0}={1}+1 & {3})))".format(
+                ex_var, v, w, self.f.to_mona(ex_var, w)
             )
         else:
-            return "(((0 = max($)) | (ex1 {0}: {0}=1 & {1})))".format(
-                ex_var, self.f.to_mona(ex_var)
+            return "(((0 = {1}) | (ex1 {0}: {0}=1 & {2})))".format(
+                ex_var, w, self.f.to_mona(ex_var, w)
             )
 
     # def to_ldlf(self):
@@ -378,7 +378,7 @@ class LTLfUntil(LTLfBinaryOperator):
         """Negate the formula."""
         return LTLfRelease([f.negate() for f in self.formulas])
 
-    def to_mona(self, v="0") -> str:
+    def to_mona(self, v="0", w="max($)") -> str:
         """Return the MONA encoding of an LTLf Until formula."""
         ex_var = new_var(v)
         all_var = new_var(ex_var)
@@ -390,15 +390,15 @@ class LTLfUntil(LTLfBinaryOperator):
         )
         if v != "0":
             return (
-                "(ex1 {0}: {1}<={0}&{0}<=max($) & {2} & "
+                "(ex1 {0}: {1}<={0}&{0}<={5} & {2} & "
                 "(all1 {3}: {1}<={3}&{3}<{0} => {4}))".format(
-                    ex_var, v, f2, all_var, f1
+                    ex_var, v, f2, all_var, f1, w
                 )
             )
         else:
             return (
-                "(ex1 {0}: 0<={0}&{0}<=max($) & {1} & "
-                "(all1 {2}: 0<={2}&{2}<{0} => {3}))".format(ex_var, f2, all_var, f1)
+                "(ex1 {0}: 0<={0}&{0}<={4} & {1} & "
+                "(all1 {2}: 0<={2}&{2}<{0} => {3}))".format(ex_var, f2, all_var, f1, w)
             )
 
     # def to_ldlf(self):
@@ -431,7 +431,7 @@ class LTLfRelease(LTLfBinaryOperator):
         """Negate the formula."""
         return LTLfUntil([f.negate() for f in self.formulas])
 
-    def to_mona(self, v="0") -> str:
+    def to_mona(self, v="0", w="max($)") -> str:
         """Return the MONA encoding of an LTLf Release formula."""
         ex_var = new_var(v)
         all_var = new_var(ex_var)
@@ -443,15 +443,15 @@ class LTLfRelease(LTLfBinaryOperator):
         )
         if v != "0":
             return (
-                "((ex1 {0}: {1}<={0}&{0}<=max($) & {2} & "
+                "((ex1 {0}: {1}<={0}&{0}<={5} & {2} & "
                 "(all1 {3}: {1}<={3}&{3}<={0} => {4})) | (all1 {3}: "
-                "{1}<={3}&{3}<=max($) => {4}))".format(ex_var, v, f1, all_var, f2)
+                "{1}<={3}&{3}<=max($) => {4}))".format(ex_var, v, f1, all_var, f2, w)
             )
         else:
             return (
-                "((ex1 {0}: 0<={0}&{0}<=max($) & {1} & "
+                "((ex1 {0}: 0<={0}&{0}<={4} & {1} & "
                 "(all1 {2}: 0<={2}&{2}<={0} => {3})) | (all1 {2}: "
-                "0<={2}&{2}<=max($) => {3}))".format(ex_var, f1, all_var, f2)
+                "0<={2}&{2}<=max($) => {3}))".format(ex_var, f1, all_var, f2, w)
             )
 
     # def to_ldlf(self):
@@ -486,9 +486,9 @@ class LTLfEventually(LTLfUnaryOperator):
         """Negate the formula."""
         return self.to_nnf().negate()
 
-    def to_mona(self, v="0") -> str:
+    def to_mona(self, v="0", w="max($)") -> str:
         """Return the MONA encoding of an LTLf Eventually formula."""
-        return LTLfUntil([LTLfTrue(), self.f]).to_mona(v)
+        return LTLfUntil([LTLfTrue(), self.f]).to_mona(v, w)
 
     # def to_ldlf(self):
     #     """Convert the formula to LDLf."""
@@ -514,9 +514,9 @@ class LTLfAlways(LTLfUnaryOperator):
         """Negate the formula."""
         return self.to_nnf().negate()
 
-    def to_mona(self, v="0") -> str:
+    def to_mona(self, v="0", w="max($)") -> str:
         """Return the MONA encoding of an LTLf Always formula."""
-        return LTLfRelease([LTLfFalse(), self.f]).to_mona(v)
+        return LTLfRelease([LTLfFalse(), self.f]).to_mona(v, w)
 
     # def to_ldlf(self):
     #     """Convert the formula to LDLf."""
@@ -548,9 +548,9 @@ class LTLfLast(LTLfFormula):
         """Get the string representation."""
         return Symbols.LAST.value
 
-    def to_mona(self, v="0") -> str:
+    def to_mona(self, v="0", w="max($)") -> str:
         """Return the MONA encoding of an LTLf Last formula."""
-        return LTLfWeakNext(LTLfFalse()).to_mona(v)
+        return LTLfWeakNext(LTLfFalse()).to_mona(v, w)
 
     # def to_ldlf(self):
     #     """Convert the formula to LDLf."""

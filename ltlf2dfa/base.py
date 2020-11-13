@@ -45,7 +45,7 @@ class Formula(Hashable, ABC):
         """Negate the formula. Used by 'to_nnf'."""
 
     @abstractmethod
-    def to_mona(self, v: Optional[Any] = None) -> str:
+    def to_mona(self, v: Optional[Any] = None, w: Optional[Any] = None) -> str:
         """Transform the formula in MONA."""
 
 
