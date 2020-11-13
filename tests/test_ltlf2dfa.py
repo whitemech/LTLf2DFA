@@ -111,15 +111,13 @@ A = {0}"""
  size = "7.5,10.5";
  edge [fontname = Courier];
  node [height = .5, width = .5];
- node [shape = doublecircle]; 3;
+ node [shape = doublecircle]; 1;
  node [shape = circle]; 1;
  init [shape = plaintext, label = ""];
  init -> 1;
  1 -> 2 [label="~a"];
- 1 -> 3 [label="a"];
+ 1 -> 1 [label="a"];
  2 -> 2 [label="true"];
- 3 -> 2 [label="~a"];
- 3 -> 3 [label="a"];
 }"""
     assert dfa == expected
 
@@ -288,26 +286,24 @@ A counter-example of least length (0) is:"""
     mona_dfa = f.to_dfa(mona_dfa_out=True)
     expected_mona = """DFA for formula with free variables: A 
 Initial state: 0
-Accepting states: 3 
-Rejecting states: 0 1 2 
+Accepting states: 1 
+Rejecting states: 0 2 
 
-Automaton has 4 states and 4 BDD-nodes
+Automaton has 3 states and 3 BDD-nodes
 Transitions:
 State 0: X -> state 1
 State 1: 0 -> state 2
-State 1: 1 -> state 3
+State 1: 1 -> state 1
 State 2: X -> state 2
-State 3: 0 -> state 2
-State 3: 1 -> state 3
 A counter-example of least length (1) is:
 A               X 0
 
 A = {}
 
-A satisfying example of least length (1) is:
-A               X 1
+A satisfying example of least length (0) is:
+A               X 
 
-A = {0}"""
+A = {}"""
     assert mona_dfa == expected_mona
 
     f1 = parser("F(WX(false))")
@@ -387,15 +383,13 @@ def test_pltlf_dfa():
  size = "7.5,10.5";
  edge [fontname = Courier];
  node [height = .5, width = .5];
- node [shape = doublecircle]; 3;
+ node [shape = doublecircle]; 1;
  node [shape = circle]; 1;
  init [shape = plaintext, label = ""];
  init -> 1;
  1 -> 2 [label="~a"];
- 1 -> 3 [label="a"];
+ 1 -> 1 [label="a"];
  2 -> 2 [label="true"];
- 3 -> 2 [label="~a"];
- 3 -> 3 [label="a"];
 }"""
     assert dfa == expected
 
