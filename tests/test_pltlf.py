@@ -178,14 +178,14 @@ def test_mona():
     f = parser("Y(a & b)")
     assert (
         f.to_mona(v="max($)")
-        == "(ex1 v_1: v_1=max($)-1 & max($)>0 & ((v_1 in A) & (v_1 in B)))"
+        == "(ex1 v_1: v_1 in $ & v_1=max($)-1 & max($)>0 & ((v_1 in A) & (v_1 in B)))"
     )
 
     # Since
     f = parser("a S b")
     assert (
         f.to_mona(v="max($)")
-        == "(ex1 v_1: 0<=v_1&v_1<=max($) & (v_1 in B) & (all1 v_2: v_1<v_2&v_2<=max($)"
+        == "(ex1 v_1: v_1 in $ & 0<=v_1&v_1<=max($) & (v_1 in B) & (all1 v_2: v_2 in $ & v_1<v_2&v_2<=max($)"
         " => (v_2 in A)))"
     )
 
@@ -193,20 +193,20 @@ def test_mona():
     f = parser("O(a & b)")
     assert (
         f.to_mona(v="max($)")
-        == "(ex1 v_1: 0<=v_1&v_1<=max($) & ((v_1 in A) & (v_1 in B)) & (all1 v_2: "
-        "v_1<v_2&v_2<=max($) => true))"
+        == "(ex1 v_1: v_1 in $ & 0<=v_1&v_1<=max($) & ((v_1 in A) & (v_1 in B)) & (all1 v_2: "
+        "v_2 in $ & v_1<v_2&v_2<=max($) => true))"
     )
     f = parser("a & O(b)")
     assert (
         f.to_mona(v="max($)")
-        == "((max($) in A) & (ex1 v_1: 0<=v_1&v_1<=max($) & (v_1 in B) & (all1 v_2: v_1<v_2&v_2<=max($) => "
+        == "((max($) in A) & (ex1 v_1: v_1 in $ & 0<=v_1&v_1<=max($) & (v_1 in B) & (all1 v_2: v_2 in $ & v_1<v_2&v_2<=max($) => "
         "true)))"
     )
     f = parser("H(a | b)")
     assert (
         f.to_mona(v="max($)")
-        == "~((ex1 v_1: 0<=v_1&v_1<=max($) & ~(((v_1 in A) | (v_1 in B))) & (all1 v_2: "
-        "v_1<v_2&v_2<=max($) => true)))"
+        == "~((ex1 v_1: v_1 in $ & 0<=v_1&v_1<=max($) & ~(((v_1 in A) | (v_1 in B))) & (all1 v_2: "
+        "v_2 in $ & v_1<v_2&v_2<=max($) => true)))"
     )
 
 

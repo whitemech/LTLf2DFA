@@ -118,7 +118,7 @@ class QuotedFormula(Wrapper):
 class MonaProgram:
     """Implements a MONA program."""
 
-    HEADER = "m2l-str"
+    HEADER = "var2 $ where ~ex1 p where true: p notin $ & p+1 in $;\nallpos $"
     vars: List[str] = list()
 
     def __init__(self, f: Formula):
