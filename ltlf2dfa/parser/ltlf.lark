@@ -8,13 +8,17 @@ start: ltlf_formula
 ?ltlf_until:       ltlf_release (UNTIL ltlf_release)*
 ?ltlf_release:     ltlf_unaryop (RELEASE ltlf_unaryop)*
 
-?ltlf_unaryop:     ltlf_always
+?ltlf_unaryop:     ltlf_exist
+             |     ltlf_forall
+             |     ltlf_always
              |     ltlf_eventually
              |     ltlf_next
              |     ltlf_weak_next
              |     ltlf_not
              |     ltlf_wrapped
 
+?ltlf_exist:       EXIST ltlf_unaryop
+?ltlf_forall:      FORALL ltlf_unaryop
 ?ltlf_always:      ALWAYS ltlf_unaryop
 ?ltlf_eventually:  EVENTUALLY ltlf_unaryop
 ?ltlf_next:        NEXT ltlf_unaryop
@@ -33,6 +37,8 @@ ltlf_false: prop_false
 ltlf_last: LAST
 
 // Operators must not be part of a word
+EXIST.2: /EX(?=[^a-z]|$)/
+FORALL.2: /ALL(?=[^a-z]|$)/
 UNTIL.2: /U(?=[^a-z]|$)/
 RELEASE.2: /R(?=[^a-z]|$)/
 ALWAYS.2: /G(?=[^a-z]|$)/
