@@ -80,3 +80,21 @@ def test_QuotedFormula():
     for member in dir(f):
         assert member in dir_qf
         assert hasattr(qf, member)
+
+
+def test_newvar():
+    from ltlf2dfa.helpers import new_var
+
+    v_1, v_2, v_3 = ["v_{}".format(n) for n in "123"]
+    w_1, w_2, w_3 = ["w_{}".format(n) for n in "123"]
+
+    assert new_var("0") == v_1
+    assert new_var("max($)") == v_1
+    assert new_var("v_1") == v_2
+    assert new_var("v_1", False) == v_2
+    assert new_var("v_2") == v_3
+
+    assert new_var("max($)", False) == w_1
+    assert new_var("w_1") == w_2
+    assert new_var("w_1", False) == w_2
+    assert new_var("w_2") == w_3
