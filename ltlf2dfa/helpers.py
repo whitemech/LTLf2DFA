@@ -149,10 +149,12 @@ class Wrapper(Hashable):
 #         yield c
 
 
-def new_var(prev_var: str) -> str:
+def new_var(prev_var: str, free: bool = True) -> str:
     """Compute next variable."""
-    if prev_var == "0" or prev_var == "max($)":
+    if (prev_var == "0" or prev_var == "max($)") and free:
         return "v_1"
+    elif prev_var == "max($)" and not free:
+        return "w_1"
     else:
         s = prev_var.split("_")
         s[1] = str(int(s[1]) + 1)

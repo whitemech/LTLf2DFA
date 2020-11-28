@@ -27,6 +27,8 @@ OpSymbol = str
 class Symbols(Enum):
     """A set of symbols that can be used in a logical formula."""
 
+    EXIST = "EX"
+    FORALL = "ALL"
     NOT = "!"
     AND = "&"
     OR = "|"
