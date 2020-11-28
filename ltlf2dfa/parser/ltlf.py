@@ -42,6 +42,7 @@ from ltlf2dfa.ltlf import (
 )
 from ltlf2dfa.parser import CUR_DIR
 from ltlf2dfa.parser.pl import PLTransformer
+from ltlf2dfa.qltlf import QLTLfExist, QLTLfForAll
 
 
 class LTLfTransformer(Transformer):
@@ -121,6 +122,26 @@ class LTLfTransformer(Transformer):
             return LTLfRelease(subformulas)
         else:
             raise ParsingError
+
+    def ltlf_exist(self, args):
+        """Parse LTLf Exist."""
+        if len(args) == 1:
+            return args[0]
+        else:
+            f = args[-1]
+            for _ in args[:-1]:
+                f = QLTLfExist(f)
+            return f
+
+    def ltlf_forall(self, args):
+        """Parse LTLf All."""
+        if len(args) == 1:
+            return args[0]
+        else:
+            f = args[-1]
+            for _ in args[:-1]:
+                f = QLTLfForAll(f)
+            return f
 
     def ltlf_always(self, args):
         """Parse LTLf Always."""
