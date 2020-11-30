@@ -87,13 +87,17 @@ class QLTLfExist(LTLfUnaryOperator):
         """Negate the formula."""
         return QLTLfForAll(self.f.negate())
 
-    def to_mona(self, v="0", w="max($)") -> str:
+    def to_mona(self, v="0", w="j") -> str:
         """Return the MONA encoding of an QLTLf Exist formula."""
         ex_var = new_var(w, False)
-        return "(ex1 {0}: {1}<={0} & {0}<={2} & {3})".format(
-            ex_var, v, w, self.f.to_mona(v, ex_var)
-        )
-
+        if v == "0" and w == "j":
+            return "(ex1 {0}, {2}: {1}<={0} & {0}<={2} & {3})".format(
+                ex_var, v, w, self.f.to_mona(v, ex_var)
+            )
+        else:
+            return "(ex1 {0}: {1}<={0} & {0}<={2} & {3})".format(
+                ex_var, v, w, self.f.to_mona(v, ex_var)
+            )
 
 class QLTLfForAll(LTLfUnaryOperator):
     """Class for the QLTLf QLTLfForAll formula."""
@@ -115,9 +119,14 @@ class QLTLfForAll(LTLfUnaryOperator):
         """Negate the formula."""
         return QLTLfExist(self.f.negate())
 
-    def to_mona(self, v="0", w="max($)") -> str:
+    def to_mona(self, v="0", w="j") -> str:
         """Return the MONA encoding of an QLTLf Forall formula."""
         ex_var = new_var(w, False)
-        return "(all1 {0}: {1}<={0} & {0}<={2} => {3})".format(
-            ex_var, v, w, self.f.to_mona(v, ex_var)
-        )
+        if v == "0" and w == "j":
+            return "(all1 {0}, {2}: {1}<={0} & {0}<={2} => {3})".format(
+                ex_var, v, w, self.f.to_mona(v, ex_var)
+            )
+        else:
+            return "(all1 {0}: {1}<={0} & {0}<={2} => {3})".format(
+                ex_var, v, w, self.f.to_mona(v, ex_var)
+            )
