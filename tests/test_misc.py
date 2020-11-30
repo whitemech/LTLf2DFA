@@ -94,7 +94,7 @@ def test_newvar():
     assert new_var("v_1", False) == v_2
     assert new_var("v_2") == v_3
 
-    assert new_var("max($)", False) == w_1
+    assert new_var("j", False) == w_1
     assert new_var("w_1") == w_2
     assert new_var("w_1", False) == w_2
     assert new_var("w_2") == w_3

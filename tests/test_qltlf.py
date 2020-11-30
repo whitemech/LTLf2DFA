@@ -128,57 +128,57 @@ def test_mona():
     parser = LTLfParser()
 
     f = parser("EX a")
-    assert f.to_mona(v="0", w="max($)") == "(ex1 w_1: 0<=w_1 & w_1<=max($) & (0 in A))"
+    assert f.to_mona(v="0", w="j") == "(ex1 w_1, j: 0<=w_1 & w_1<=j & (0 in A))"
 
     f = parser("EX(X a)")
     assert (
-        f.to_mona(v="0", w="max($)")
-        == "(ex1 w_1: 0<=w_1 & w_1<=max($) & (ex1 v_1: v_1=1 & (v_1 in A)))"
+        f.to_mona(v="0", w="j")
+        == "(ex1 w_1, j: 0<=w_1 & w_1<=j & (ex1 v_1: v_1=0+1 & (v_1 in A)))"
     )
 
     f = parser("EX(F a)")
     assert (
-        f.to_mona(v="0", w="max($)")
-        == "(ex1 w_1: 0<=w_1 & w_1<=max($) & (ex1 v_1: 0<=v_1&v_1<=w_1 & (v_1 in A) & (all1 v_2: 0<=v_2&v_2<v_1 => true)))"
+        f.to_mona(v="0", w="j")
+        == "(ex1 w_1, j: 0<=w_1 & w_1<=j & (ex1 v_1: 0<=v_1&v_1<=w_1 & (v_1 in A) & (all1 v_2: 0<=v_2&v_2<v_1 => true)))"
     )
 
     f = parser("EX(EX a)")
     assert (
-        f.to_mona(v="0", w="max($)")
-        == "(ex1 w_1: 0<=w_1 & w_1<=max($) & (ex1 w_2: 0<=w_2 & w_2<=w_1 & (0 in A)))"
+        f.to_mona(v="0", w="j")
+        == "(ex1 w_1, j: 0<=w_1 & w_1<=j & (ex1 w_2: 0<=w_2 & w_2<=w_1 & (0 in A)))"
     )
 
     f = parser("F(EX(a))")
     assert (
-        f.to_mona(v="0", w="max($)")
-        == "(ex1 v_1: 0<=v_1&v_1<=max($) & (ex1 w_1: v_1<=w_1 & w_1<=max($) & (v_1 in A)) & (all1 v_2: 0<=v_2&v_2<v_1 => true))"
+        f.to_mona(v="0", w="j")
+        == "(ex1 v_1, j: 0<=v_1&v_1<=j & (ex1 w_1: v_1<=w_1 & w_1<=j & (v_1 in A)) & (all1 v_2: 0<=v_2&v_2<v_1 => true))"
     )
 
     f = parser("ALL a")
-    assert f.to_mona(v="0", w="max($)") == "(all1 w_1: 0<=w_1 & w_1<=max($) => (0 in A))"
+    assert f.to_mona(v="0", w="j") == "(all1 w_1, j: 0<=w_1 & w_1<=j => (0 in A))"
 
     f = parser("ALL(X a)")
     assert (
-        f.to_mona(v="0", w="max($)")
-        == "(all1 w_1: 0<=w_1 & w_1<=max($) => (ex1 v_1: v_1=1 & (v_1 in A)))"
+        f.to_mona(v="0", w="j")
+        == "(all1 w_1, j: 0<=w_1 & w_1<=j => (ex1 v_1: v_1=0+1 & (v_1 in A)))"
     )
 
     f = parser("ALL(F a)")
     assert (
-        f.to_mona(v="0", w="max($)")
-        == "(all1 w_1: 0<=w_1 & w_1<=max($) => (ex1 v_1: 0<=v_1&v_1<=w_1 & (v_1 in A) & (all1 v_2: 0<=v_2&v_2<v_1 => true)))"
+        f.to_mona(v="0", w="j")
+        == "(all1 w_1, j: 0<=w_1 & w_1<=j => (ex1 v_1: 0<=v_1&v_1<=w_1 & (v_1 in A) & (all1 v_2: 0<=v_2&v_2<v_1 => true)))"
     )
 
     f = parser("ALL(ALL a)")
     assert (
-        f.to_mona(v="0", w="max($)")
-        == "(all1 w_1: 0<=w_1 & w_1<=max($) => (all1 w_2: 0<=w_2 & w_2<=w_1 => (0 in A)))"
+        f.to_mona(v="0", w="j")
+        == "(all1 w_1, j: 0<=w_1 & w_1<=j => (all1 w_2: 0<=w_2 & w_2<=w_1 => (0 in A)))"
     )
 
     f = parser("F(ALL(a))")
     assert (
-        f.to_mona(v="0", w="max($)")
-        == "(ex1 v_1: 0<=v_1&v_1<=max($) & (all1 w_1: v_1<=w_1 & w_1<=max($) => (v_1 in A)) & (all1 v_2: 0<=v_2&v_2<v_1 => true))"
+        f.to_mona(v="0", w="j")
+        == "(ex1 v_1, j: 0<=v_1&v_1<=j & (all1 w_1: v_1<=w_1 & w_1<=j => (v_1 in A)) & (all1 v_2: 0<=v_2&v_2<v_1 => true))"
     )
 
 
