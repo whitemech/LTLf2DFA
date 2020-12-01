@@ -144,14 +144,14 @@ class MonaProgram:
     def mona_program(self) -> str:
         """Construct the MONA program."""
         if self.vars:
-            return "#{};\n{};\nvar2 {};\n{};\n".format(
+            return "#{}\n{};\nvar2 {};\n{};\n".format(
                 str(self.formula),
                 self.HEADER,
                 ", ".join(self.vars),
                 self.formula.to_mona(self.start, self.end),
             )
         else:
-            return "#{};\n{};\n{};\n".format(
+            return "#{}\n{};\n{};\n".format(
                 str(self.formula),
                 self.HEADER,
                 self.formula.to_mona(self.start, self.end),

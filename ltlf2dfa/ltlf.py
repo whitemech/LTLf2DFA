@@ -452,7 +452,7 @@ class LTLfRelease(LTLfBinaryOperator):
         if v == "0" and w == "j":
             return (
                 "((ex1 {0}, {5}: {1}<={0}&{0}<={5} & {2} & "
-                "(all1 {3}: {1}<={3}&{3}<={0} => {4})) | (all1 {3}: "
+                "(all1 {3}: {1}<={3}&{3}<={0} => {4})) | (all1 {3}, {5}: "
                 "{1}<={3}&{3}<={5} => {4}))".format(ex_var, v, f1, all_var, f2, w)
             )
         else:

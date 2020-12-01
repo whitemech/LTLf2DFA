@@ -504,52 +504,53 @@ def test_pltlf_dfa():
     assert dfa == expected
 
 
-# def test_qltlf():
-#     parser = LTLfParser()
-#
-#     f = parser("EX(a)")
-#     dfa = f.to_dfa(mona_dfa_out=False)
-#     expected = """digraph MONA_DFA {
-#  rankdir = LR;
-#  center = true;
-#  size = "7.5,10.5";
-#  edge [fontname = Courier];
-#  node [height = .5, width = .5];
-#  node [shape = doublecircle]; 3;
-#  node [shape = circle]; 1;
-#  init [shape = plaintext, label = ""];
-#  init -> 1;
-#  1 -> 2 [label="~a"];
-#  1 -> 3 [label="a"];
-#  2 -> 2 [label="true"];
-#  3 -> 3 [label="true"];
-# }"""
-#     assert dfa == expected
-#
-#     f1 = parser("a")
-#     assert dfa == f1.to_dfa(mona_dfa_out=False)
-#
-#     f = parser("G(a -> EX(b))")
-#     dfa = f.to_dfa(mona_dfa_out=False)
-#     expected = """digraph MONA_DFA {
-#  rankdir = LR;
-#  center = true;
-#  size = "7.5,10.5";
-#  edge [fontname = Courier];
-#  node [height = .5, width = .5];
-#  node [shape = doublecircle]; 3;
-#  node [shape = circle]; 1;
-#  init [shape = plaintext, label = ""];
-#  init -> 1;
-#  1 -> 2 [label="~a"];
-#  1 -> 3 [label="a"];
-#  2 -> 2 [label="true"];
-#  3 -> 3 [label="true"];
-# }"""
-#     assert dfa == expected
+def test_qltlf():
+    parser = LTLfParser()
 
-# f1 = parser("a")
-# assert dfa == f1.to_dfa(mona_dfa_out=False)
+    f = parser("EX(a)")
+    dfa = f.to_dfa(start="0", end="j", mona_dfa_out=False)
+    expected = """digraph MONA_DFA {
+ rankdir = LR;
+ center = true;
+ size = "7.5,10.5";
+ edge [fontname = Courier];
+ node [height = .5, width = .5];
+ node [shape = doublecircle]; 3;
+ node [shape = circle]; 1;
+ init [shape = plaintext, label = ""];
+ init -> 1;
+ 1 -> 2 [label="~a"];
+ 1 -> 3 [label="a"];
+ 2 -> 2 [label="true"];
+ 3 -> 3 [label="true"];
+}"""
+    assert dfa == expected
+
+    f1 = parser("a")
+    assert dfa == f1.to_dfa(start="0", end="j", mona_dfa_out=False)
+
+    f = parser("G(a -> EX(b))")
+    dfa = f.to_dfa(start="0", end="j", mona_dfa_out=False)
+    expected = """digraph MONA_DFA {
+ rankdir = LR;
+ center = true;
+ size = "7.5,10.5";
+ edge [fontname = Courier];
+ node [height = .5, width = .5];
+ node [shape = doublecircle]; 2;
+ node [shape = circle]; 1;
+ init [shape = plaintext, label = ""];
+ init -> 1;
+ 1 -> 2 [label="b | ~a"];
+ 1 -> 3 [label="a & ~b"];
+ 2 -> 2 [label="b | ~a"];
+ 2 -> 3 [label="a & ~b"];
+ 3 -> 3 [label="true"];
+}"""
+    assert dfa == expected
+
+    f1 = parser("G(a -> b)")
+    assert dfa == f1.to_dfa(start="0", end="j", mona_dfa_out=False)
 
 
 def test_ter2symb():

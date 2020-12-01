@@ -174,7 +174,9 @@ def test_mona():
     f = parser("G(a -> EX(b))")
     assert (
         f.to_mona(v="0", w="j")
-        == "((ex1 v_1, j: 0<=v_1&v_1<=j & false & (all1 v_2: 0<=v_2&v_2<=v_1 => (~((v_2 in A)) | (ex1 w_1: v_2<=w_1 & w_1<=j & (v_2 in B))))) | (all1 v_2: 0<=v_2&v_2<=j => (~((v_2 in A)) | (ex1 w_1: v_2<=w_1 & w_1<=j & (v_2 in B)))))"
+        == "((ex1 v_1, j: 0<=v_1&v_1<=j & false & (all1 v_2: 0<=v_2&v_2<=v_1 => (~((v_2 in A)) | (ex1 w_1: v_2<=w_1 & "
+        "w_1<=j & (v_2 in B))))) | (all1 v_2, j: 0<=v_2&v_2<=j => (~((v_2 in A)) | (ex1 w_1: v_2<=w_1 & w_1<=j & "
+        "(v_2 in B)))))"
     )
 
 
