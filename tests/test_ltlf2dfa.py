@@ -348,7 +348,7 @@ def test_pltlf_dfa():
     #     assert dfa == expected
 
     f = parser("true")
-    dfa = f.to_dfa(mona_dfa_out=False)
+    dfa = f.to_dfa(start="max($)", end="0", mona_dfa_out=False)
     expected = """digraph MONA_DFA {
  rankdir = LR;
  center = true;
@@ -364,7 +364,7 @@ def test_pltlf_dfa():
     assert dfa == expected
 
     f = parser("false")
-    dfa = f.to_dfa(mona_dfa_out=False)
+    dfa = f.to_dfa(start="max($)", end="0", mona_dfa_out=False)
     expected = """digraph MONA_DFA {
  rankdir = LR;
  center = true;
@@ -380,7 +380,7 @@ def test_pltlf_dfa():
     assert dfa == expected
 
     f = parser("H a")
-    dfa = f.to_dfa(mona_dfa_out=False)
+    dfa = f.to_dfa(start="max($)", end="0", mona_dfa_out=False)
     expected = """digraph MONA_DFA {
  rankdir = LR;
  center = true;
@@ -400,7 +400,7 @@ def test_pltlf_dfa():
     assert dfa == expected
 
     f = parser("O(a & b)")
-    dfa = f.to_dfa(mona_dfa_out=False)
+    dfa = f.to_dfa(start="max($)", end="0", mona_dfa_out=False)
     expected = """digraph MONA_DFA {
  rankdir = LR;
  center = true;
@@ -418,7 +418,7 @@ def test_pltlf_dfa():
     assert dfa == expected
 
     f = parser("Y(a)")
-    dfa = f.to_dfa(mona_dfa_out=False)
+    dfa = f.to_dfa(start="max($)", end="0", mona_dfa_out=False)
     expected = """digraph MONA_DFA {
  rankdir = LR;
  center = true;
@@ -441,7 +441,7 @@ def test_pltlf_dfa():
     assert dfa == expected
 
     f = parser("a S b")
-    dfa = f.to_dfa(mona_dfa_out=False)
+    dfa = f.to_dfa(start="max($)", end="0", mona_dfa_out=False)
     expected = """digraph MONA_DFA {
  rankdir = LR;
  center = true;
@@ -460,7 +460,7 @@ def test_pltlf_dfa():
     assert dfa == expected
 
     f = parser("H(a) & O(b)")
-    dfa = f.to_dfa(mona_dfa_out=False)
+    dfa = f.to_dfa(start="max($)", end="0", mona_dfa_out=False)
     expected = """digraph MONA_DFA {
  rankdir = LR;
  center = true;
@@ -482,7 +482,7 @@ def test_pltlf_dfa():
 
     f = parser("a & O(b)")
 
-    dfa = f.to_dfa(mona_dfa_out=False)
+    dfa = f.to_dfa(start="max($)", end="0", mona_dfa_out=False)
     expected = """digraph MONA_DFA {
  rankdir = LR;
  center = true;
@@ -502,6 +502,54 @@ def test_pltlf_dfa():
  3 -> 3 [label="a"];
 }"""
     assert dfa == expected
+
+
+# def test_qltlf():
+#     parser = LTLfParser()
+#
+#     f = parser("EX(a)")
+#     dfa = f.to_dfa(mona_dfa_out=False)
+#     expected = """digraph MONA_DFA {
+#  rankdir = LR;
+#  center = true;
+#  size = "7.5,10.5";
+#  edge [fontname = Courier];
+#  node [height = .5, width = .5];
+#  node [shape = doublecircle]; 3;
+#  node [shape = circle]; 1;
+#  init [shape = plaintext, label = ""];
+#  init -> 1;
+#  1 -> 2 [label="~a"];
+#  1 -> 3 [label="a"];
+#  2 -> 2 [label="true"];
+#  3 -> 3 [label="true"];
+# }"""
+#     assert dfa == expected
+#
+#     f1 = parser("a")
+#     assert dfa == f1.to_dfa(mona_dfa_out=False)
+#
+#     f = parser("G(a -> EX(b))")
+#     dfa = f.to_dfa(mona_dfa_out=False)
+#     expected = """digraph MONA_DFA {
+#  rankdir = LR;
+#  center = true;
+#  size = "7.5,10.5";
+#  edge [fontname = Courier];
+#  node [height = .5, width = .5];
+#  node [shape = doublecircle]; 3;
+#  node [shape = circle]; 1;
+#  init [shape = plaintext, label = ""];
+#  init -> 1;
+#  1 -> 2 [label="~a"];
+#  1 -> 3 [label="a"];
+#  2 -> 2 [label="true"];
+#  3 -> 3 [label="true"];
+# }"""
+#     assert dfa == expected
+
+# f1 = parser("a")
+# assert dfa == f1.to_dfa(mona_dfa_out=False)
 
 
 def test_ter2symb():
