@@ -88,40 +88,23 @@ def test_parser():
     assert parser("X ALL(a | b)") == LTLfNext(QLTLfForAll(LTLfOr([a, b])))
 
 
-# def test_nnf():
-#     parser = LTLfParser()
-#     a, b, c = [LTLfAtomic(c) for c in "abc"]
-#
-#     f = parser("!(a & !b)")
-#     assert f.to_nnf() == LTLfOr([LTLfNot(a), b])
-#
-#     f = parser("!(!a | b)")
-#     assert f.to_nnf() == LTLfAnd([a, LTLfNot(b)])
-#
-#     f = parser("!(a <-> b)")
-#     assert f.to_nnf() == LTLfAnd([LTLfOr([LTLfNot(a), LTLfNot(b)]), LTLfOr([a, b])])
-#
-#     # Next and Weak Next
-#     f = parser("!(X (a & b))")
-#     assert f.to_nnf() == LTLfWeakNext(LTLfOr([LTLfNot(a), LTLfNot(b)]))
-#
-#     f = parser("!(WX (a & b))")
-#     assert f.to_nnf() == LTLfNext(LTLfOr([LTLfNot(a), LTLfNot(b)]))
-#
-#     # Eventually and Always
-#     f = parser("!(F (a | b))")
-#     assert f.to_nnf() == LTLfAlways(LTLfAnd([LTLfNot(a), LTLfNot(b)])).to_nnf()
-#
-#     # Until and Release
-#     f = parser("!(a U b)")
-#     assert f.to_nnf() == LTLfRelease([LTLfNot(a), LTLfNot(b)])
-#     f = parser("!(a R b)")
-#     assert f.to_nnf() == LTLfUntil([LTLfNot(a), LTLfNot(b)])
-#
-#     f = parser("!(F (a | b))")
-#     assert f.to_nnf() == LTLfAlways(LTLfAnd([LTLfNot(a), LTLfNot(b)])).to_nnf()
-#     f = parser("!(G (a | b))")
-#     assert f.to_nnf() == LTLfEventually(LTLfAnd([LTLfNot(a), LTLfNot(b)])).to_nnf()
+def test_nnf():
+    parser = LTLfParser()
+    a, b, c = [LTLfAtomic(c) for c in "abc"]
+
+    # Exists
+    f = parser("!(EX a)")
+    assert f.to_nnf() == QLTLfForAll(LTLfNot(a))
+
+    f = parser("!(EX !(a | b))")
+    assert f.to_nnf() == QLTLfForAll(LTLfOr([a, b]))
+
+    f = parser("!(EX !F(a | b))")
+    assert f.to_nnf() == QLTLfForAll(LTLfEventually(LTLfOr([a, b])))
+
+    # ForAll
+    f = parser("!(ALL a)")
+    assert f.to_nnf() == QLTLfExist(LTLfNot(a))
 
 
 def test_mona():
@@ -140,6 +123,13 @@ def test_mona():
     assert (
         f.to_mona(v="0", w="j")
         == "(ex1 w_1, j: 0<=w_1 & w_1<=j & (ex1 v_1: 0<=v_1&v_1<=w_1 & (v_1 in A) & (all1 v_2: 0<=v_2&v_2<v_1 => true)))"
+    )
+
+    f = parser("EX(G a)")
+    assert (
+        f.to_mona(v="0", w="j")
+        == "(ex1 w_1, j: 0<=w_1 & w_1<=j & ((ex1 v_1: 0<=v_1&v_1<=w_1 & false & (all1 v_2: 0<=v_2&v_2<=v_1 => (v_2 in A))) | "
+        "(all1 v_2: 0<=v_2&v_2<=w_1 => (v_2 in A))))"
     )
 
     f = parser("EX(EX a)")
@@ -179,6 +169,12 @@ def test_mona():
     assert (
         f.to_mona(v="0", w="j")
         == "(ex1 v_1, j: 0<=v_1&v_1<=j & (all1 w_1: v_1<=w_1 & w_1<=j => (v_1 in A)) & (all1 v_2: 0<=v_2&v_2<v_1 => true))"
+    )
+
+    f = parser("G(a -> EX(b))")
+    assert (
+        f.to_mona(v="0", w="j")
+        == "((ex1 v_1, j: 0<=v_1&v_1<=j & false & (all1 v_2: 0<=v_2&v_2<=v_1 => (~((v_2 in A)) | (ex1 w_1: v_2<=w_1 & w_1<=j & (v_2 in B))))) | (all1 v_2: 0<=v_2&v_2<=j => (~((v_2 in A)) | (ex1 w_1: v_2<=w_1 & w_1<=j & (v_2 in B)))))"
     )
 
 
