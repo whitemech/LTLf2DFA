@@ -199,9 +199,9 @@ def output2dot(mona_output):
         return parse_mona(mona_output)
 
 
-def to_dfa(f, mona_dfa_out=False) -> str:
+def to_dfa(f, start, end, mona_dfa_out=False) -> str:
     """Translate to deterministic finite-state automaton."""
-    p = MonaProgram(f)
+    p = MonaProgram(f, start, end)
     mona_p_string = p.mona_program()
     createMonafile(mona_p_string)
     mona_dfa = invoke_mona()

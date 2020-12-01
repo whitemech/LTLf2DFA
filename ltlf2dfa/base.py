@@ -121,14 +121,17 @@ class MonaProgram:
     HEADER = "m2l-str"
     vars: List[str] = list()
 
-    def __init__(self, f: Formula):
+    def __init__(self, f: Formula, start: str, end: str):
         """Initialize.
 
         :param f: formula to encode.
-        :param i: instant of evaluation in the trace.
+        :param start: instant of evaluation in the trace.
+        :param end: last instant of evaluation in the trace.
         """
         self.formula = f
         self._vars()
+        self.start = start
+        self.end = end
 
     def _vars(self):
         """List MONA vars."""
@@ -145,11 +148,11 @@ class MonaProgram:
                 str(self.formula),
                 self.HEADER,
                 ", ".join(self.vars),
-                self.formula.to_mona(),
+                self.formula.to_mona(self.start, self.end),
             )
         else:
             return "#{};\n{};\n{};\n".format(
-                str(self.formula), self.HEADER, self.formula.to_mona()
+                str(self.formula), self.HEADER, self.formula.to_mona(self.start, self.end)
             )
 
 

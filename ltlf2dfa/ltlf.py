@@ -65,13 +65,15 @@ class LTLfFormula(Formula, ABC):
         :return: an LDLf formula.
         """
 
-    def to_dfa(self, mona_dfa_out: bool = False) -> str:
+    def to_dfa(self, start: str = "0", end: str = "max($)", mona_dfa_out: bool = False) -> str:
         """
         Translate into a DFA.
 
+        :param start: instant of evaluation in the trace.
+        :param end: last instant of evaluation in the trace.
         :param mona_dfa_out: flag for DFA output in MONA syntax.
         """
-        return to_dfa(self, mona_dfa_out)
+        return to_dfa(self, start, end, mona_dfa_out)
 
 
 class LTLfUnaryOperator(UnaryOperator[LTLfFormula], LTLfFormula, ABC):
