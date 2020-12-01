@@ -314,7 +314,7 @@ class LTLfNext(LTLfUnaryOperator):
         ex_var = new_var(v)
         if v == "0" and w == "j":
             return "(ex1 {0}, {3}: {0}={1}+1 & {2})".format(
-                ex_var, v, self.f.to_mona(ex_var, w), "j"
+                ex_var, v, self.f.to_mona(ex_var, w), w
             )
         else:
             return "(ex1 {0}: {0}={1}+1 & {2})".format(
@@ -349,8 +349,8 @@ class LTLfWeakNext(LTLfUnaryOperator):
         """Return the MONA encoding of an LTLf WeakNext formula."""
         ex_var = new_var(v)
         if v == "0" and w == "j":
-            return "((({1} = {2}) | (ex1 {0}, {4}: {0}={1}+1 & {3})))".format(
-                ex_var, v, w, self.f.to_mona(ex_var, w), "j"
+            return "((({1} = {2}) | (ex1 {0}, {2}: {0}={1}+1 & {3})))".format(
+                ex_var, v, w, self.f.to_mona(ex_var, w)
             )
         else:
             return "((({1} = {2}) | (ex1 {0}: {0}={1}+1 & {3})))".format(
@@ -392,9 +392,9 @@ class LTLfUntil(LTLfBinaryOperator):
         )
         if v == "0" and w == "j":
             return (
-                "(ex1 {0}, {6}: {1}<={0}&{0}<={5} & {2} & "
+                "(ex1 {0}, {5}: {1}<={0}&{0}<={5} & {2} & "
                 "(all1 {3}: {1}<={3}&{3}<{0} => {4}))".format(
-                    ex_var, v, f2, all_var, f1, w, "j"
+                    ex_var, v, f2, all_var, f1, w
                 )
             )
         else:
@@ -447,15 +447,15 @@ class LTLfRelease(LTLfBinaryOperator):
         )
         if v == "0" and w == "j":
             return (
-                "((ex1 {0}, {6}: {1}<={0}&{0}<={5} & {2} & "
+                "((ex1 {0}, {5}: {1}<={0}&{0}<={5} & {2} & "
                 "(all1 {3}: {1}<={3}&{3}<={0} => {4})) | (all1 {3}: "
-                "{1}<={3}&{3}<=max($) => {4}))".format(ex_var, v, f1, all_var, f2, w, "j")
+                "{1}<={3}&{3}<={5} => {4}))".format(ex_var, v, f1, all_var, f2, w)
             )
         else:
             return (
                 "((ex1 {0}: {1}<={0}&{0}<={5} & {2} & "
                 "(all1 {3}: {1}<={3}&{3}<={0} => {4})) | (all1 {3}: "
-                "{1}<={3}&{3}<=max($) => {4}))".format(ex_var, v, f1, all_var, f2, w)
+                "{1}<={3}&{3}<={5} => {4}))".format(ex_var, v, f1, all_var, f2, w)
             )
 
     # def to_ldlf(self):
