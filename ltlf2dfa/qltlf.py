@@ -75,13 +75,9 @@ class QLTLfExist(LTLfUnaryOperator):
         """Get the operator symbol."""
         return Symbols.EXIST.value
 
-    def to_nnf(self) -> QLTLfFormula:
-        """Transform to NNF."""
-        # TODO nnf the Exist formula
-        # if not isinstance(self.f, AtomicFormula):
-        #     return self.f.negate().to_nnf()
-        # else:
-        #     return self
+    # def to_nnf(self) -> QLTLfFormula:
+    #     """Transform to NNF."""
+    #     return QLTLfForAll(self.f.to_nnf().negate())
 
     def negate(self) -> LTLfFormula:
         """Negate the formula."""
@@ -99,6 +95,7 @@ class QLTLfExist(LTLfUnaryOperator):
                 ex_var, v, w, self.f.to_mona(v, ex_var)
             )
 
+
 class QLTLfForAll(LTLfUnaryOperator):
     """Class for the QLTLf QLTLfForAll formula."""
 
@@ -107,13 +104,9 @@ class QLTLfForAll(LTLfUnaryOperator):
         """Get the operator symbol."""
         return Symbols.FORALL.value
 
-    def to_nnf(self) -> QLTLfFormula:
-        """Transform to NNF."""
-        # TODO nnf the QLTLfForAll formula
-        # if not isinstance(self.f, AtomicFormula):
-        #     return self.f.negate().to_nnf()
-        # else:
-        #     return self
+    # def to_nnf(self) -> QLTLfFormula:
+    #     """Transform to NNF."""
+    #     return QLTLfExist(self.f.to_nnf().negate())
 
     def negate(self) -> LTLfFormula:
         """Negate the formula."""
