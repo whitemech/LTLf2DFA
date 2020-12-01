@@ -65,7 +65,9 @@ class LTLfFormula(Formula, ABC):
         :return: an LDLf formula.
         """
 
-    def to_dfa(self, start: str = "0", end: str = "max($)", mona_dfa_out: bool = False) -> str:
+    def to_dfa(
+        self, start: str = "0", end: str = "max($)", mona_dfa_out: bool = False
+    ) -> str:
         """
         Translate into a DFA.
 

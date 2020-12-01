@@ -152,7 +152,9 @@ class MonaProgram:
             )
         else:
             return "#{};\n{};\n{};\n".format(
-                str(self.formula), self.HEADER, self.formula.to_mona(self.start, self.end)
+                str(self.formula),
+                self.HEADER,
+                self.formula.to_mona(self.start, self.end),
             )
 
 
