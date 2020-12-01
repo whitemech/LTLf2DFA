@@ -17,7 +17,7 @@
 # along with ltlf2dfa.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-"""This module contains the implementation of Linear Temporal Logic on finite traces."""
+"""This module contains the implementation of Quantified Linear Temporal Logic on finite traces."""
 
 from abc import ABC, abstractmethod
 from typing import Any, Optional

@@ -28,24 +28,17 @@ from ltlf2dfa.ltlf import (
     LTLfAtomic,
     LTLfEquivalence,
     LTLfEventually,
-    LTLfFalse,
     LTLfImplies,
-    LTLfLast,
     LTLfNext,
     LTLfNot,
     LTLfOr,
-    LTLfRelease,
-    LTLfTrue,
     LTLfUntil,
-    LTLfWeakNext,
 )
 from ltlf2dfa.parser.ltlf import LTLfParser
 from ltlf2dfa.qltlf import QLTLfExist, QLTLfForAll
 
 # from .conftest import LTLfFixtures
 from .parsing import ParsingCheck
-
-# from ltlf2dfa.pl import PLAtomic, PLTrue, PLFalse, PLAnd, PLOr
 
 
 def test_parser():
@@ -54,7 +47,7 @@ def test_parser():
 
     assert parser("EX(a)") == QLTLfExist(a)
     assert parser("EX a") == QLTLfExist(a)
-    # assert parser("EX(EX a)") == QLTLfExist(QLTLfExist(a))
+    assert parser("EX(EX a)") == QLTLfExist(QLTLfExist(a))
     assert parser("EX(a & b)") == QLTLfExist(LTLfAnd([a, b]))
     assert parser("EX(a | b)") == QLTLfExist(LTLfOr([a, b]))
     assert parser("EX(a & !b)") == QLTLfExist(LTLfAnd([a, LTLfNot(b)]))
