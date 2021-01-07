@@ -497,6 +497,24 @@ def test_pltlf_dfa():
 }"""
     assert dfa == expected
 
+    f = parser("H(Y(a))")
+
+    dfa = f.to_dfa(mona_dfa_out=False)
+    expected = """digraph MONA_DFA {
+ rankdir = LR;
+ center = true;
+ size = "7.5,10.5";
+ edge [fontname = Courier];
+ node [height = .5, width = .5];
+ node [shape = doublecircle]; 1;
+ node [shape = circle]; 1;
+ init [shape = plaintext, label = ""];
+ init -> 1;
+ 1 -> 2 [label="true"];
+ 2 -> 2 [label="true"];
+}"""
+    assert dfa == expected
+
 
 def test_ter2symb():
     ap = symbols("a b c")
