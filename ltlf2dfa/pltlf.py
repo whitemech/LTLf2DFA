@@ -282,7 +282,7 @@ class PLTLfBefore(PLTLfUnaryOperator):
         """Return the MONA encoding of a PLTLf Before formula."""
         ex_var = new_var(v)
         if v != "max($)":
-            return "(ex1 {0}: {0} in $ & {0}={1}-1 & {0}>=0 & {2})".format(
+            return "(ex1 {0}: {0} in $ & {0}={1}-1 & {1}>0 & {2})".format(
                 ex_var, v, self.f.to_mona(ex_var)
             )
         else:
