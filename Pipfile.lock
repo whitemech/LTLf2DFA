@@ -312,7 +312,6 @@
                 "sha256:3b80836aa6d1feeaa108e046da6423ab8f6ceda6468545ae8d02d9d58d18818a"
             ],
             "index": "pypi",
-            "version": "==1.10.0"
         },
         "pycodestyle": {
             "hashes": [
