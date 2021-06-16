@@ -1,13 +1,32 @@
 site_name: LTLf2DFA
+site_url: "https://whitemech.github.io/LTLf2DFA/"
+repo_name: 'whitemech/LTLf2DFA'
+repo_url: "https://github.com/whitemech/LTLf2DFA"
+
 nav:
     - Home: index.md
     - Credits: authors.md
-    - How to contribute: contributing.md
     - Grammars: grammars.md
-    - Change Log: history.md
+    - Change Log: changelog.md
+    - How to contribute: contributing.md
     - References: references.md
 
-theme: readthedocs
+plugins:
+- search
+
+theme:
+  name: material
+
 markdown_extensions:
-    - markdown_include.include:
-        base_path: docs
+- codehilite
+- pymdownx.arithmatex
+- pymdownx.highlight
+- pymdownx.superfences
+- pymdownx.emoji:
+    emoji_index: !!python/name:materialx.emoji.twemoji
+    emoji_generator: !!python/name:materialx.emoji.to_svg
+- markdown_include.include:
+    base_path: docs
+
+extra_javascript:
+- 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
