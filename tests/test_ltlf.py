@@ -1,31 +1,50 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#
+# This file is part of ltlf2dfa.
+#
+# ltlf2dfa is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# ltlf2dfa is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with ltlf2dfa.  If not, see <https://www.gnu.org/licenses/>.
+#
 """Test LTLf."""
-import pytest
 import os
+
 import lark
+import pytest
 
 from ltlf2dfa.ltlf import (
-    LTLfAtomic,
-    LTLfAnd,
-    LTLfEquivalence,
-    LTLfOr,
-    LTLfNot,
-    LTLfImplies,
-    LTLfEventually,
     LTLfAlways,
-    LTLfUntil,
-    LTLfRelease,
-    LTLfNext,
-    LTLfWeakNext,
-    LTLfTrue,
+    LTLfAnd,
+    LTLfAtomic,
+    LTLfEquivalence,
+    LTLfEventually,
     LTLfFalse,
+    LTLfImplies,
+    LTLfLast,
+    LTLfNext,
+    LTLfNot,
+    LTLfOr,
+    LTLfRelease,
+    LTLfTrue,
+    LTLfUntil,
+    LTLfWeakNext,
 )
 from ltlf2dfa.parser.ltlf import LTLfParser
 
-# from ltlf2dfa.pl import PLAtomic, PLTrue, PLFalse, PLAnd, PLOr
-
 # from .conftest import LTLfFixtures
 from .parsing import ParsingCheck
+
+# from ltlf2dfa.pl import PLAtomic, PLTrue, PLFalse, PLAnd, PLOr
 
 
 def test_parser():
@@ -55,6 +74,8 @@ def test_parser():
             LTLfNot(LTLfRelease([LTLfNot(a), LTLfNot(b), LTLfNot(c)])),
         ]
     )
+
+    assert parser("a & last") == LTLfAnd([a, LTLfLast()])
 
 
 def test_names():
@@ -130,42 +151,56 @@ def test_mona():
         == "((~((0 in A)) | ~((0 in B))) & ((0 in A) | (0 in B)))"
     )
 
+    f = parser("a & last")
+    assert (
+        f.to_mona(v="0")
+        == "((0 in A) & ((0 = max($)) | (ex1 v_1: v_1 in $ & v_1=1 & false)))"
+    )
+
     # Next and Weak Next
     f = parser("X(a & b)")
-    assert f.to_mona(v="0") == "(ex1 v_1: v_1=1 & ((v_1 in A) & (v_1 in B)))"
+    assert f.to_mona(v="0") == "(ex1 v_1: v_1 in $ & v_1=1 & ((v_1 in A) & (v_1 in B)))"
+
+    f = parser("WX(a)")
+    assert (
+        f.to_mona(v="0") == "((0 = max($)) | (ex1 v_1: v_1 in $ & v_1=1 & (v_1 in A)))"
+    )
+
+    # f = parser("F(b & WX false) -> F(a & (WX false | X(WX false)))")
+    # assert f.to_mona(v="0") == ""
 
     f = parser("WX (a & b)")
     assert (
         f.to_mona(v="0")
-        == "((0 = max($)) | (ex1 v_1: v_1=1 & ((v_1 in A) & (v_1 in B))))"
+        == "((0 = max($)) | (ex1 v_1: v_1 in $ & v_1=1 & ((v_1 in A) & (v_1 in B))))"
     )
 
     # Until and Release
     f = parser("a U b")
     assert (
         f.to_mona(v="0")
-        == "(ex1 v_1: 0<=v_1&v_1<=max($) & (v_1 in B) & (all1 v_2: 0<=v_2&v_2<v_1"
+        == "(ex1 v_1: v_1 in $ & 0<=v_1&v_1<=max($) & (v_1 in B) & (all1 v_2: v_2 in $ & 0<=v_2&v_2<v_1"
         " => (v_2 in A)))"
     )
     f = parser("a R b")
     assert (
         f.to_mona(v="0")
-        == "((ex1 v_1: 0<=v_1&v_1<=max($) & (v_1 in A) & (all1 v_2: 0<=v_2&v_2<=v_1"
-        " => (v_2 in B))) | (all1 v_2: 0<=v_2&v_2<=max($) => (v_2 in B)))"
+        == "((ex1 v_1: v_1 in $ & 0<=v_1&v_1<=max($) & (v_1 in A) & (all1 v_2: v_2 in $ & 0<=v_2&v_2<=v_1"
+        " => (v_2 in B))) | (all1 v_2: v_2 in $ & 0<=v_2&v_2<=max($) => (v_2 in B)))"
     )
 
     # Eventually and Always
     f = parser("F(a & b)")
     assert (
         f.to_mona(v="0")
-        == "(ex1 v_1: 0<=v_1&v_1<=max($) & ((v_1 in A) & (v_1 in B)) & (all1 v_2: "
-        "0<=v_2&v_2<v_1 => true))"
+        == "(ex1 v_1: v_1 in $ & 0<=v_1&v_1<=max($) & ((v_1 in A) & (v_1 in B)) & (all1 v_2: "
+        "v_2 in $ & 0<=v_2&v_2<v_1 => true))"
     )
     f = parser("G(a | b)")
     assert (
         f.to_mona(v="0")
-        == "((ex1 v_1: 0<=v_1&v_1<=max($) & false & (all1 v_2: 0<=v_2&v_2<=v_1 => "
-        "((v_2 in A) | (v_2 in B)))) | (all1 v_2: 0<=v_2&v_2<=max($) => ((v_2 in A) "
+        == "((ex1 v_1: v_1 in $ & 0<=v_1&v_1<=max($) & false & (all1 v_2: v_2 in $ & 0<=v_2&v_2<=v_1 => "
+        "((v_2 in A) | (v_2 in B)))) | (all1 v_2: v_2 in $ & 0<=v_2&v_2<=max($) => ((v_2 in A) "
         "| (v_2 in B))))"
     )
 

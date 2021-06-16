@@ -1,14 +1,31 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#
+# This file is part of ltlf2dfa.
+#
+# ltlf2dfa is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# ltlf2dfa is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with ltlf2dfa.  If not, see <https://www.gnu.org/licenses/>.
+#
 
 """Main module of the pakage."""
 
 import itertools as it
-from subprocess import PIPE, Popen, TimeoutExpired
 import os
 import re
 import signal
+from subprocess import PIPE, Popen, TimeoutExpired
 
-from sympy import symbols, And, Not, Or, simplify
+from sympy import And, Not, Or, simplify, symbols
 
 from ltlf2dfa.base import MonaProgram
 
@@ -57,10 +74,7 @@ def ter2symb(ap, ternary):
 
 def simplify_guard(guards):
     """Make a big OR among guards and simplify them."""
-    final = Or()
-    for g in guards:
-        final = Or(final, g)
-    return simplify(final)
+    return simplify(Or(*guards))
 
 
 def parse_mona(mona_output):
@@ -160,7 +174,7 @@ def createMonafile(p: str):
 
 def invoke_mona():
     """Execute the MONA tool."""
-    command = "mona -q -w {}/automa.mona".format(PACKAGE_DIR)
+    command = "mona -q -u -w {}/automa.mona".format(PACKAGE_DIR)
     process = Popen(
         args=command,
         stdout=PIPE,
@@ -185,10 +199,14 @@ def output2dot(mona_output):
         return parse_mona(mona_output)
 
 
-def to_dfa(f) -> str:
+def to_dfa(f, mona_dfa_out=False) -> str:
     """Translate to deterministic finite-state automaton."""
     p = MonaProgram(f)
     mona_p_string = p.mona_program()
     createMonafile(mona_p_string)
     mona_dfa = invoke_mona()
-    return output2dot(mona_dfa)
+    if mona_dfa_out:
+        return mona_dfa
+    else:
+        assert mona_dfa_out is False
+        return output2dot(mona_dfa)

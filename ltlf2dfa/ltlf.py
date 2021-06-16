@@ -1,22 +1,39 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#
+# This file is part of ltlf2dfa.
+#
+# ltlf2dfa is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# ltlf2dfa is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with ltlf2dfa.  If not, see <https://www.gnu.org/licenses/>.
+#
 
 """This module contains the implementation of Linear Temporal Logic on finite traces."""
 
-from abc import abstractmethod, ABC
-from typing import Set, Optional, Any
 import re
+from abc import ABC, abstractmethod
+from typing import Any, List, Optional
 
 from ltlf2dfa.base import (
-    Formula,
     AtomicFormula,
-    UnaryOperator,
-    BinaryOperator,
     AtomSymbol,
+    BinaryOperator,
+    Formula,
+    UnaryOperator,
 )
+from ltlf2dfa.helpers import new_var
 from ltlf2dfa.ltlf2dfa import to_dfa
 from ltlf2dfa.pl import PLAtomic
-from ltlf2dfa.symbols import Symbols, OpSymbol
-from ltlf2dfa.helpers import new_var
+from ltlf2dfa.symbols import OpSymbol, Symbols
 
 
 class LTLfFormula(Formula, ABC):
@@ -48,9 +65,13 @@ class LTLfFormula(Formula, ABC):
         :return: an LDLf formula.
         """
 
-    def to_dfa(self) -> str:
-        """Translate into a DFA."""
-        return to_dfa(self)
+    def to_dfa(self, mona_dfa_out: bool = False) -> str:
+        """
+        Translate into a DFA.
+
+        :param mona_dfa_out: flag for DFA output in MONA syntax.
+        """
+        return to_dfa(self, mona_dfa_out)
 
 
 class LTLfUnaryOperator(UnaryOperator[LTLfFormula], LTLfFormula, ABC):
@@ -70,7 +91,7 @@ class LTLfAtomic(AtomicFormula, LTLfFormula):
         """Negate the formula."""
         return LTLfNot(self)
 
-    def find_labels(self) -> Set[AtomSymbol]:
+    def find_labels(self) -> List[AtomSymbol]:
         """Find the labels."""
         return PLAtomic(self.s).find_labels()
 
@@ -97,9 +118,9 @@ class LTLfTrue(LTLfAtomic):
         """Negate the formula."""
         return LTLfFalse()
 
-    def find_labels(self) -> Set[AtomSymbol]:
+    def find_labels(self) -> List[AtomSymbol]:
         """Find the labels."""
-        return set()
+        return list()
 
     def to_mona(self, v="0") -> str:
         """Return the MONA encoding for False."""
@@ -121,9 +142,9 @@ class LTLfFalse(LTLfAtomic):
         """Negate the formula."""
         return LTLfTrue()
 
-    def find_labels(self) -> Set[AtomSymbol]:
+    def find_labels(self) -> List[AtomSymbol]:
         """Find the labels."""
-        return set()
+        return list()
 
     def to_mona(self, v="0") -> str:
         """Return the MONA encoding for False."""
@@ -292,11 +313,13 @@ class LTLfNext(LTLfUnaryOperator):
         """Return the MONA encoding of an LTLf Next formula."""
         ex_var = new_var(v)
         if v != "0":
-            return "(ex1 {0}: {0}={1}+1 & {2})".format(
+            return "(ex1 {0}: {0} in $ & {0}={1}+1 & {2})".format(
                 ex_var, v, self.f.to_mona(ex_var)
             )
         else:
-            return "(ex1 {0}: {0}=1 & {1})".format(ex_var, self.f.to_mona(ex_var))
+            return "(ex1 {0}: {0} in $ & {0}=1 & {1})".format(
+                ex_var, self.f.to_mona(ex_var)
+            )
 
     # def to_ldlf(self):
     #     """Convert the formula to LDLf."""
@@ -326,11 +349,11 @@ class LTLfWeakNext(LTLfUnaryOperator):
         """Return the MONA encoding of an LTLf WeakNext formula."""
         ex_var = new_var(v)
         if v != "0":
-            return "((0 = max($)) | (ex1 {0}: {0}={1}+1 & {2}))".format(
+            return "(({1} = max($)) | (ex1 {0}: {0} in $ & {0}={1}+1 & {2}))".format(
                 ex_var, v, self.f.to_mona(ex_var)
             )
         else:
-            return "((0 = max($)) | (ex1 {0}: {0}=1 & {1}))".format(
+            return "((0 = max($)) | (ex1 {0}: {0} in $ & {0}=1 & {1}))".format(
                 ex_var, self.f.to_mona(ex_var)
             )
 
@@ -367,18 +390,12 @@ class LTLfUntil(LTLfBinaryOperator):
             if len(self.formulas) > 2
             else self.formulas[1].to_mona(v=ex_var)
         )
-        if v != "0":
-            return (
-                "(ex1 {0}: {1}<={0}&{0}<=max($) & {2} & "
-                "(all1 {3}: {1}<={3}&{3}<{0} => {4}))".format(
-                    ex_var, v, f2, all_var, f1
-                )
+        return (
+            "(ex1 {0}: {0} in $ & {1}<={0}&{0}<=max($) & {2} & "
+            "(all1 {3}: {3} in $ & {1}<={3}&{3}<{0} => {4}))".format(
+                ex_var, v, f2, all_var, f1
             )
-        else:
-            return (
-                "(ex1 {0}: 0<={0}&{0}<=max($) & {1} & "
-                "(all1 {2}: 0<={2}&{2}<{0} => {3}))".format(ex_var, f2, all_var, f1)
-            )
+        )
 
     # def to_ldlf(self):
     #     """Convert the formula to LDLf."""
@@ -420,18 +437,13 @@ class LTLfRelease(LTLfBinaryOperator):
             if len(self.formulas) > 2
             else self.formulas[1].to_mona(v=all_var)
         )
-        if v != "0":
-            return (
-                "((ex1 {0}: {1}<={0}&{0}<=max($) & {2} & "
-                "(all1 {3}: {1}<={3}&{3}<={0} => {4})) | (all1 {3}: "
-                "{1}<={3}&{3}<=max($) => {4}))".format(ex_var, v, f1, all_var, f2)
+        return (
+            "((ex1 {0}: {0} in $ & {1}<={0}&{0}<=max($) & {2} & "
+            "(all1 {3}: {3} in $ & {1}<={3}&{3}<={0} => {4})) | (all1 {3}: "
+            "{3} in $ & {1}<={3}&{3}<=max($) => {4}))".format(
+                ex_var, v, f1, all_var, f2
             )
-        else:
-            return (
-                "((ex1 {0}: 0<={0}&{0}<=max($) & {1} & "
-                "(all1 {2}: 0<={2}&{2}<={0} => {3})) | (all1 {2}: "
-                "0<={2}&{2}<=max($) => {3}))".format(ex_var, f1, all_var, f2)
-            )
+        )
 
     # def to_ldlf(self):
     #     """Convert the formula to LDLf."""
@@ -516,9 +528,9 @@ class LTLfLast(LTLfFormula):
         """Negate the formula."""
         return self.to_nnf().negate()
 
-    def find_labels(self) -> Set[AtomSymbol]:
+    def find_labels(self) -> List[AtomSymbol]:
         """Find the labels."""
-        return set()
+        return list()
 
     def _members(self):
         return (Symbols.LAST.value,)
@@ -526,6 +538,10 @@ class LTLfLast(LTLfFormula):
     def __str__(self):
         """Get the string representation."""
         return Symbols.LAST.value
+
+    def to_mona(self, v="0") -> str:
+        """Return the MONA encoding of an LTLf Last formula."""
+        return LTLfWeakNext(LTLfFalse()).to_mona(v)
 
     # def to_ldlf(self):
     #     """Convert the formula to LDLf."""
@@ -535,9 +551,9 @@ class LTLfLast(LTLfFormula):
 class LTLfEnd(LTLfFormula):
     """Class for the LTLf End formula."""
 
-    def find_labels(self) -> Set[AtomSymbol]:
+    def find_labels(self) -> List[AtomSymbol]:
         """Find the labels."""
-        return set()
+        return list()
 
     def _members(self):
         return (Symbols.END.value,)

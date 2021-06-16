@@ -1,17 +1,30 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#
+# This file is part of ltlf2dfa.
+#
+# ltlf2dfa is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# ltlf2dfa is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with ltlf2dfa.  If not, see <https://www.gnu.org/licenses/>.
+#
 
 """This module provides support for Propositional Logic."""
 
 import functools
-from abc import abstractmethod, ABC
-from typing import Set, Any, Optional
+from abc import ABC, abstractmethod
+from typing import Any, List, Optional, Set
 
-# import sympy
-# from sympy.logic.boolalg import Boolean, BooleanTrue, BooleanFalse
-# from pythomata import PropositionalInterpretation
-
-from ltlf2dfa.base import Formula, AtomicFormula, BinaryOperator, UnaryOperator
-from ltlf2dfa.symbols import Symbols, OpSymbol
+from ltlf2dfa.base import AtomicFormula, BinaryOperator, Formula, UnaryOperator
+from ltlf2dfa.symbols import OpSymbol, Symbols
 
 
 class PLFormula(Formula):
@@ -54,54 +67,12 @@ class PLFormula(Formula):
         """
 
 
-# def to_sympy(
-#     formula: Formula, replace: Optional[Dict[AtomSymbol, sympy.Symbol]] = None
-# ) -> Boolean:
-#     """
-#     Translate a PLFormula object into a SymPy expression.
-#
-#     :param formula: the formula to translate.
-#     :param replace: an optional mapping from symbols to replace to other replacement symbols.
-#     :return: the SymPy formula object equivalent to the formula.
-#     """
-#     if replace is None:
-#         replace = {}
-#
-#     if isinstance(formula, PLTrue):
-#         return BooleanTrue()
-#     elif isinstance(formula, PLFalse):
-#         return BooleanFalse()
-#     elif isinstance(formula, PLAtomic):
-#         symbol = replace.get(formula.s, formula.s)
-#         return sympy.Symbol(symbol)
-#     elif isinstance(formula, PLNot):
-#         return sympy.Not(to_sympy(formula.f, replace=replace))
-#     elif isinstance(formula, PLOr):
-#         return sympy.simplify(
-#             sympy.Or(*[to_sympy(f, replace=replace) for f in formula.formulas])
-#         )
-#     elif isinstance(formula, PLAnd):
-#         return sympy.simplify(
-#             sympy.And(*[to_sympy(f, replace=replace) for f in formula.formulas])
-#         )
-#     elif isinstance(formula, PLImplies):
-#         return sympy.simplify(
-#             sympy.Implies(*[to_sympy(f, replace=replace) for f in formula.formulas])
-#         )
-#     elif isinstance(formula, PLEquivalence):
-#         return sympy.simplify(
-#             sympy.Equivalent(*[to_sympy(f, replace=replace) for f in formula.formulas])
-#         )
-#     else:
-#         raise ValueError("Formula is not valid.")
-
-
 class PLAtomic(AtomicFormula, PLFormula):
     """A class to represent propositional atomic formulas."""
 
-    def find_labels(self) -> Set[Any]:
-        """Return the set of symbols."""
-        return {self.s}
+    def find_labels(self) -> List[Any]:
+        """Return the list of symbols."""
+        return [self.s]
 
     def _find_atomics(self):
         return {self}
@@ -112,10 +83,7 @@ class PLAtomic(AtomicFormula, PLFormula):
 
     def to_mona(self, v="0") -> str:
         """Return the MONA encoding of a PL atomic formula."""
-        if v != "0":
-            return "({} in {})".format(v, self.s.upper())
-        else:
-            return "(0 in {})".format(self.s.upper())
+        return f"({v} in {self.s.upper()})"
 
 
 class PLBinaryOperator(BinaryOperator[PLFormula], PLFormula, ABC):
@@ -138,13 +106,17 @@ class PLTrue(PLAtomic):
         """Negate the formula."""
         return PLFalse()
 
-    def find_labels(self) -> Set[Any]:
-        """Return the set of symbols."""
-        return set()
+    def find_labels(self) -> List[Any]:
+        """Return the list of symbols."""
+        return list()
 
     def to_nnf(self):
         """Transform in NNF."""
         return self
+
+    def to_mona(self, v="0") -> str:
+        """Return the MONA encoding of a PL atomic formula."""
+        return Symbols.TRUE.value
 
 
 class PLFalse(PLAtomic):
@@ -158,13 +130,17 @@ class PLFalse(PLAtomic):
         """Negate the formula."""
         return PLTrue()
 
-    def find_labels(self) -> Set[Any]:
-        """Return the set of symbols."""
-        return set()
+    def find_labels(self) -> List[Any]:
+        """Return the list of symbols."""
+        return list()
 
     def to_nnf(self):
         """Transform in NNF."""
         return self
+
+    def to_mona(self, v="0") -> str:
+        """Return the MONA encoding of a PL atomic formula."""
+        return Symbols.FALSE.value
 
 
 class PLNot(UnaryOperator[PLFormula], PLFormula):

@@ -14,12 +14,17 @@ pydocstyle = "*"
 mypy = "*"
 tox = "*"
 coverage = "*"
-black = "==19.3b0"
 mkdocs = "*"
 markdown-include = "*"
+mkdocs-material = "*"
 pymdown-extensions = "*"
+ipython = "*"
+codecov = "*"
+tox-travis = "*"
+black = "==19.10b0"
+isort = "*"
+
+[packages]
 
 [requires]
 python_version = "3.7"
-
-[packages]

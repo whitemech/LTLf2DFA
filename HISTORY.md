@@ -1,5 +1,11 @@
 # History
 
+## 1.0.1 (2020-07-03)
+* Introduce optional argument to `to_dfa()` method for DFA in MONA output
+* Add parsing support for `LTLfLast()` and `PLTLfStart()` keywords
+* Some fixes
+* Increase code coverage
+
 ## 1.0.0.post0 (2020-06-05)
 
 * Include *.lark files in the package build

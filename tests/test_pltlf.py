@@ -1,29 +1,48 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#
+# This file is part of ltlf2dfa.
+#
+# ltlf2dfa is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# ltlf2dfa is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with ltlf2dfa.  If not, see <https://www.gnu.org/licenses/>.
+#
 """Test PLTLf."""
-import pytest
 import os
+
 import lark
+import pytest
 
-from ltlf2dfa.pltlf import (
-    PLTLfAtomic,
-    PLTLfAnd,
-    PLTLfEquivalence,
-    PLTLfOr,
-    PLTLfNot,
-    PLTLfImplies,
-    PLTLfOnce,
-    PLTLfHistorically,
-    PLTLfSince,
-    PLTLfBefore,
-    PLTLfTrue,
-    PLTLfFalse,
-)
 from ltlf2dfa.parser.pltlf import PLTLfParser
-
-# from ltlf2dfa.pl import PLAtomic, PLTrue, PLFalse, PLAnd, PLOr
+from ltlf2dfa.pltlf import (
+    PLTLfAnd,
+    PLTLfAtomic,
+    PLTLfBefore,
+    PLTLfEquivalence,
+    PLTLfFalse,
+    PLTLfHistorically,
+    PLTLfImplies,
+    PLTLfNot,
+    PLTLfOnce,
+    PLTLfOr,
+    PLTLfSince,
+    PLTLfStart,
+    PLTLfTrue,
+)
 
 # from .conftest import LTLfFixtures
 from .parsing import ParsingCheck
+
+# from ltlf2dfa.pl import PLAtomic, PLTrue, PLFalse, PLAnd, PLOr
 
 
 def test_parser():
@@ -40,6 +59,8 @@ def test_parser():
 
     assert parser("(Y a)") == PLTLfBefore(a)
 
+    assert parser("a & O(b)") == PLTLfAnd([a, PLTLfOnce(b)])
+
     assert parser("(O (a&b)) <-> !(H (!a | !b) )") == PLTLfEquivalence(
         [
             PLTLfOnce(PLTLfAnd([a, b])),
@@ -48,6 +69,34 @@ def test_parser():
     )
 
     assert parser("(a S b S !c)") == PLTLfSince([a, b, PLTLfNot(c)])
+
+    assert parser("a & start") == PLTLfAnd([a, PLTLfStart()])
+
+
+def test_negate():
+    parser = PLTLfParser()
+    sa, sb, sc = "a", "b", "c"
+    a, b, c = PLTLfAtomic(sa), PLTLfAtomic(sb), PLTLfAtomic(sc)
+
+    a_and_b = PLTLfAnd([a, b])
+    not_a_or_not_b = PLTLfOr([PLTLfNot(a), PLTLfNot(b)])
+    assert a_and_b.negate() == not_a_or_not_b
+
+    a_and_b_and_c = PLTLfAnd([a, b, c])
+    not_a_or_not_b_or_not_c = PLTLfOr([PLTLfNot(a), PLTLfNot(b), PLTLfNot(c)])
+    assert a_and_b_and_c.negate() == not_a_or_not_b_or_not_c
+
+    before_a = PLTLfBefore(a)
+    not_before_a = PLTLfNot(PLTLfBefore(a))
+    assert before_a.negate() == not_before_a
+
+    once_a = PLTLfOnce(a)
+    not_true_since_a = PLTLfNot(PLTLfSince([PLTLfTrue(), a]))
+    assert once_a.negate() == not_true_since_a
+
+    historically_a = PLTLfHistorically(a)
+    true_since_not_a = PLTLfSince([PLTLfTrue(), PLTLfNot(a)])
+    assert historically_a.negate() == true_since_not_a
 
 
 def test_names():
@@ -107,36 +156,36 @@ def test_mona():
     tt = PLTLfTrue()
     ff = PLTLfFalse()
 
-    assert a.to_mona(v="max($)") == "(0 in A)"
-    assert b.to_mona(v="max($)") == "(0 in B)"
-    assert c.to_mona(v="max($)") == "(0 in C)"
+    assert a.to_mona(v="max($)") == "(max($) in A)"
+    assert b.to_mona(v="max($)") == "(max($) in B)"
+    assert c.to_mona(v="max($)") == "(max($) in C)"
     assert tt.to_mona(v="max($)") == "true"
     assert ff.to_mona(v="max($)") == "false"
 
     f = parser("!(a & !b)")
-    assert f.to_mona(v="max($)") == "~(((0 in A) & ~((0 in B))))"
+    assert f.to_mona(v="max($)") == "~(((max($) in A) & ~((max($) in B))))"
 
     f = parser("!(!a | b)")
-    assert f.to_mona(v="max($)") == "~((~((0 in A)) | (0 in B)))"
+    assert f.to_mona(v="max($)") == "~((~((max($) in A)) | (max($) in B)))"
 
     f = parser("!(a <-> b)")
     assert (
         f.to_nnf().to_mona(v="max($)")
-        == "((~((0 in A)) | ~((0 in B))) & ((0 in A) | (0 in B)))"
+        == "((~((max($) in A)) | ~((max($) in B))) & ((max($) in A) | (max($) in B)))"
     )
 
     # Before
     f = parser("Y(a & b)")
     assert (
         f.to_mona(v="max($)")
-        == "(ex1 v_1: v_1=max($)-1 & max($)>0 & ((v_1 in A) & (v_1 in B)))"
+        == "(ex1 v_1: v_1 in $ & v_1=max($)-1 & max($)>0 & ((v_1 in A) & (v_1 in B)))"
     )
 
     # Since
     f = parser("a S b")
     assert (
         f.to_mona(v="max($)")
-        == "(ex1 v_1: 0<=v_1&v_1<=max($) & (v_1 in B) & (all1 v_2: v_1<v_2&v_2<=max($)"
+        == "(ex1 v_1: v_1 in $ & 0<=v_1&v_1<=max($) & (v_1 in B) & (all1 v_2: v_2 in $ & v_1<v_2&v_2<=max($)"
         " => (v_2 in A)))"
     )
 
@@ -144,14 +193,20 @@ def test_mona():
     f = parser("O(a & b)")
     assert (
         f.to_mona(v="max($)")
-        == "(ex1 v_1: 0<=v_1&v_1<=max($) & ((v_1 in A) & (v_1 in B)) & (all1 v_2: "
-        "v_1<v_2&v_2<=max($) => true))"
+        == "(ex1 v_1: v_1 in $ & 0<=v_1&v_1<=max($) & ((v_1 in A) & (v_1 in B)) & (all1 v_2: "
+        "v_2 in $ & v_1<v_2&v_2<=max($) => true))"
+    )
+    f = parser("a & O(b)")
+    assert (
+        f.to_mona(v="max($)")
+        == "((max($) in A) & (ex1 v_1: v_1 in $ & 0<=v_1&v_1<=max($) & (v_1 in B) & (all1 v_2: v_2 in $ & v_1<v_2&v_2<=max($) => "
+        "true)))"
     )
     f = parser("H(a | b)")
     assert (
         f.to_mona(v="max($)")
-        == "~((ex1 v_1: 0<=v_1&v_1<=max($) & ~(((v_1 in A) | (v_1 in B))) & (all1 v_2: "
-        "v_1<v_2&v_2<=max($) => true)))"
+        == "~((ex1 v_1: v_1 in $ & 0<=v_1&v_1<=max($) & ~(((v_1 in A) | (v_1 in B))) & (all1 v_2: "
+        "v_2 in $ & v_1<v_2&v_2<=max($) => true)))"
     )
 
 
