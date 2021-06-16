@@ -12,21 +12,21 @@ nav:
     - References: references.md
 
 plugins:
-- search
+    - search
 
 theme:
-  name: material
+    name: material
 
 markdown_extensions:
-- codehilite
-- pymdownx.arithmatex
-- pymdownx.highlight
-- pymdownx.superfences
-- pymdownx.emoji:
-    emoji_index: !!python/name:materialx.emoji.twemoji
-    emoji_generator: !!python/name:materialx.emoji.to_svg
-- markdown_include.include:
-    base_path: docs
+    - codehilite
+    - pymdownx.arithmatex
+    - pymdownx.highlight
+    - pymdownx.superfences
+    - pymdownx.emoji:
+        emoji_index: !!python/name:materialx.emoji.twemoji
+        emoji_generator: !!python/name:materialx.emoji.to_svg
+    - markdown_include.include:
+        base_path: docs
 
 extra_javascript:
-- 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
+    - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
