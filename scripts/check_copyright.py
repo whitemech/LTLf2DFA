@@ -78,17 +78,21 @@ def parse_args():
 
 
 if __name__ == "__main__":
-    python_files = set(itertools.chain(
-        Path("ltlf2dfa").glob("**/*.py"),
-        Path("tests").glob("**/*.py"),
-        Path("scripts").glob("**/*.py"),
-        [Path("setup.py")],
-    ))
+    python_files = set(
+        itertools.chain(
+            Path("ltlf2dfa").glob("**/*.py"),
+            Path("tests").glob("**/*.py"),
+            Path("scripts").glob("**/*.py"),
+            [Path("setup.py")],
+        )
+    )
 
     ignore_files = {}
 
     bad_files = {
-        filepath for filepath in python_files.difference(ignore_files) if not check_copyright(filepath)
+        filepath
+        for filepath in python_files.difference(ignore_files)
+        if not check_copyright(filepath)
     }
 
     if len(bad_files) > 0:

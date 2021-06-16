@@ -26,10 +26,6 @@ from typing import Any, List, Optional, Set
 from ltlf2dfa.base import AtomicFormula, BinaryOperator, Formula, UnaryOperator
 from ltlf2dfa.symbols import OpSymbol, Symbols
 
-# import sympy
-# from sympy.logic.boolalg import Boolean, BooleanTrue, BooleanFalse
-# from pythomata import PropositionalInterpretation
-
 
 class PLFormula(Formula):
     """A class to represent propositional formulas."""
@@ -69,48 +65,6 @@ class PLFormula(Formula):
 
         :return: a string.
         """
-
-
-# def to_sympy(
-#     formula: Formula, replace: Optional[Dict[AtomSymbol, sympy.Symbol]] = None
-# ) -> Boolean:
-#     """
-#     Translate a PLFormula object into a SymPy expression.
-#
-#     :param formula: the formula to translate.
-#     :param replace: an optional mapping from symbols to replace to other replacement symbols.
-#     :return: the SymPy formula object equivalent to the formula.
-#     """
-#     if replace is None:
-#         replace = {}
-#
-#     if isinstance(formula, PLTrue):
-#         return BooleanTrue()
-#     elif isinstance(formula, PLFalse):
-#         return BooleanFalse()
-#     elif isinstance(formula, PLAtomic):
-#         symbol = replace.get(formula.s, formula.s)
-#         return sympy.Symbol(symbol)
-#     elif isinstance(formula, PLNot):
-#         return sympy.Not(to_sympy(formula.f, replace=replace))
-#     elif isinstance(formula, PLOr):
-#         return sympy.simplify(
-#             sympy.Or(*[to_sympy(f, replace=replace) for f in formula.formulas])
-#         )
-#     elif isinstance(formula, PLAnd):
-#         return sympy.simplify(
-#             sympy.And(*[to_sympy(f, replace=replace) for f in formula.formulas])
-#         )
-#     elif isinstance(formula, PLImplies):
-#         return sympy.simplify(
-#             sympy.Implies(*[to_sympy(f, replace=replace) for f in formula.formulas])
-#         )
-#     elif isinstance(formula, PLEquivalence):
-#         return sympy.simplify(
-#             sympy.Equivalent(*[to_sympy(f, replace=replace) for f in formula.formulas])
-#         )
-#     else:
-#         raise ValueError("Formula is not valid.")
 
 
 class PLAtomic(AtomicFormula, PLFormula):

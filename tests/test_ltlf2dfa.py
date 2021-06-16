@@ -324,24 +324,24 @@ A = {}"""
 def test_pltlf_dfa():
     parser = PLTLfParser()
 
-    #     f = parser("a")
-    #     dfa = f.to_dfa(mona_dfa_out=False)
-    #     expected = """digraph MONA_DFA {
-    #  rankdir = LR;
-    #  center = true;
-    #  size = "7.5,10.5";
-    #  edge [fontname = Courier];
-    #  node [height = .5, width = .5];
-    #  node [shape = doublecircle]; 3;
-    #  node [shape = circle]; 1;
-    #  init [shape = plaintext, label = ""];
-    #  init -> 1;
-    #  1 -> 2 [label="~a"];
-    #  1 -> 3 [label="a"];
-    #  2 -> 2 [label="true"];
-    #  3 -> 3 [label="true"];
-    # }"""
-    #     assert dfa == expected
+    f = parser("a")
+    dfa = f.to_dfa(mona_dfa_out=False)
+    expected = """digraph MONA_DFA {
+ rankdir = LR;
+ center = true;
+ size = "7.5,10.5";
+ edge [fontname = Courier];
+ node [height = .5, width = .5];
+ node [shape = doublecircle]; 2;
+ node [shape = circle]; 1;
+ init [shape = plaintext, label = ""];
+ init -> 1;
+ 1 -> 1 [label="~a"];
+ 1 -> 2 [label="a"];
+ 2 -> 1 [label="~a"];
+ 2 -> 2 [label="a"];
+}"""
+    assert dfa == expected
 
     f = parser("true")
     dfa = f.to_dfa(mona_dfa_out=False)
@@ -644,29 +644,3 @@ def test_simplify_guard():
         Not(Symbol("h")),
     )
     assert expected == actual
-
-    # ap = symbols("a b c d e f g h i")
-    #
-    # tern_1 = "0XXXXXXXX"
-    # tern_2 = "10XXXXXXX"
-    # tern_3 = "110XXXXXX"
-    # tern_4 = "1110XXXXX"
-    # tern_5 = "11110XXXX"
-    # tern_6 = "111110XXX"
-    # tern_7 = "1111110XX"
-    # tern_8 = "11111110X"
-    # tern_9 = "111111110"
-    # sym_1 = ter2symb(ap, tern_1)
-    # sym_2 = ter2symb(ap, tern_2)
-    # sym_3 = ter2symb(ap, tern_3)
-    # sym_4 = ter2symb(ap, tern_4)
-    # sym_5 = ter2symb(ap, tern_5)
-    # sym_6 = ter2symb(ap, tern_6)
-    # sym_7 = ter2symb(ap, tern_7)
-    # sym_8 = ter2symb(ap, tern_8)
-    # sym_9 = ter2symb(ap, tern_9)
-    #
-    # actual = simplify_guard([sym_1, sym_2, sym_3, sym_4, sym_5, sym_6, sym_7, sym_8, sym_9])
-    # expected = Or(Not(Symbol("a")), Not(Symbol("b")), Not(Symbol("c")), Not(Symbol("d")), Not(Symbol("e")),
-    #               Not(Symbol("f")), Not(Symbol("g")), Not(Symbol("h")), Not(Symbol("i")))
-    # assert expected == actual

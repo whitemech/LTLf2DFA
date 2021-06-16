@@ -58,7 +58,7 @@ class PLTLfFormula(Formula, ABC):
         :return: a string.
         """
 
-    # def to_ldlf(self):
+    # def to_pldlf(self):
     #     """
     #     Tranform the formula into an equivalent LDLf formula.
     #
@@ -102,7 +102,7 @@ class PLTLfAtomic(AtomicFormula, PLTLfFormula):
         else:
             return PLAtomic(self.s).to_mona(v="max($)")
 
-    # def to_ldlf(self):
+    # def to_pldlf(self):
     #     return LDLfPropositional(PLAtomic(self.s)).convert()
 
 
@@ -169,8 +169,8 @@ class PLTLfNot(PLTLfUnaryOperator):
         """Return the MONA encoding of a PLTLf Not formula."""
         return "~({})".format(self.f.to_mona(v))
 
-    # def to_ldlf(self):
-    #     return LDLfNot(self.f.to_ldlf())
+    # def to_pldlf(self):
+    #     return LDLfNot(self.f.to_pldlf())
 
 
 class PLTLfAnd(PLTLfBinaryOperator):
@@ -189,8 +189,8 @@ class PLTLfAnd(PLTLfBinaryOperator):
         """Return the MONA encoding of a PLTLf And formula."""
         return "({})".format(" & ".join([f.to_mona(v) for f in self.formulas]))
 
-    # def to_ldlf(self):
-    #     return LDLfAnd([f.to_ldlf() for f in self.formulas])
+    # def to_pldlf(self):
+    #     return LDLfAnd([f.to_pldlf() for f in self.formulas])
 
 
 class PLTLfOr(PLTLfBinaryOperator):
@@ -290,10 +290,10 @@ class PLTLfBefore(PLTLfUnaryOperator):
                 ex_var, self.f.to_mona(ex_var)
             )
 
-    # def to_ldlf(self):
+    # def to_pldlf(self):
     #     return LDLfDiamond(
     #         RegExpPropositional(PLTrue()),
-    #         LDLfAnd([self.f.to_ldlf(), LDLfNot(LDLfEnd())]),
+    #         LDLfAnd([self.f.to_pldlf(), LDLfNot(LDLfEnd())]),
     #     )
 
 
@@ -323,27 +323,19 @@ class PLTLfSince(PLTLfBinaryOperator):
             if len(self.formulas) > 2
             else self.formulas[1].to_mona(v=ex_var)
         )
-        if v != "max($)":
-            return (
-                "(ex1 {0}: {0} in $ & 0<={0}&{0}<={1} & {2} & "
-                "(all1 {3}: {3} in $ & {0}<{3}&{3}<={1} => {4}))".format(
-                    ex_var, v, f2, all_var, f1
-                )
+        return (
+            "(ex1 {0}: {0} in $ & 0<={0}&{0}<={1} & {2} & "
+            "(all1 {3}: {3} in $ & {0}<{3}&{3}<={1} => {4}))".format(
+                ex_var, v, f2, all_var, f1
             )
-        else:
-            return (
-                "(ex1 {0}: {0} in $ & 0<={0}&{0}<=max($) & {1} & "
-                "(all1 {2}: {2} in $ & {0}<{2}&{2}<=max($) => {3}))".format(
-                    ex_var, f2, all_var, f1
-                )
-            )
+        )
 
-    # def to_ldlf(self):
-    #     f1 = self.formulas[0].to_ldlf()
+    # def to_pldlf(self):
+    #     f1 = self.formulas[0].to_pldlf()
     #     f2 = (
-    #         PLTLfSince(self.formulas[1:]).to_ldlf()
+    #         PLTLfSince(self.formulas[1:]).to_pldlf()
     #         if len(self.formulas) > 2
-    #         else self.formulas[1].to_ldlf()
+    #         else self.formulas[1].to_pldlf()
     #     )
     #     return LDLfDiamond(
     #         RegExpStar(RegExpSequence([RegExpTest(f1), RegExpPropositional(PLTrue())])),
@@ -371,10 +363,10 @@ class PLTLfOnce(PLTLfUnaryOperator):
         """Return the MONA encoding of a PLTLf Once formula."""
         return PLTLfSince([PLTLfTrue(), self.f]).to_mona(v)
 
-    # def to_ldlf(self):
+    # def to_pldlf(self):
     #     return LDLfDiamond(
     #         RegExpStar(RegExpPropositional(PLTrue())),
-    #         LDLfAnd([self.f.to_ldlf(), LDLfNot(LDLfEnd())]),
+    #         LDLfAnd([self.f.to_pldlf(), LDLfNot(LDLfEnd())]),
     #     )
 
 
