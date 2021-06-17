@@ -50,7 +50,7 @@ setup(
     long_description=readme + '\n\n' + history,
     long_description_content_type="text/markdown",
     classifiers=[
-        'Development Status :: 2 - Alpha',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Education',
         'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
         'Natural Language :: English',
