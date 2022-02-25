@@ -359,23 +359,8 @@ def test_pltlf_dfa():
 }"""
     assert dfa == expected
 
-    f = parser("false")
-    dfa = f.to_dfa(mona_dfa_out=False)
-    expected = """digraph MONA_DFA {
- rankdir = LR;
- center = true;
- size = "7.5,10.5";
- edge [fontname = Courier];
- node [height = .5, width = .5];
- node [shape = doublecircle];
- node [shape = circle]; 1;
- init [shape = plaintext, label = ""];
- init -> 1;
- 1 -> 1 [label="true"];
-}"""
-    assert dfa == expected
+    f = parser("O(a) -> O(b)")
 
-    f = parser("H a")
     dfa = f.to_dfa(mona_dfa_out=False)
     expected = """digraph MONA_DFA {
  rankdir = LR;
@@ -383,135 +368,16 @@ def test_pltlf_dfa():
  size = "7.5,10.5";
  edge [fontname = Courier];
  node [height = .5, width = .5];
- node [shape = doublecircle]; 1;
+ node [shape = doublecircle]; 1; 2;
  node [shape = circle]; 1;
  init [shape = plaintext, label = ""];
  init -> 1;
- 1 -> 2 [label="~a"];
- 1 -> 1 [label="a"];
- 2 -> 2 [label="true"];
-}"""
-    assert dfa == expected
-
-    f = parser("O(a & b)")
-    dfa = f.to_dfa(mona_dfa_out=False)
-    expected = """digraph MONA_DFA {
- rankdir = LR;
- center = true;
- size = "7.5,10.5";
- edge [fontname = Courier];
- node [height = .5, width = .5];
- node [shape = doublecircle]; 2;
- node [shape = circle]; 1;
- init [shape = plaintext, label = ""];
- init -> 1;
- 1 -> 1 [label="~a | ~b"];
- 1 -> 2 [label="a & b"];
- 2 -> 2 [label="true"];
-}"""
-    assert dfa == expected
-
-    f = parser("Y(a)")
-    dfa = f.to_dfa(mona_dfa_out=False)
-    expected = """digraph MONA_DFA {
- rankdir = LR;
- center = true;
- size = "7.5,10.5";
- edge [fontname = Courier];
- node [height = .5, width = .5];
- node [shape = doublecircle]; 3; 4;
- node [shape = circle]; 1;
- init [shape = plaintext, label = ""];
- init -> 1;
- 1 -> 1 [label="~a"];
- 1 -> 2 [label="a"];
- 2 -> 3 [label="~a"];
- 2 -> 4 [label="a"];
- 3 -> 1 [label="~a"];
- 3 -> 2 [label="a"];
- 4 -> 3 [label="~a"];
- 4 -> 4 [label="a"];
-}"""
-    assert dfa == expected
-
-    f = parser("a S b")
-    dfa = f.to_dfa(mona_dfa_out=False)
-    expected = """digraph MONA_DFA {
- rankdir = LR;
- center = true;
- size = "7.5,10.5";
- edge [fontname = Courier];
- node [height = .5, width = .5];
- node [shape = doublecircle]; 2;
- node [shape = circle]; 1;
- init [shape = plaintext, label = ""];
- init -> 1;
- 1 -> 1 [label="~b"];
+ 1 -> 1 [label="~a & ~b"];
  1 -> 2 [label="b"];
- 2 -> 1 [label="~a & ~b"];
- 2 -> 2 [label="a | b"];
-}"""
-    assert dfa == expected
-
-    f = parser("H(a) & O(b)")
-    dfa = f.to_dfa(mona_dfa_out=False)
-    expected = """digraph MONA_DFA {
- rankdir = LR;
- center = true;
- size = "7.5,10.5";
- edge [fontname = Courier];
- node [height = .5, width = .5];
- node [shape = doublecircle]; 3;
- node [shape = circle]; 1;
- init [shape = plaintext, label = ""];
- init -> 1;
- 1 -> 2 [label="~a"];
- 1 -> 1 [label="a & ~b"];
- 1 -> 3 [label="a & b"];
+ 1 -> 3 [label="a & ~b"];
  2 -> 2 [label="true"];
- 3 -> 2 [label="~a"];
- 3 -> 3 [label="a"];
-}"""
-    assert dfa == expected
-
-    f = parser("a & O(b)")
-
-    dfa = f.to_dfa(mona_dfa_out=False)
-    expected = """digraph MONA_DFA {
- rankdir = LR;
- center = true;
- size = "7.5,10.5";
- edge [fontname = Courier];
- node [height = .5, width = .5];
- node [shape = doublecircle]; 3;
- node [shape = circle]; 1;
- init [shape = plaintext, label = ""];
- init -> 1;
- 1 -> 1 [label="~b"];
- 1 -> 2 [label="b & ~a"];
- 1 -> 3 [label="a & b"];
- 2 -> 2 [label="~a"];
- 2 -> 3 [label="a"];
- 3 -> 2 [label="~a"];
- 3 -> 3 [label="a"];
-}"""
-    assert dfa == expected
-
-    f = parser("H(Y(a))")
-
-    dfa = f.to_dfa(mona_dfa_out=False)
-    expected = """digraph MONA_DFA {
- rankdir = LR;
- center = true;
- size = "7.5,10.5";
- edge [fontname = Courier];
- node [height = .5, width = .5];
- node [shape = doublecircle]; 1;
- node [shape = circle]; 1;
- init [shape = plaintext, label = ""];
- init -> 1;
- 1 -> 2 [label="true"];
- 2 -> 2 [label="true"];
+ 3 -> 3 [label="~b"];
+ 3 -> 2 [label="b"];
 }"""
     assert dfa == expected
 
