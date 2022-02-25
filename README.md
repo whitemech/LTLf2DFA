@@ -153,7 +153,7 @@ and then go to [http://localhost:8000](http://localhost:8000)
 
 LTL<sub>f</sub>2DFA is released under the GNU Lesser General Public License v3.0 or later (LGPLv3+).
 
-Copyright 2018-2020 WhiteMech @ Sapienza University
+Copyright 2018-2022 WhiteMech @ Sapienza University
 
 ## Citing
 If you are interested in this tool, and you use it in your own work, please consider citing it.
