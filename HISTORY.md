@@ -1,5 +1,10 @@
 # History
 
+## 1.0.2 (2022-02-25)
+* Introduce `PLTLfWeakBefore` and `PLTLfPastRelease` support
+* Hotfix problem on translation of the Once operator
+* Increase code coverage
+
 ## 1.0.1 (2020-07-03)
 * Introduce optional argument to `to_dfa()` method for DFA in MONA output
 * Add parsing support for `LTLfLast()` and `PLTLfStart()` keywords
