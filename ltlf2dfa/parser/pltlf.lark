@@ -5,17 +5,20 @@ start: pltlf_formula
 ?pltlf_implication: pltlf_or (IMPLY pltlf_or)*
 ?pltlf_or:          pltlf_and (OR pltlf_and)*
 ?pltlf_and:         pltlf_since (AND pltlf_since)*
-?pltlf_since:       pltlf_unaryop (SINCE pltlf_unaryop)*
+?pltlf_since:       pltlf_pastrelease (SINCE pltlf_unaryop)*
+?pltlf_pastrelease: pltlf_unaryop (PAST_RELEASE pltlf_unaryop)*
 
 ?pltlf_unaryop:    pltlf_historically
              |     pltlf_once
              |     pltlf_before
+             |     pltlf_weak_before
              |     pltlf_not
              |     pltlf_wrapped
 
 ?pltlf_historically: HISTORICALLY pltlf_unaryop
 ?pltlf_once:         ONCE pltlf_unaryop
 ?pltlf_before:       BEFORE pltlf_unaryop
+?pltlf_weak_before:  WEAK_BEFORE pltlf_unaryop
 ?pltlf_not:          NOT pltlf_unaryop
 ?pltlf_wrapped:      pltlf_atom
              |       LSEPARATOR pltlf_formula RSEPARATOR
@@ -31,9 +34,11 @@ pltlf_start: START
 
 // Operators must not be part of a word
 SINCE.2: /S(?=[^a-z]|$)/
+PAST_RELEASE.2: /P(?=[^a-z]|$)/
 HISTORICALLY.2: /H(?=[^a-z]|$)/
 ONCE.2: /O(?=[^a-z]|$)/
 BEFORE.2: /Y(?=[^a-z]|$)/
+WEAK_BEFORE.2: /WY(?=[^a-z]|$)/
 START.2: /(?i:start)/
 
 // Symbols cannot contain uppercase letters, because these are reserved

@@ -34,15 +34,15 @@ from ltlf2dfa.pltlf import (
     PLTLfNot,
     PLTLfOnce,
     PLTLfOr,
+    PLTLfPastRelease,
     PLTLfSince,
     PLTLfStart,
     PLTLfTrue,
+    PLTLfWeakBefore,
 )
 
 # from .conftest import LTLfFixtures
 from .parsing import ParsingCheck
-
-# from ltlf2dfa.pl import PLAtomic, PLTrue, PLFalse, PLAnd, PLOr
 
 
 def test_parser():
@@ -87,12 +87,12 @@ def test_negate():
     assert a_and_b_and_c.negate() == not_a_or_not_b_or_not_c
 
     before_a = PLTLfBefore(a)
-    not_before_a = PLTLfNot(PLTLfBefore(a))
-    assert before_a.negate() == not_before_a
+    weakBefore_not_a = PLTLfWeakBefore(PLTLfNot(a))
+    assert before_a.negate() == weakBefore_not_a
 
     once_a = PLTLfOnce(a)
-    not_true_since_a = PLTLfNot(PLTLfSince([PLTLfTrue(), a]))
-    assert once_a.negate() == not_true_since_a
+    false_pastRelease_not_a = PLTLfPastRelease([PLTLfFalse(), PLTLfNot(a)])
+    assert once_a.negate() == false_pastRelease_not_a
 
     historically_a = PLTLfHistorically(a)
     true_since_not_a = PLTLfSince([PLTLfTrue(), PLTLfNot(a)])
@@ -127,27 +127,31 @@ def test_nnf():
         [PLTLfOr([PLTLfNot(a), PLTLfNot(b)]), PLTLfOr([a, b])]
     )
 
-    # Next and Weak Next
-    # f = parser("!(X (a & b))")
-    # assert f.to_nnf() == PLTLfWeakNext(PLTLfOr([PLTLfNot(a), PLTLfNot(b)]))
+    # Yesterday and Weak Yesterday
+    f = parser("!(Y (a & b))")
+    assert f.to_nnf() == PLTLfWeakBefore(PLTLfOr([PLTLfNot(a), PLTLfNot(b)]))
 
-    # f = parser("!(WX (a & b))")
-    # assert f.to_nnf() == PLTLfBefore(PLTLfOr([PLTLfNot(a), PLTLfNot(b)]))
+    f = parser("!(WY (a & b))")
+    assert f.to_nnf() == PLTLfBefore(PLTLfOr([PLTLfNot(a), PLTLfNot(b)]))
 
     # Once and Historically
-    # f = parser("!(O (a | b))")
-    # assert f.to_nnf() == PLTLfHistorically(PLTLfAnd([PLTLfNot(a), PLTLfNot(b)])).to_nnf()
+    f = parser("!(O (a | b))")
+    assert (
+        f.to_nnf() == PLTLfHistorically(PLTLfAnd([PLTLfNot(a), PLTLfNot(b)])).to_nnf()
+    )
 
     # Since
-    # f = parser("!(a S b)")
-    # assert f.to_nnf() == PLTLfRelease([PLTLfNot(a), PLTLfNot(b)])
-    # f = parser("!(a R b)")
-    # assert f.to_nnf() == PLTLfSince([PLTLfNot(a), PLTLfNot(b)])
-    #
-    # f = parser("!(F (a | b))")
-    # assert f.to_nnf() == PLTLfHistorically(PLTLfAnd([PLTLfNot(a), PLTLfNot(b)])).to_nnf()
-    # f = parser("!(G (a | b))")
-    # assert f.to_nnf() == PLTLfOnce(PLTLfAnd([PLTLfNot(a), PLTLfNot(b)])).to_nnf()
+    f = parser("!(a S b)")
+    assert f.to_nnf() == PLTLfPastRelease([PLTLfNot(a), PLTLfNot(b)])
+    f = parser("!(a P b)")
+    assert f.to_nnf() == PLTLfSince([PLTLfNot(a), PLTLfNot(b)])
+
+    f = parser("!(O (a | b))")
+    assert (
+        f.to_nnf() == PLTLfHistorically(PLTLfAnd([PLTLfNot(a), PLTLfNot(b)])).to_nnf()
+    )
+    f = parser("!(H (a | b))")
+    assert f.to_nnf() == PLTLfOnce(PLTLfAnd([PLTLfNot(a), PLTLfNot(b)])).to_nnf()
 
 
 def test_mona():

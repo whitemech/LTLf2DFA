@@ -276,7 +276,7 @@ class PLTLfBefore(PLTLfUnaryOperator):
 
     def negate(self) -> PLTLfFormula:
         """Negate the formula."""
-        return PLTLfNot(self)
+        return PLTLfWeakBefore(self.f.negate())
 
     def to_mona(self, v="max($)") -> str:
         """Return the MONA encoding of a PLTLf Before formula."""
@@ -287,6 +287,41 @@ class PLTLfBefore(PLTLfUnaryOperator):
             )
         else:
             return "(ex1 {0}: {0} in $ & {0}=max($)-1 & max($)>0 & {1})".format(
+                ex_var, self.f.to_mona(ex_var)
+            )
+
+    # def to_pldlf(self):
+    #     return LDLfDiamond(
+    #         RegExpPropositional(PLTrue()),
+    #         LDLfAnd([self.f.to_pldlf(), LDLfNot(LDLfEnd())]),
+    #     )
+
+
+class PLTLfWeakBefore(PLTLfUnaryOperator):
+    """Class for the PLTLf Weak Before formula."""
+
+    @property
+    def operator_symbol(self) -> OpSymbol:
+        """Get the operator symbol."""
+        return Symbols.WEAK_BEFORE.value
+
+    def to_nnf(self) -> PLTLfFormula:
+        """Transform to NNF."""
+        return PLTLfWeakBefore(self.f.to_nnf())
+
+    def negate(self) -> PLTLfFormula:
+        """Negate the formula."""
+        return PLTLfBefore(self.f.negate())
+
+    def to_mona(self, v="max($)") -> str:
+        """Return the MONA encoding of a PLTLf Weak Before formula."""
+        ex_var = new_var(v)
+        if v != "max($)":
+            return "~(ex1 {0}: {0} in $ & {0}={1}-1 & {1}>0 & ~({2}))".format(
+                ex_var, v, self.f.to_mona(ex_var)
+            )
+        else:
+            return "~(ex1 {0}: {0} in $ & {0}=max($)-1 & max($)>0 & ~({1}))".format(
                 ex_var, self.f.to_mona(ex_var)
             )
 
@@ -311,7 +346,7 @@ class PLTLfSince(PLTLfBinaryOperator):
 
     def negate(self):
         """Negate the formula."""
-        return PLTLfNot(self)
+        return PLTLfPastRelease([f.negate() for f in self.formulas])
 
     def to_mona(self, v="max($)") -> str:
         """Return the MONA encoding of a PLTLf Since formula."""
@@ -328,6 +363,50 @@ class PLTLfSince(PLTLfBinaryOperator):
             "(all1 {3}: {3} in $ & {0}<{3}&{3}<={1} => {4}))".format(
                 ex_var, v, f2, all_var, f1
             )
+        )
+
+    # def to_pldlf(self):
+    #     f1 = self.formulas[0].to_pldlf()
+    #     f2 = (
+    #         PLTLfSince(self.formulas[1:]).to_pldlf()
+    #         if len(self.formulas) > 2
+    #         else self.formulas[1].to_pldlf()
+    #     )
+    #     return LDLfDiamond(
+    #         RegExpStar(RegExpSequence([RegExpTest(f1), RegExpPropositional(PLTrue())])),
+    #         LDLfAnd([f2, LDLfNot(LDLfEnd())]),
+    #     )
+
+
+class PLTLfPastRelease(PLTLfBinaryOperator):
+    """Class for the PLTLf Past Release formula."""
+
+    @property
+    def operator_symbol(self) -> OpSymbol:
+        """Get the operator symbol."""
+        return Symbols.PAST_RELEASE.value
+
+    def to_nnf(self):
+        """Transform to NNF."""
+        return PLTLfPastRelease([f.to_nnf() for f in self.formulas])
+
+    def negate(self):
+        """Negate the formula."""
+        return PLTLfSince([f.negate() for f in self.formulas])
+
+    def to_mona(self, v="max($)") -> str:
+        """Return the MONA encoding of a PLTLf Past Release formula."""
+        ex_var = new_var(v)
+        all_var = new_var(ex_var)
+        f1 = self.formulas[0].to_mona(v=all_var)
+        f2 = (
+            PLTLfSince(self.formulas[1:]).to_mona(v=ex_var)
+            if len(self.formulas) > 2
+            else self.formulas[1].to_mona(v=ex_var)
+        )
+        return (
+            f"~(ex1 {ex_var}: {ex_var} in $ & 0<={ex_var}&{ex_var}<={v} & ~({f2}) & "
+            f"(all1 {all_var}: {all_var} in $ & {ex_var}<{all_var}&{all_var}<={v} => ~({f1})))"
         )
 
     # def to_pldlf(self):
@@ -380,7 +459,7 @@ class PLTLfHistorically(PLTLfUnaryOperator):
 
     def to_nnf(self) -> PLTLfFormula:
         """Transform to NNF."""
-        return PLTLfNot(PLTLfSince([PLTLfTrue(), PLTLfNot(self.f.to_nnf())]))
+        return PLTLfPastRelease([PLTLfFalse(), self.f.to_nnf()])
 
     def negate(self) -> PLTLfFormula:
         """Negate the formula."""
@@ -414,8 +493,8 @@ class PLTLfStart(PLTLfFormula):
         return Symbols.START.value
 
     def to_mona(self, v="max($)") -> str:
-        """Return the MONA encoding of an LTLf Last formula."""
-        return PLTLfNot(PLTLfBefore(PLTLfTrue())).to_mona(v)
+        """Return the MONA encoding of a PLTLf Start formula."""
+        return PLTLfWeakBefore(PLTLfFalse()).to_mona(v)
 
 
 # class PLTLfEnd(PLTLfFormula):

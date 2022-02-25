@@ -36,9 +36,11 @@ from ltlf2dfa.pltlf import (
     PLTLfNot,
     PLTLfOnce,
     PLTLfOr,
+    PLTLfPastRelease,
     PLTLfSince,
     PLTLfStart,
     PLTLfTrue,
+    PLTLfWeakBefore,
 )
 
 
@@ -110,6 +112,16 @@ class PLTLfTransformer(Transformer):
         else:
             raise ParsingError
 
+    def pltlf_pastrelease(self, args):
+        """Parse PLTLf Past Release."""
+        if len(args) == 1:
+            return args[0]
+        elif (len(args) - 1) % 2 == 0:
+            subformulas = args[::2]
+            return PLTLfPastRelease(subformulas)
+        else:
+            raise ParsingError
+
     def pltlf_historically(self, args):
         """Parse PLTLf Historically."""
         if len(args) == 1:
@@ -138,6 +150,16 @@ class PLTLfTransformer(Transformer):
             f = args[-1]
             for _ in args[:-1]:
                 f = PLTLfBefore(f)
+            return f
+
+    def pltlf_weak_before(self, args):
+        """Parse PLTLf Weak Before."""
+        if len(args) == 1:
+            return args[0]
+        else:
+            f = args[-1]
+            for _ in args[:-1]:
+                f = PLTLfWeakBefore(f)
             return f
 
     def pltlf_not(self, args):
