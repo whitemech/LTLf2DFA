@@ -73,8 +73,9 @@ your system following the instructions [here](http://www.brics.dk/mona/download.
 
 This tool is also based on the following libraries:
 
-- [lark-parser 0.9.0](https://pypi.org/project/lark-parser/)
-- [sympy 1.6.1](https://pypi.org/project/sympy/)
+- [lark-parser](https://pypi.org/project/lark-parser/)
+- [sympy](https://pypi.org/project/sympy/)
+- [click](https://pypi.org/project/click/)
 
 They are automatically added while installing LTL<sub>f</sub>2DFA.
 
@@ -95,7 +96,9 @@ git clone https://github.com/whitemech/LTLf2DFA.git
 cd ltlf2dfa
 pip install .
 ```
-## How To Use
+
+## How to Use
+### As a Library
 
 - Parse an LTL<sub>f</sub> formula:
 ```python
@@ -122,6 +125,12 @@ print(formula)                      # prints "H(a -> Y (b))"
 dfa = formula.to_dfa()
 print(dfa)                          # prints the DFA in DOT format
 ```
+
+### As a CLI Interface
+```python
+ltlf2dfa -l {ltlf | pltlf} -f <path/to/formula>
+```
+
 ## Features
 
 * Syntax and parsing support for the following formal languages:
