@@ -46,7 +46,9 @@ def execute(logic, formula):
 
 
 @click.command()
-@click.option("-l", "--logic", type=click.Choice(["ltlf", "pltlf"], case_sensitive=False))
+@click.option("-l", "--logic",
+              type=click.Choice(["ltlf", "pltlf"], case_sensitive=False),
+              required=True)
 @click.option(
     "-f",
     "--formula",
@@ -56,7 +58,7 @@ def execute(logic, formula):
 )
 def main(logic, formula):
     """From LTLf/PLTLf formulas to DFA."""
-    execute(Logic(logic.lower), formula)
+    execute(Logic(logic.lower()), formula)
 
 
 if __name__ == "__main__":
