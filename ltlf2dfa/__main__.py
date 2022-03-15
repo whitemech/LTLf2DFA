@@ -27,16 +27,24 @@ from ltlf2dfa.parser.pltlf import PLTLfParser
 
 
 def execute(logic, formula):
+    try:
+        with open(formula, "r") as f:
+            formula_str = f.read()
+    except Exception:
+        raise IOError(
+            "[ERROR]: Something wrong occurred while parsing the domain and problem."
+        )
+
     if logic == Logic.LTLf:
         f_parser = LTLfParser()
         try:
-            parsed_formula = f_parser(formula)
+            parsed_formula = f_parser(formula_str)
         except Exception as e:
             raise ValueError(e)
     elif logic == Logic.PLTLf:
         p_parser = PLTLfParser()
         try:
-            parsed_formula = p_parser(formula)
+            parsed_formula = p_parser(formula_str)
         except Exception as e:
             raise ValueError(e)
     else:
