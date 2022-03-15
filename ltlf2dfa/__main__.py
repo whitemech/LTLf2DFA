@@ -27,6 +27,7 @@ from ltlf2dfa.parser.pltlf import PLTLfParser
 
 
 def execute(logic, formula):
+    """Transform the formula."""
     try:
         with open(formula, "r") as f:
             formula_str = f.read()
@@ -54,9 +55,12 @@ def execute(logic, formula):
 
 
 @click.command()
-@click.option("-l", "--logic",
-              type=click.Choice(["ltlf", "pltlf"], case_sensitive=False),
-              required=True)
+@click.option(
+    "-l",
+    "--logic",
+    type=click.Choice(["ltlf", "pltlf"], case_sensitive=False),
+    required=True,
+)
 @click.option(
     "-f",
     "--formula",

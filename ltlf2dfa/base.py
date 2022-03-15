@@ -31,6 +31,8 @@ AtomSymbol = Union["QuotedFormula", str]
 
 
 class Logic(Enum):
+    """Logic classes."""
+
     LTLf = "ltlf"
     PLTLf = "pltlf"
 
