@@ -21,12 +21,18 @@
 import functools
 import re
 from abc import ABC, abstractmethod
+from enum import Enum
 from typing import Any, Generic, List, Optional, Sequence, Tuple, TypeVar, Union, cast
 
 from ltlf2dfa.helpers import Hashable, Wrapper
 from ltlf2dfa.symbols import OpSymbol, Symbols
 
 AtomSymbol = Union["QuotedFormula", str]
+
+
+class Logic(Enum):
+    LTLf = "ltlf"
+    PLTLf = "pltlf"
 
 
 class Formula(Hashable, ABC):
