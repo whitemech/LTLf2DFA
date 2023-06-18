@@ -18,12 +18,10 @@
 #
 """Implementation of the PL parser."""
 
-from pathlib import Path
-
 from lark import Lark, Transformer
 
-from ltlf2dfa.helpers import ParsingError
-from ltlf2dfa.parser import CUR_DIR
+from ltlf2dfa.helpers import ParsingError, check_
+from ltlf2dfa.parser import PARSERS_DIRECTORY, PL_GRAMMAR_FILE
 from ltlf2dfa.pl import (
     PLAnd,
     PLAtomic,
@@ -45,88 +43,85 @@ class PLTransformer(Transformer):
 
     def propositional_formula(self, args):
         """Parse Propositional formula."""
-        assert len(args) == 1
+        check_(len(args) == 1)
         return args[0]
 
     def prop_equivalence(self, args):
         """Parse Propositional Equivalence."""
         if len(args) == 1:
             return args[0]
-        elif (len(args) - 1) % 2 == 0:
+        if (len(args) - 1) % 2 == 0:
             subformulas = args[::2]
             return PLEquivalence(subformulas)
-        else:
-            raise ParsingError
+        raise ParsingError
 
     def prop_implication(self, args):
         """Parse Propositional Implication."""
         if len(args) == 1:
             return args[0]
-        elif (len(args) - 1) % 2 == 0:
+        if (len(args) - 1) % 2 == 0:
             subformulas = args[::2]
             return PLImplies(subformulas)
-        else:
-            raise ParsingError
+        raise ParsingError
 
     def prop_or(self, args):
         """Parse Propositional Or."""
         if len(args) == 1:
             return args[0]
-        elif (len(args) - 1) % 2 == 0:
+        if (len(args) - 1) % 2 == 0:
             subformulas = args[::2]
             return PLOr(subformulas)
-        else:
-            raise ParsingError
+        raise ParsingError
 
     def prop_and(self, args):
         """Parse Propositional And."""
         if len(args) == 1:
             return args[0]
-        elif (len(args) - 1) % 2 == 0:
+        if (len(args) - 1) % 2 == 0:
             subformulas = args[::2]
             return PLAnd(subformulas)
-        else:
-            raise ParsingError
+        raise ParsingError
 
     def prop_not(self, args):
         """Parse Propositional Not."""
         if len(args) == 1:
             return args[0]
-        else:
-            f = args[-1]
-            for _ in args[:-1]:
-                f = PLNot(f)
-            return f
+        f = args[-1]
+        for _ in args[:-1]:
+            f = PLNot(f)
+        return f
 
     def prop_wrapped(self, args):
         """Parse Propositional wrapped formula."""
         if len(args) == 1:
             return args[0]
-        elif len(args) == 3:
+        if len(args) == 3:
             _, f, _ = args
             return f
-        else:
-            raise ParsingError
+        raise ParsingError
 
     def prop_atom(self, args):
         """Parse Propositional Atom."""
-        assert len(args) == 1
+        check_(len(args) == 1)
         return args[0]
 
     def prop_true(self, args):
         """Parse Propositional True."""
-        assert len(args) == 1
+        check_(len(args) == 1)
         return PLTrue()
 
     def prop_false(self, args):
         """Parse Propositional False."""
-        assert len(args) == 1
+        check_(len(args) == 1)
         return PLFalse()
 
     def atom(self, args):
         """Parse Atom."""
-        assert len(args) == 1
+        check_(len(args) == 1)
         return PLAtomic(str(args[0]))
+
+
+_pl_parser_lark = PL_GRAMMAR_FILE.read_text()
 
 
 class PLParser:
@@ -135,23 +130,12 @@ class PLParser:
     def __init__(self):
         """Initialize."""
         self._transformer = PLTransformer()
-        self._parser = Lark(open(str(Path(CUR_DIR, "pl.lark"))), parser="lalr")
+        self._parser = Lark(
+            _pl_parser_lark, parser="lalr", import_paths=[PARSERS_DIRECTORY]
+        )
 
     def __call__(self, text):
         """Call."""
         tree = self._parser.parse(text)
         formula = self._transformer.transform(tree)
         return formula
-
-
-if __name__ == "__main__":
-    parser = PLParser()
-    while True:
-        try:
-            s = input("pl > ")
-        except EOFError:
-            break
-        if not s:
-            continue
-        result = parser(s)
-        print(result)

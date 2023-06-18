@@ -24,7 +24,7 @@ from abc import ABC, abstractmethod
 from enum import Enum
 from typing import Any, Generic, List, Optional, Sequence, Tuple, TypeVar, Union, cast
 
-from ltlf2dfa.helpers import Hashable, Wrapper
+from ltlf2dfa.helpers import Hashable, Wrapper, check_
 from ltlf2dfa.symbols import OpSymbol, Symbols
 
 AtomSymbol = Union["QuotedFormula", str]
@@ -34,7 +34,7 @@ class Logic(Enum):
     """Logic classes."""
 
     LTLf = "ltlf"
-    PLTLf = "pltlf"
+    PPLTL = "ppltl"
 
 
 class Formula(Hashable, ABC):
@@ -127,7 +127,7 @@ class MonaProgram:
     """Implements a MONA program."""
 
     HEADER = "var2 $ where ~ex1 p where true: p notin $ & p+1 in $;\nallpos $"
-    vars: List[str] = list()
+    vars: List[str] = []
 
     def __init__(self, f: Formula):
         """Initialize.
@@ -149,16 +149,8 @@ class MonaProgram:
     def mona_program(self) -> str:
         """Construct the MONA program."""
         if self.vars:
-            return "#{};\n{};\nvar2 {};\n{};\n".format(
-                str(self.formula),
-                self.HEADER,
-                ", ".join(self.vars),
-                self.formula.to_mona(),
-            )
-        else:
-            return "#{};\n{};\n{};\n".format(
-                str(self.formula), self.HEADER, self.formula.to_mona()
-            )
+            return f"#{str(self.formula)};\n{self.HEADER};\nvar2 {', '.join(self.vars)};\n{self.formula.to_mona()};\n"
+        return f"#{str(self.formula)};\n{self.HEADER};\n{self.formula.to_mona()};\n"
 
 
 class Operator(Formula, ABC):
@@ -221,7 +213,7 @@ class BinaryOperator(Generic[T], Operator, ABC):
         :param formulas: the children formulas of the operator.
         """
         super().__init__()
-        assert len(formulas) >= 2
+        check_(len(formulas) >= 2)
         self.formulas = tuple(formulas)  # type: OperatorChildren
 
     def __str__(self):

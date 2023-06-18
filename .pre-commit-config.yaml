@@ -1,0 +1,31 @@
+fail_fast: true
+
+repos:
+  - repo: https://github.com/ambv/black
+    rev: 23.3.0
+    hooks:
+    - id: black
+      args: [--exclude=scripts/whitelist.py]
+
+  - repo: https://github.com/PyCQA/flake8
+    rev: 6.0.0
+    hooks:
+    - id: flake8
+      args: [--exclude=tests/*]
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.3.0
+    hooks:
+      - id: mypy
+
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        args: ["--profile", "black"]
+
+  - repo: https://github.com/pre-commit/mirrors-pylint
+    rev: v3.0.0a5
+    hooks:
+      - id: pylint
+        args: [--disable=all, --enable=unused-import]

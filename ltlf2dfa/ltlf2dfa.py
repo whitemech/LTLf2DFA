@@ -23,11 +23,12 @@ import itertools as it
 import os
 import re
 import signal
-from subprocess import PIPE, Popen, TimeoutExpired
+from subprocess import PIPE, Popen, TimeoutExpired  # nosec B404
 
 from sympy import And, Not, Or, simplify, symbols
 
 from ltlf2dfa.base import MonaProgram
+from ltlf2dfa.helpers import check_
 
 PACKAGE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -51,9 +52,8 @@ def get_value(text, regex, value_type=float):
     results = pattern.search(text)
     if results:
         return value_type(results.group(1))
-    else:
-        print("Could not find the value {}, in the text provided".format(regex))
-        return value_type(0.0)
+    print(f"Could not find the value {regex}, in the text provided")
+    return value_type(0.0)
 
 
 def ter2symb(ap, ternary):
@@ -64,10 +64,10 @@ def ter2symb(ap, ternary):
         if value == "1":
             expr = And(expr, ap[i] if isinstance(ap, tuple) else ap)
         elif value == "0":
-            assert value == "0"
+            check_(value == "0")
             expr = And(expr, Not(ap[i] if isinstance(ap, tuple) else ap))
         else:
-            assert value == "X", "[ERROR]: the guard is not X"
+            check_(value == "X", "[ERROR]: the guard is not X")
         i += 1
     return expr
 
@@ -104,12 +104,12 @@ def parse_mona(mona_output):
  size = "7.5,10.5";
  edge [fontname = Courier];
  node [height = .5, width = .5];\n"""
-    dot += " node [shape = doublecircle]; {};\n".format("; ".join(accepting_states))
+    dot += f" node [shape = doublecircle]; {'; '.join(accepting_states)};\n"
     dot += """ node [shape = circle]; 1;
  init [shape = plaintext, label = ""];
  init -> 1;\n"""
 
-    dot_trans = dict()  # maps each couple (src, dst) to a list of guards
+    dot_trans = {}  # maps each couple (src, dst) to a list of guards
     for line in mona_output.splitlines():
         if line.startswith("State "):
             orig_state = get_value(line, r".*State[\s]*(\d+):\s.*", int)
@@ -120,16 +120,14 @@ def parse_mona(mona_output):
                 guard = ter2symb(free_variables, "X")
             dest_state = get_value(line, r".*state[\s]*(\d+)[\s]*.*", int)
             if orig_state:
-                if (orig_state, dest_state) in dot_trans.keys():
+                if (orig_state, dest_state) in dot_trans:
                     dot_trans[(orig_state, dest_state)].append(guard)
                 else:
                     dot_trans[(orig_state, dest_state)] = [guard]
 
     for c, guards in dot_trans.items():
         simplified_guard = simplify_guard(guards)
-        dot += ' {} -> {} [label="{}"];\n'.format(
-            c[0], c[1], str(simplified_guard).lower()
-        )
+        dot += f' {c[0]} -> {c[1]} [label="{str(simplified_guard).lower()}"];\n'
 
     dot += "}"
     return dot
@@ -150,23 +148,18 @@ def compute_declare_assumption(s):
         second_assumption = "~(ex1 y: 0<=y & y<=max($) & ~("
         for pair in pairs:
             if pair == pairs[-1]:
-                second_assumption += (
-                    "(y notin " + pair[0] + " | y notin " + pair[1] + ")));"
-                )
+                second_assumption += f"(y notin {pair[0]} | y notin {pair[1]})));"
             else:
-                second_assumption += (
-                    "(y notin " + pair[0] + " | y notin " + pair[1] + ") & "
-                )
+                second_assumption += f"(y notin {pair[0]} | y notin {pair[1]}) & "
 
         return first_assumption + " & " + second_assumption
-    else:
-        return None
+    return None
 
 
 def createMonafile(p: str):
     """Write the .mona file."""
     try:
-        with open("{}/automa.mona".format(PACKAGE_DIR), "w+") as file:
+        with open(f"{PACKAGE_DIR}/automa.mona", "w+", encoding="utf-8") as file:
             file.write(p)
     except IOError:
         print("[ERROR]: Problem opening the automa.mona file!")
@@ -174,7 +167,7 @@ def createMonafile(p: str):
 
 def invoke_mona():
     """Execute the MONA tool."""
-    command = "mona -q -u -w {}/automa.mona".format(PACKAGE_DIR)
+    command = f"mona -q -u -w {PACKAGE_DIR}/automa.mona"
     process = Popen(
         args=command,
         stdout=PIPE,
@@ -184,7 +177,7 @@ def invoke_mona():
         encoding="utf-8",
     )
     try:
-        output, error = process.communicate(timeout=30)
+        output, _ = process.communicate(timeout=30)
         return str(output).strip()
     except TimeoutExpired:
         os.killpg(os.getpgid(process.pid), signal.SIGTERM)
@@ -195,8 +188,7 @@ def output2dot(mona_output):
     """Parse the mona output or return the unsatisfiable dot."""
     if "Formula is unsatisfiable" in mona_output:
         return UNSAT_DOT
-    else:
-        return parse_mona(mona_output)
+    return parse_mona(mona_output)
 
 
 def to_dfa(f, mona_dfa_out=False) -> str:
@@ -207,6 +199,5 @@ def to_dfa(f, mona_dfa_out=False) -> str:
     mona_dfa = invoke_mona()
     if mona_dfa_out:
         return mona_dfa
-    else:
-        assert mona_dfa_out is False
-        return output2dot(mona_dfa)
+    check_(mona_dfa_out is False)
+    return output2dot(mona_dfa)

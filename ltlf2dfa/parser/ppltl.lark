@@ -1,0 +1,57 @@
+start: ppltl_formula
+
+?ppltl_formula:     ppltl_equivalence
+?ppltl_equivalence: ppltl_implication (EQUIVALENCE ppltl_implication)*
+?ppltl_implication: ppltl_or (IMPLY ppltl_or)*
+?ppltl_or:          ppltl_and (OR ppltl_and)*
+?ppltl_and:         ppltl_since (AND ppltl_since)*
+?ppltl_since:       ppltl_pastrelease (SINCE ppltl_unaryop)*
+?ppltl_pastrelease: ppltl_unaryop (PAST_RELEASE ppltl_unaryop)*
+
+?ppltl_unaryop:    ppltl_historically
+             |     ppltl_once
+             |     ppltl_before
+             |     ppltl_weak_before
+             |     ppltl_not
+             |     ppltl_wrapped
+
+?ppltl_historically: HISTORICALLY ppltl_unaryop
+?ppltl_once:         ONCE ppltl_unaryop
+?ppltl_before:       BEFORE ppltl_unaryop
+?ppltl_weak_before:  WEAK_BEFORE ppltl_unaryop
+?ppltl_not:          NOT ppltl_unaryop
+?ppltl_wrapped:      ppltl_atom
+             |       LSEPARATOR ppltl_formula RSEPARATOR
+?ppltl_atom:       ppltl_symbol
+           |       ppltl_true
+           |       ppltl_false
+           |       ppltl_start
+
+ppltl_symbol: SYMBOL_NAME
+ppltl_true: prop_true
+ppltl_false: prop_false
+ppltl_start: START
+
+// Operators must not be part of a word
+SINCE.2: /S(?=[^a-z]|$)/
+PAST_RELEASE.2: /P(?=[^a-z]|$)/
+HISTORICALLY.2: /H(?=[^a-z]|$)/
+ONCE.2: /O(?=[^a-z]|$)/
+BEFORE.2: /Y(?=[^a-z]|$)/
+WEAK_BEFORE.2: /WY(?=[^a-z]|$)/
+START.2: /(?i:start)/
+
+// Symbols cannot contain uppercase letters, because these are reserved
+SYMBOL_NAME: /[a-z][a-z0-9_]*/
+
+%ignore /\s+/
+
+%import .pl.prop_true -> prop_true
+%import .pl.prop_false -> prop_false
+%import .pl.NOT -> NOT
+%import .pl.OR -> OR
+%import .pl.AND -> AND
+%import .pl.EQUIVALENCE -> EQUIVALENCE
+%import .pl.IMPLY -> IMPLY
+%import .pl.LSEPARATOR -> LSEPARATOR
+%import .pl.RSEPARATOR -> RSEPARATOR

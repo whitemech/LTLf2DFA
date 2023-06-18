@@ -33,10 +33,10 @@ def test_ltlf_example_readme():
     # dfa = parsed_formula.to_dfa()
 
 
-def test_pltlf_example_readme():
-    from ltlf2dfa.parser.pltlf import PLTLfParser
+def test_ppltl_example_readme():
+    from ltlf2dfa.parser.ppltl import PPLTLParser
 
-    parser = PLTLfParser()
+    parser = PPLTLParser()
     formula = "H(a -> Y b)"
     parsed_formula = parser(formula)
 
@@ -47,7 +47,7 @@ def test_pltlf_example_readme():
 
 
 def test_hash_consistency_after_pickling():
-    import pickle
+    import pickle  # nosec
 
     from ltlf2dfa.parser.ltlf import LTLfParser
 
@@ -56,8 +56,8 @@ def test_hash_consistency_after_pickling():
     old_obj = parser(formula)
 
     h = hash(old_obj)
-    pickle.dump(old_obj, open("temp", "wb"))
-    new_obj = pickle.load(open("temp", "rb"))
+    pickle.dump(old_obj, open("temp", "wb"))  # nosec
+    new_obj = pickle.load(open("temp", "rb"))  # nosec
 
     assert new_obj._hash is None
     assert h == hash(new_obj)

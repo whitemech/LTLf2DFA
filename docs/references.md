@@ -1,7 +1,7 @@
 # References
 
 Linear Temporal Logic on finite traces (LTL<sub>f</sub>) and 
-Pure-Past Linear Temporal Logic on finite traces (PLTL<sub>f</sub>) are two
+Pure-Past Linear Temporal Logic on finite traces (PPLTL) are two
 compelling well-known logical formalisms employed in several contexts, such as:
 
 - Reasoning about Actions and Planning

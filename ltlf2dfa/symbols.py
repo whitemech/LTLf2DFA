@@ -54,4 +54,4 @@ class Symbols(Enum):
     FALSE = "false"
 
 
-ALL_SYMBOLS = {v.value for v in Symbols}  # type: Set[str]
+ALL_SYMBOLS: Set[str] = {v.value for v in Symbols}

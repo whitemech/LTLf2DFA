@@ -16,34 +16,34 @@
 # You should have received a copy of the GNU General Public License
 # along with ltlf2dfa.  If not, see <https://www.gnu.org/licenses/>.
 #
-"""Implementation of the LTLf parser."""
+"""Implementation of the PPLTL parser."""
 
 from lark import Lark, Transformer
 
 from ltlf2dfa.helpers import ParsingError, check_
-from ltlf2dfa.ltlf import (
-    LTLfAlways,
-    LTLfAnd,
-    LTLfAtomic,
-    LTLfEquivalence,
-    LTLfEventually,
-    LTLfFalse,
-    LTLfImplies,
-    LTLfLast,
-    LTLfNext,
-    LTLfNot,
-    LTLfOr,
-    LTLfRelease,
-    LTLfTrue,
-    LTLfUntil,
-    LTLfWeakNext,
-)
-from ltlf2dfa.parser import LTLF_GRAMMAR_FILE, PARSERS_DIRECTORY
+from ltlf2dfa.parser import PARSERS_DIRECTORY, PPLTL_GRAMMAR_FILE
 from ltlf2dfa.parser.pl import PLTransformer
+from ltlf2dfa.ppltl import (
+    PPLTLAnd,
+    PPLTLAtomic,
+    PPLTLBefore,
+    PPLTLEquivalence,
+    PPLTLFalse,
+    PPLTLHistorically,
+    PPLTLImplies,
+    PPLTLNot,
+    PPLTLOnce,
+    PPLTLOr,
+    PPLTLPastRelease,
+    PPLTLSince,
+    PPLTLStart,
+    PPLTLTrue,
+    PPLTLWeakBefore,
+)
 
 
-class LTLfTransformer(Transformer):
-    """LTLf Transformer."""
+class PPLTLTransformer(Transformer):
+    """PPLTL Transformer."""
 
     def __init__(self):
         """Initialize."""
@@ -55,112 +55,112 @@ class LTLfTransformer(Transformer):
         check_(len(args) == 1)
         return args[0]
 
-    def ltlf_formula(self, args):
-        """Parse LTLf formula."""
+    def ppltl_formula(self, args):
+        """Parse PPLTL formula."""
         check_(len(args) == 1)
         return args[0]
 
-    def ltlf_equivalence(self, args):
-        """Parse LTLf Equivalence."""
+    def ppltl_equivalence(self, args):
+        """Parse PPLTL Equivalence."""
         if len(args) == 1:
             return args[0]
         if (len(args) - 1) % 2 == 0:
             subformulas = args[::2]
-            return LTLfEquivalence(subformulas)
+            return PPLTLEquivalence(subformulas)
         raise ParsingError
 
-    def ltlf_implication(self, args):
-        """Parse LTLf Implication."""
+    def ppltl_implication(self, args):
+        """Parse PPLTL Implication."""
         if len(args) == 1:
             return args[0]
         if (len(args) - 1) % 2 == 0:
             subformulas = args[::2]
-            return LTLfImplies(subformulas)
+            return PPLTLImplies(subformulas)
         raise ParsingError
 
-    def ltlf_or(self, args):
-        """Parse LTLf Or."""
+    def ppltl_or(self, args):
+        """Parse PPLTL Or."""
         if len(args) == 1:
             return args[0]
         if (len(args) - 1) % 2 == 0:
             subformulas = args[::2]
-            return LTLfOr(subformulas)
+            return PPLTLOr(subformulas)
         raise ParsingError
 
-    def ltlf_and(self, args):
-        """Parse LTLf And."""
+    def ppltl_and(self, args):
+        """Parse PPLTL And."""
         if len(args) == 1:
             return args[0]
         if (len(args) - 1) % 2 == 0:
             subformulas = args[::2]
-            return LTLfAnd(subformulas)
+            return PPLTLAnd(subformulas)
         raise ParsingError
 
-    def ltlf_until(self, args):
-        """Parse LTLf Until."""
+    def ppltl_since(self, args):
+        """Parse PPLTL Since."""
         if len(args) == 1:
             return args[0]
         if (len(args) - 1) % 2 == 0:
             subformulas = args[::2]
-            return LTLfUntil(subformulas)
+            return PPLTLSince(subformulas)
         raise ParsingError
 
-    def ltlf_release(self, args):
-        """Parse LTLf Release."""
+    def ppltl_pastrelease(self, args):
+        """Parse PPLTL Past Release."""
         if len(args) == 1:
             return args[0]
         if (len(args) - 1) % 2 == 0:
             subformulas = args[::2]
-            return LTLfRelease(subformulas)
+            return PPLTLPastRelease(subformulas)
         raise ParsingError
 
-    def ltlf_always(self, args):
-        """Parse LTLf Always."""
+    def ppltl_historically(self, args):
+        """Parse PPLTL Historically."""
         if len(args) == 1:
             return args[0]
         f = args[-1]
         for _ in args[:-1]:
-            f = LTLfAlways(f)
+            f = PPLTLHistorically(f)
         return f
 
-    def ltlf_eventually(self, args):
-        """Parse LTLf Eventually."""
+    def ppltl_once(self, args):
+        """Parse PPLTL Once."""
         if len(args) == 1:
             return args[0]
         f = args[-1]
         for _ in args[:-1]:
-            f = LTLfEventually(f)
+            f = PPLTLOnce(f)
         return f
 
-    def ltlf_next(self, args):
-        """Parse LTLf Next."""
+    def ppltl_before(self, args):
+        """Parse PPLTL Before."""
         if len(args) == 1:
             return args[0]
         f = args[-1]
         for _ in args[:-1]:
-            f = LTLfNext(f)
+            f = PPLTLBefore(f)
         return f
 
-    def ltlf_weak_next(self, args):
-        """Parse LTLf Weak Next."""
+    def ppltl_weak_before(self, args):
+        """Parse PPLTL Weak Before."""
         if len(args) == 1:
             return args[0]
         f = args[-1]
         for _ in args[:-1]:
-            f = LTLfWeakNext(f)
+            f = PPLTLWeakBefore(f)
         return f
 
-    def ltlf_not(self, args):
-        """Parse LTLf Not."""
+    def ppltl_not(self, args):
+        """Parse PPLTL Not."""
         if len(args) == 1:
             return args[0]
         f = args[-1]
         for _ in args[:-1]:
-            f = LTLfNot(f)
+            f = PPLTLNot(f)
         return f
 
-    def ltlf_wrapped(self, args):
-        """Parse LTLf wrapped formula."""
+    def ppltl_wrapped(self, args):
+        """Parse PPLTL wrapped formula."""
         if len(args) == 1:
             return args[0]
         if len(args) == 3:
@@ -168,45 +168,45 @@ class LTLfTransformer(Transformer):
             return formula
         raise ParsingError
 
-    def ltlf_atom(self, args):
-        """Parse LTLf Atom."""
+    def ppltl_atom(self, args):
+        """Parse PPLTL Atom."""
         check_(len(args) == 1)
         return args[0]
 
-    def ltlf_true(self, _args):
-        """Parse LTLf True."""
-        return LTLfTrue()
+    def ppltl_true(self, _args):
+        """Parse PPLTL True."""
+        return PPLTLTrue()
 
-    def ltlf_false(self, _args):
-        """Parse LTLf False."""
-        return LTLfFalse()
+    def ppltl_false(self, _args):
+        """Parse PPLTL False."""
+        return PPLTLFalse()
 
-    def ltlf_last(self, _args):
-        """Parse LTLf Last."""
-        return LTLfLast()
+    def ppltl_start(self, _args):
+        """Parse PPLTL Last."""
+        return PPLTLStart()
 
-    # def ltlf_end(self, _args):
-    #     raise NotImplementedError("LTLf end not supported, yet")
+    # def ppltl_end(self, args):
+    #     raise NotImplementedError("PPLTL end not supported, yet")
 
-    def ltlf_symbol(self, args):
-        """Parse LTLf Symbol."""
+    def ppltl_symbol(self, args):
+        """Parse PPLTL Symbol."""
         check_(len(args) == 1)
         token = args[0]
         symbol = str(token)
-        return LTLfAtomic(symbol)
+        return PPLTLAtomic(symbol)
 
 
-_ltlf_parser_lark = LTLF_GRAMMAR_FILE.read_text()
+_ppltl_parser_lark = PPLTL_GRAMMAR_FILE.read_text()
 
 
-class LTLfParser:
-    """LTLf Parser class."""
+class PPLTLParser:
+    """PPLTL Parser class."""
 
     def __init__(self):
         """Initialize."""
-        self._transformer = LTLfTransformer()
+        self._transformer = PPLTLTransformer()
         self._parser = Lark(
-            _ltlf_parser_lark, parser="lalr", import_paths=[PARSERS_DIRECTORY]
+            _ppltl_parser_lark, parser="lalr", import_paths=[PARSERS_DIRECTORY]
         )
 
     def __call__(self, text):

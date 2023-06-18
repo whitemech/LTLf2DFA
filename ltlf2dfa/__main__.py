@@ -23,31 +23,31 @@ import click  # type: ignore
 
 from ltlf2dfa.base import Logic
 from ltlf2dfa.parser.ltlf import LTLfParser
-from ltlf2dfa.parser.pltlf import PLTLfParser
+from ltlf2dfa.parser.ppltl import PPLTLParser
 
 
 def execute(logic, formula):
     """Transform the formula."""
     try:
-        with open(formula, "r") as f:
+        with open(formula, "r", encoding="utf-8") as f:
             formula_str = f.read()
-    except Exception:
+    except Exception as exc:
         raise IOError(
             "[ERROR]: Something wrong occurred while parsing the domain and problem."
-        )
+        ) from exc
 
     if logic == Logic.LTLf:
         f_parser = LTLfParser()
         try:
             parsed_formula = f_parser(formula_str)
         except Exception as e:
-            raise ValueError(e)
-    elif logic == Logic.PLTLf:
-        p_parser = PLTLfParser()
+            raise ValueError(e) from e
+    elif logic == Logic.PPLTL:
+        p_parser = PPLTLParser()
         try:
             parsed_formula = p_parser(formula_str)
         except Exception as e:
-            raise ValueError(e)
+            raise ValueError(e) from e
     else:
         raise ValueError("Formula has mixed future/past operators.")
     dfa = parsed_formula.to_dfa(mona_dfa_out=True)
@@ -58,18 +58,18 @@ def execute(logic, formula):
 @click.option(
     "-l",
     "--logic",
-    type=click.Choice(["ltlf", "pltlf"], case_sensitive=False),
+    type=click.Choice(["ltlf", "ppltl"], case_sensitive=False),
     required=True,
 )
 @click.option(
     "-f",
     "--formula",
     required=True,
-    help="Path to the LTLf/PLTLf formula file.",
+    help="Path to the LTLf/PPLTL formula file.",
     type=click.Path(exists=True, readable=True),
 )
 def main(logic, formula):
-    """From LTLf/PLTLf formulas to DFA."""
+    """From LTLf/PPLTL formulas to DFA."""
     execute(Logic(logic.lower()), formula)
 
 

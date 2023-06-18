@@ -21,6 +21,7 @@
 
 from abc import ABC, abstractmethod
 from copy import copy
+from pathlib import Path
 
 from ltlf2dfa.symbols import Symbols
 
@@ -42,8 +43,7 @@ class Hashable(ABC):
         """Compare."""
         if type(other) is type(self):
             return self._members() == other._members()
-        else:
-            return False
+        return False
 
     def __hash__(self):
         """Compute the hash."""
@@ -119,12 +119,11 @@ class Wrapper(Hashable):
 
 def new_var(prev_var: str) -> str:
     """Compute next variable."""
-    if prev_var == "0" or prev_var == "max($)":
+    if prev_var in ("0", "max($)"):
         return "v_1"
-    else:
-        s = prev_var.split("_")
-        s[1] = str(int(s[1]) + 1)
-        return "_".join(s)
+    s = prev_var.split("_")
+    s[1] = str(int(s[1]) + 1)
+    return "_".join(s)
 
 
 def sym2regexp(sym: Symbols):
@@ -132,8 +131,27 @@ def sym2regexp(sym: Symbols):
     s = sym.value
     if s in r"|()+?*.[]":
         return r"\%s" % s
-    else:
-        return s
+    return s
+
+
+def check_(condition: bool, message: str = "") -> None:
+    """
+    User-defined assert.
+
+    This function is useful to avoid the use of the built-in assert statement, which is removed
+        when the code is compiled in optimized mode. For more information, see
+        https://bandit.readthedocs.io/en/1.7.5/plugins/b101_assert_used.html
+    """
+    if not condition:
+        raise AssertionError(message)
+
+
+def _get_current_path() -> Path:
+    """Get the path to the file where the function is called."""
+    import inspect
+    import os
+
+    return Path(os.path.dirname(inspect.getfile(inspect.currentframe()))).parent  # type: ignore
 
 
 MAX_CACHE_SIZE = 1024

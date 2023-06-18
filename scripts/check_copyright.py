@@ -30,6 +30,7 @@ import itertools
 import re
 import sys
 from pathlib import Path
+from typing import Any, Dict
 
 HEADER_REGEX = r"""(#!/usr/bin/env python3
 )?# -\*- coding: utf-8 -\*-
@@ -87,7 +88,7 @@ if __name__ == "__main__":
         )
     )
 
-    ignore_files = {}
+    ignore_files: Dict[Any, Any] = {}
 
     bad_files = {
         filepath

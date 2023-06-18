@@ -3,8 +3,7 @@ name: lint
 on:
   push:
     branches:
-      - develop
-      - master
+      - main
   pull_request:
 
 jobs:
@@ -14,13 +13,13 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: [3.7]
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
 
     timeout-minutes: 30
 
     steps:
-    - uses: actions/checkout@master
-    - uses: actions/setup-python@master
+    - uses: actions/checkout@main
+    - uses: actions/setup-python@main
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
@@ -30,7 +29,8 @@ jobs:
         tox -e black-check
         tox -e isort-check
         tox -e flake8
-        tox -e vulture
+    - name: Unused code check
+      run: tox -e vulture
     - name: Static type check
       run: tox -e mypy
     - name: Check copyright
