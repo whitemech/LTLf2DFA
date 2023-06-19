@@ -30,7 +30,6 @@ import itertools
 import re
 import sys
 from pathlib import Path
-from typing import Any, Dict
 
 HEADER_REGEX = r"""(#!/usr/bin/env python3
 )?# -\*- coding: utf-8 -\*-
@@ -84,11 +83,10 @@ if __name__ == "__main__":
             Path("ltlf2dfa").glob("**/*.py"),
             Path("tests").glob("**/*.py"),
             Path("scripts").glob("**/*.py"),
-            [Path("setup.py")],
         )
     )
 
-    ignore_files: Dict[Any, Any] = {}
+    ignore_files = {Path("scripts/whitelist.py")}
 
     bad_files = {
         filepath
