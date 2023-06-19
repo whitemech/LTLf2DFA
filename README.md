@@ -9,14 +9,8 @@
   <a href="https://pypi.org/project/ltlf2dfa">
     <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/ltlf2dfa" />
   </a>
-  <a href="">
-    <img alt="PyPI - Implementation" src="https://img.shields.io/pypi/implementation/ltlf2dfa">
-  </a>
   <a href="https://github.com/whitemech/ltlf2dfa/blob/master/LICENSE">
     <img alt="GitHub" src="https://img.shields.io/badge/license-LGPLv3%2B-blue">
-  </a>  
-  <a href="">
-    <img alt="PyPI - Wheel" src="https://img.shields.io/pypi/wheel/ltlf2dfa">
   </a>
 </p>
 <p align="center">
@@ -32,25 +26,6 @@
   <a href="https://codecov.io/gh/whitemech/pddl">
     <img alt="codecov" src="https://codecov.io/gh/whitemech/ltlf2dfa/branch/master/graph/badge.svg">
   </a>
-  <a href="">
-    <img alt="PyPI - Status" src="https://img.shields.io/pypi/status/ltlf2dfa" />
-  </a>
-</p>
-<p align="center">
-  <a href="https://img.shields.io/badge/flake8-checked-blueviolet">
-    <img alt="" src="https://img.shields.io/badge/flake8-checked-blueviolet">
-  </a>
-  <a href="https://img.shields.io/badge/mypy-checked-blue">
-    <img alt="" src="https://img.shields.io/badge/mypy-checked-blue">
-  </a>
-  <a href="https://img.shields.io/badge/isort-checked-yellow">
-    <img alt="isort" src="https://img.shields.io/badge/isort-checked-yellow" />
-  </a>
-  <a href="https://img.shields.io/badge/code%20style-black-black">
-    <img alt="black" src="https://img.shields.io/badge/code%20style-black-black" />
-  </a>
-  <a href="https://www.mkdocs.org/">
-    <img alt="" src="https://img.shields.io/badge/docs-mkdocs-9cf">
 </p>
 <p align="center">
   </a>
@@ -61,23 +36,18 @@
 
 ---
 
-LTL<sub>f</sub>2DFA is a tool that transforms an LTL<sub>f</sub> or a PLTL<sub>f</sub> formula into a minimal 
+LTL<sub>f</sub>2DFA is a tool that transforms an LTL<sub>f</sub> or a PPLTL formula into a minimal 
 Deterministic Finite state Automaton (DFA) using [MONA](http://www.brics.dk/mona/).
 
 It is also available online at [http://ltlf2dfa.diag.uniroma1.it](http://ltlf2dfa.diag.uniroma1.it).
 
 ## Prerequisites
 
-This tool uses MONA for the generation of the DFA. Hence, you should first install MONA with all its dependencies on 
-your system following the instructions [here](http://www.brics.dk/mona/download.html).
+### MONA Installation
 
-This tool is also based on the following libraries:
-
-- [lark-parser](https://pypi.org/project/lark-parser/)
-- [sympy](https://pypi.org/project/sympy/)
-- [click](https://pypi.org/project/click/)
-
-They are automatically added while installing LTL<sub>f</sub>2DFA.
+LTL<sub>f</sub>2DFA relies on the MONA tool for the generation of the DFA. 
+Please, make sure you have the MONA tool installed on your system before running LTL<sub>f</sub>2DFA. 
+You can follow the instructions [here](http://www.brics.dk/mona/download.html) to get MONA.
 
 ## Install
 
@@ -97,7 +67,11 @@ cd ltlf2dfa
 pip install .
 ```
 
-## How to Use
+## Quickstart
+
+You can use the LTL<sub>f</sub>2DFA package in two ways: as a library, and as a CLI tool.
+
+
 ### As a Library
 
 - Parse an LTL<sub>f</sub> formula:
@@ -110,13 +84,13 @@ formula = parser(formula_str)       # returns an LTLfFormula
 
 print(formula)                      # prints "G(a -> X (b))"
 ```
-- Or, parse a PLTL<sub>f</sub> formula:
+- Or, parse a PPLTL formula:
 ```python
-from ltlf2dfa.parser.pltlf import PLTLfParser
+from ltlf2dfa.parser.ppltl import PPLTLParser
 
-parser = PLTLfParser()
+parser = PPLTLParser()
 formula_str = "H(a -> Y b)"
-formula = parser(formula_str)       # returns a PLTLfFormula
+formula = parser(formula_str)       # returns a PPLTLFormula
 
 print(formula)                      # prints "H(a -> Y (b))"
 ```
@@ -128,7 +102,7 @@ print(dfa)                          # prints the DFA in DOT format
 
 ### As a CLI Interface
 ```python
-ltlf2dfa -l {ltlf | pltlf} -f <path/to/formula>
+ltlf2dfa -l {ltlf | ppltl} -f <path/to/formula>
 ```
 
 ## Features
@@ -138,16 +112,24 @@ ltlf2dfa -l {ltlf | pltlf} -f <path/to/formula>
     * Linear Temporal Logic on Finite Traces;
     * Pure-Past Linear Temporal Logic on Finite Traces.
 
-* Conversion from LTL<sub>f</sub>/PLTL<sub>f</sub> formula to MONA (First-order Logic)
+* Conversion from LTL<sub>f</sub>/PPLTL formula to MONA (First-order Logic)
 
-**NOTE**: LTL<sub>f</sub>2DFA accepts either LTL<sub>f</sub> formulas or PLTL<sub>f</sub> formulas, i.e., formulas that 
+**NOTE**: LTL<sub>f</sub>2DFA accepts either LTL<sub>f</sub> formulas or PPLTL formulas, i.e., formulas that 
 have only past, only future or none operators.
+
+## Development
+
+If you want to contribute, set up your development environment as follows:
+
+- Intall [Poetry](https://python-poetry.org)
+- Clone the repository: `git clone https://github.com/whitemech/LTLf2DFA.git && cd LTLf2DFA`
+- Install the dependencies: `poetry shell && poetry install`
 
 ## Tests
 
 To run tests: `tox`
 
-To run only the code tests: `tox -e py3.7`
+To run only the code tests: `tox -e py38`
 
 To run only the code style checks: `tox -e flake8`
 
@@ -162,10 +144,23 @@ and then go to [http://localhost:8000](http://localhost:8000)
 
 LTL<sub>f</sub>2DFA is released under the GNU Lesser General Public License v3.0 or later (LGPLv3+).
 
-Copyright 2018-2022 WhiteMech @ Sapienza University
+Copyright 2018-2023 WhiteMech
 
 ## Citing
-If you are interested in this tool, and you use it in your own work, please consider citing it.
+If you use LTL<sub>f</sub>2DFA in your research, please consider citing it with the following bibtex:
+```
+@software{fuggitti-ltlf2dfa,
+  author       = {Francesco Fuggitti},
+  title        = {LTLf2DFA},
+  month        = {March},
+  year         = {2019},
+  publisher    = {Zenodo},
+  version      = {1.0.3},
+  doi          = {10.5281/zenodo.3888410},
+  url_code    = {https://github.com/whitemech/LTLf2DFA},
+  url_website = {http://ltlf2dfa.diag.uniroma1.it},
+}
+```
 
 ## Author
 

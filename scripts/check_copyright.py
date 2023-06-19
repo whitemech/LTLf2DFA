@@ -83,11 +83,10 @@ if __name__ == "__main__":
             Path("ltlf2dfa").glob("**/*.py"),
             Path("tests").glob("**/*.py"),
             Path("scripts").glob("**/*.py"),
-            [Path("setup.py")],
         )
     )
 
-    ignore_files = {}
+    ignore_files = {Path("scripts/whitelist.py")}
 
     bad_files = {
         filepath

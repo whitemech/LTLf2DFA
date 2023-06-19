@@ -60,10 +60,8 @@ class ParsingCheck:
         token_i = 0
         for elem in topdown_it:
             for child in elem.children:
-
                 # Filter tokens and match
                 if isinstance(child, Token):
-
                     if child != tokens[token_i]:
                         err = "Next expected '{}', got '{}'".format(
                             tokens[token_i], str(child)

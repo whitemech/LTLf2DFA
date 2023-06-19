@@ -65,6 +65,7 @@ class PLFormula(Formula):
 
         :return: a string.
         """
+        raise NotImplementedError()
 
 
 class PLAtomic(AtomicFormula, PLFormula):
@@ -108,7 +109,7 @@ class PLTrue(PLAtomic):
 
     def find_labels(self) -> List[Any]:
         """Return the list of symbols."""
-        return list()
+        return []
 
     def to_nnf(self):
         """Transform in NNF."""
@@ -132,7 +133,7 @@ class PLFalse(PLAtomic):
 
     def find_labels(self) -> List[Any]:
         """Return the list of symbols."""
-        return list()
+        return []
 
     def to_nnf(self):
         """Transform in NNF."""
@@ -155,8 +156,7 @@ class PLNot(UnaryOperator[PLFormula], PLFormula):
         """Transform in NNF."""
         if not isinstance(self.f, AtomicFormula):
             return self.f.negate().to_nnf()
-        else:
-            return self
+        return self
 
     def negate(self) -> PLFormula:
         """Negate the formula."""

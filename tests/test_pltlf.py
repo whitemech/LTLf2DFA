@@ -16,29 +16,29 @@
 # You should have received a copy of the GNU General Public License
 # along with ltlf2dfa.  If not, see <https://www.gnu.org/licenses/>.
 #
-"""Test PLTLf."""
+"""Test PPLTL."""
 import os
 
 import lark
 import pytest
 
-from ltlf2dfa.parser.pltlf import PLTLfParser
-from ltlf2dfa.pltlf import (
-    PLTLfAnd,
-    PLTLfAtomic,
-    PLTLfBefore,
-    PLTLfEquivalence,
-    PLTLfFalse,
-    PLTLfHistorically,
-    PLTLfImplies,
-    PLTLfNot,
-    PLTLfOnce,
-    PLTLfOr,
-    PLTLfPastRelease,
-    PLTLfSince,
-    PLTLfStart,
-    PLTLfTrue,
-    PLTLfWeakBefore,
+from ltlf2dfa.parser.ppltl import PPLTLParser
+from ltlf2dfa.ppltl import (
+    PPLTLAnd,
+    PPLTLAtomic,
+    PPLTLBefore,
+    PPLTLEquivalence,
+    PPLTLFalse,
+    PPLTLHistorically,
+    PPLTLImplies,
+    PPLTLNot,
+    PPLTLOnce,
+    PPLTLOr,
+    PPLTLPastRelease,
+    PPLTLSince,
+    PPLTLStart,
+    PPLTLTrue,
+    PPLTLWeakBefore,
 )
 
 # from .conftest import LTLfFixtures
@@ -46,119 +46,118 @@ from .parsing import ParsingCheck
 
 
 def test_parser():
-    parser = PLTLfParser()
-    a, b, c = [PLTLfAtomic(c) for c in "abc"]
+    parser = PPLTLParser()
+    a, b, c = [PPLTLAtomic(c) for c in "abc"]
 
-    assert parser("!a | b <-> !(a & !b) <-> a->b") == PLTLfEquivalence(
+    assert parser("!a | b <-> !(a & !b) <-> a->b") == PPLTLEquivalence(
         [
-            PLTLfOr([PLTLfNot(a), b]),
-            PLTLfNot(PLTLfAnd([a, PLTLfNot(b)])),
-            PLTLfImplies([a, b]),
+            PPLTLOr([PPLTLNot(a), b]),
+            PPLTLNot(PPLTLAnd([a, PPLTLNot(b)])),
+            PPLTLImplies([a, b]),
         ]
     )
 
-    assert parser("(Y a)") == PLTLfBefore(a)
+    assert parser("(Y a)") == PPLTLBefore(a)
 
-    assert parser("a & O(b)") == PLTLfAnd([a, PLTLfOnce(b)])
+    assert parser("a & O(b)") == PPLTLAnd([a, PPLTLOnce(b)])
 
-    assert parser("(O (a&b)) <-> !(H (!a | !b) )") == PLTLfEquivalence(
+    assert parser("(O (a&b)) <-> !(H (!a | !b) )") == PPLTLEquivalence(
         [
-            PLTLfOnce(PLTLfAnd([a, b])),
-            PLTLfNot(PLTLfHistorically(PLTLfOr([PLTLfNot(a), PLTLfNot(b)]))),
+            PPLTLOnce(PPLTLAnd([a, b])),
+            PPLTLNot(PPLTLHistorically(PPLTLOr([PPLTLNot(a), PPLTLNot(b)]))),
         ]
     )
 
-    assert parser("(a S b S !c)") == PLTLfSince([a, b, PLTLfNot(c)])
+    assert parser("(a S b S !c)") == PPLTLSince([a, b, PPLTLNot(c)])
 
-    assert parser("a & start") == PLTLfAnd([a, PLTLfStart()])
+    assert parser("a & start") == PPLTLAnd([a, PPLTLStart()])
 
 
 def test_negate():
-    parser = PLTLfParser()
+    parser = PPLTLParser()
     sa, sb, sc = "a", "b", "c"
-    a, b, c = PLTLfAtomic(sa), PLTLfAtomic(sb), PLTLfAtomic(sc)
+    a, b, c = PPLTLAtomic(sa), PPLTLAtomic(sb), PPLTLAtomic(sc)
 
-    a_and_b = PLTLfAnd([a, b])
-    not_a_or_not_b = PLTLfOr([PLTLfNot(a), PLTLfNot(b)])
+    a_and_b = PPLTLAnd([a, b])
+    not_a_or_not_b = PPLTLOr([PPLTLNot(a), PPLTLNot(b)])
     assert a_and_b.negate() == not_a_or_not_b
 
-    a_and_b_and_c = PLTLfAnd([a, b, c])
-    not_a_or_not_b_or_not_c = PLTLfOr([PLTLfNot(a), PLTLfNot(b), PLTLfNot(c)])
+    a_and_b_and_c = PPLTLAnd([a, b, c])
+    not_a_or_not_b_or_not_c = PPLTLOr([PPLTLNot(a), PPLTLNot(b), PPLTLNot(c)])
     assert a_and_b_and_c.negate() == not_a_or_not_b_or_not_c
 
-    before_a = PLTLfBefore(a)
-    weakBefore_not_a = PLTLfWeakBefore(PLTLfNot(a))
+    before_a = PPLTLBefore(a)
+    weakBefore_not_a = PPLTLWeakBefore(PPLTLNot(a))
     assert before_a.negate() == weakBefore_not_a
 
-    once_a = PLTLfOnce(a)
-    false_pastRelease_not_a = PLTLfPastRelease([PLTLfFalse(), PLTLfNot(a)])
+    once_a = PPLTLOnce(a)
+    false_pastRelease_not_a = PPLTLPastRelease([PPLTLFalse(), PPLTLNot(a)])
     assert once_a.negate() == false_pastRelease_not_a
 
-    historically_a = PLTLfHistorically(a)
-    true_since_not_a = PLTLfSince([PLTLfTrue(), PLTLfNot(a)])
+    historically_a = PPLTLHistorically(a)
+    true_since_not_a = PPLTLSince([PPLTLTrue(), PPLTLNot(a)])
     assert historically_a.negate() == true_since_not_a
 
 
 def test_names():
-
     good = ["a", "b", "name", "complex_name", "proposition10"]
     bad = ["Future", "X", "$", "", "40a", "niceName"]
 
     for name in good:
-        str(PLTLfAtomic(name)) == name
+        str(PPLTLAtomic(name)) == name
 
     for name in bad:
         with pytest.raises(ValueError):
-            str(PLTLfAtomic(name)) == name
+            str(PPLTLAtomic(name)) == name
 
 
 def test_nnf():
-    parser = PLTLfParser()
-    a, b, c = [PLTLfAtomic(c) for c in "abc"]
+    parser = PPLTLParser()
+    a, b, c = [PPLTLAtomic(c) for c in "abc"]
 
     f = parser("!(a & !b)")
-    assert f.to_nnf() == PLTLfOr([PLTLfNot(a), b])
+    assert f.to_nnf() == PPLTLOr([PPLTLNot(a), b])
 
     f = parser("!(!a | b)")
-    assert f.to_nnf() == PLTLfAnd([a, PLTLfNot(b)])
+    assert f.to_nnf() == PPLTLAnd([a, PPLTLNot(b)])
 
     f = parser("!(a <-> b)")
-    assert f.to_nnf() == PLTLfAnd(
-        [PLTLfOr([PLTLfNot(a), PLTLfNot(b)]), PLTLfOr([a, b])]
+    assert f.to_nnf() == PPLTLAnd(
+        [PPLTLOr([PPLTLNot(a), PPLTLNot(b)]), PPLTLOr([a, b])]
     )
 
     # Yesterday and Weak Yesterday
     f = parser("!(Y (a & b))")
-    assert f.to_nnf() == PLTLfWeakBefore(PLTLfOr([PLTLfNot(a), PLTLfNot(b)]))
+    assert f.to_nnf() == PPLTLWeakBefore(PPLTLOr([PPLTLNot(a), PPLTLNot(b)]))
 
     f = parser("!(WY (a & b))")
-    assert f.to_nnf() == PLTLfBefore(PLTLfOr([PLTLfNot(a), PLTLfNot(b)]))
+    assert f.to_nnf() == PPLTLBefore(PPLTLOr([PPLTLNot(a), PPLTLNot(b)]))
 
     # Once and Historically
     f = parser("!(O (a | b))")
     assert (
-        f.to_nnf() == PLTLfHistorically(PLTLfAnd([PLTLfNot(a), PLTLfNot(b)])).to_nnf()
+        f.to_nnf() == PPLTLHistorically(PPLTLAnd([PPLTLNot(a), PPLTLNot(b)])).to_nnf()
     )
 
     # Since
     f = parser("!(a S b)")
-    assert f.to_nnf() == PLTLfPastRelease([PLTLfNot(a), PLTLfNot(b)])
+    assert f.to_nnf() == PPLTLPastRelease([PPLTLNot(a), PPLTLNot(b)])
     f = parser("!(a P b)")
-    assert f.to_nnf() == PLTLfSince([PLTLfNot(a), PLTLfNot(b)])
+    assert f.to_nnf() == PPLTLSince([PPLTLNot(a), PPLTLNot(b)])
 
     f = parser("!(O (a | b))")
     assert (
-        f.to_nnf() == PLTLfHistorically(PLTLfAnd([PLTLfNot(a), PLTLfNot(b)])).to_nnf()
+        f.to_nnf() == PPLTLHistorically(PPLTLAnd([PPLTLNot(a), PPLTLNot(b)])).to_nnf()
     )
     f = parser("!(H (a | b))")
-    assert f.to_nnf() == PLTLfOnce(PLTLfAnd([PLTLfNot(a), PLTLfNot(b)])).to_nnf()
+    assert f.to_nnf() == PPLTLOnce(PPLTLAnd([PPLTLNot(a), PPLTLNot(b)])).to_nnf()
 
 
 def test_mona():
-    parser = PLTLfParser()
-    a, b, c = [PLTLfAtomic(c) for c in "abc"]
-    tt = PLTLfTrue()
-    ff = PLTLfFalse()
+    parser = PPLTLParser()
+    a, b, c = [PPLTLAtomic(c) for c in "abc"]
+    tt = PPLTLTrue()
+    ff = PPLTLFalse()
 
     assert a.to_mona(v="max($)") == "(max($) in A)"
     assert b.to_mona(v="max($)") == "(max($) in B)"
@@ -231,16 +230,14 @@ def test_mona():
 class TestParsingTree:
     @classmethod
     def setup_class(cls):
-
         # Path to grammar
         this_path = os.path.dirname(os.path.abspath(__file__))
-        grammar_path = "../ltlf2dfa/parser/pltlf.lark"
+        grammar_path = "../ltlf2dfa/parser/ppltl.lark"
         grammar_path = os.path.join(this_path, *grammar_path.split("/"))
 
         cls.checker = ParsingCheck(grammar_path)
 
     def test_propositional(self):
-
         ok, err = self.checker.precedence_check("a & !b | c", list("|&a!bc"))
         assert ok, err
 
@@ -250,7 +247,6 @@ class TestParsingTree:
         assert ok, err
 
     def test_unary(self):
-
         ok, err = self.checker.precedence_check("Y Y a", list("YYa"))
         assert ok, err
 
@@ -276,7 +272,6 @@ class TestParsingTree:
         assert ok, err
 
     def test_bad_termination(self):
-
         # Wrong termination or space
         with pytest.raises(lark.UnexpectedInput):
             self.checker.precedence_check("!a&", list("!a&"))
@@ -300,7 +295,6 @@ class TestParsingTree:
             self.checker.precedence_check("Ya", list("Ya"))
 
     def test_bad_names(self):
-
         # Invalid names
         with pytest.raises(lark.UnexpectedInput):
             self.checker.precedence_check("H Y H", list("HYH"))

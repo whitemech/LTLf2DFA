@@ -165,7 +165,6 @@ def test_mona():
 
 
 def test_names():
-
     good = [
         "A",
         "b",
@@ -192,7 +191,6 @@ class TestParsingTree:
 
     @classmethod
     def setup_class(cls):
-
         # Path to grammar
         this_path = os.path.dirname(os.path.abspath(__file__))
         grammar_path = "../ltlf2dfa/parser/pl.lark"
@@ -201,7 +199,6 @@ class TestParsingTree:
         cls.checker = ParsingCheck(grammar_path)
 
     def test_unary(self):
-
         ok, err = self.checker.precedence_check("!a & b", list("&!ab"))
         assert ok, err
 
@@ -212,7 +209,6 @@ class TestParsingTree:
         assert ok, err
 
     def test_and_or(self):
-
         ok, err = self.checker.precedence_check("a & b & c", list("&&abc"))
         assert ok, err
 
@@ -223,7 +219,6 @@ class TestParsingTree:
         assert ok, err
 
     def test_implications(self):
-
         ok, err = self.checker.precedence_check(
             "a <-> b -> c3", "<->,a,->,b,c3".split(",")
         )
@@ -235,14 +230,12 @@ class TestParsingTree:
         assert ok, err
 
     def test_misc(self):
-
         ok, err = self.checker.precedence_check(
             "!a&(b->c)", "&,!,a,(,),->,b,c".split(",")
         )
         assert ok, err
 
     def test_bad_examples(self):
-
         with pytest.raises(lark.UnexpectedInput):
             self.checker.precedence_check("!a&", list("!a&"))
 

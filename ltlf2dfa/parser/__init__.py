@@ -17,7 +17,10 @@
 # along with ltlf2dfa.  If not, see <https://www.gnu.org/licenses/>.
 #
 """This module contains the implementation of the parsers for the supported logic formalisms."""
-import inspect
-import os
 
-CUR_DIR = os.path.dirname(inspect.getfile(inspect.currentframe()))  # type: ignore
+from ltlf2dfa import _ROOT_PATH
+
+PARSERS_DIRECTORY = _ROOT_PATH / "ltlf2dfa" / "parser"
+PL_GRAMMAR_FILE = PARSERS_DIRECTORY / "pl.lark"
+LTLF_GRAMMAR_FILE = PARSERS_DIRECTORY / "ltlf.lark"
+PPLTL_GRAMMAR_FILE = PARSERS_DIRECTORY / "ppltl.lark"

@@ -19,13 +19,6 @@
 
 """Top-level package for ltlf2dfa."""
 
-from .__version__ import (
-    __author__,
-    __author_email__,
-    __copyright__,
-    __description__,
-    __license__,
-    __title__,
-    __url__,
-    __version__,
-)
+from .helpers import _get_current_path
+
+_ROOT_PATH = _get_current_path()

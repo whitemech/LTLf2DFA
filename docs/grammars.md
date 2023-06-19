@@ -1,7 +1,7 @@
 # Grammars
 
 Grammars used by the [Lark](https://github.com/lark-parser/lark) parser
-to parse Propositional Logic, LTL<sub>f</sub> and PLTL<sub>f</sub>.
+to parse Propositional Logic, LTL<sub>f</sub> and PPLTL.
 
 ## Propositional Logic
 
@@ -18,10 +18,10 @@ to parse Propositional Logic, LTL<sub>f</sub> and PLTL<sub>f</sub>.
 {!../ltlf2dfa/parser/ltlf.lark!}
 ```
 
-## PLTL<sub>f</sub>
+## PPLTL
 
-[pltlf.lark](https://github.com/whitemech/ltlf2dfa/blob/master/ltlf2dfa/parser/pltlf.lark)
+[ppltl.lark](https://github.com/whitemech/ltlf2dfa/blob/master/ltlf2dfa/parser/ppltl.lark)
 
 ```
-{!../ltlf2dfa/parser/pltlf.lark!}
+{!../ltlf2dfa/parser/ppltl.lark!}
 ```

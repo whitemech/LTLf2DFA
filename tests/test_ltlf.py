@@ -79,7 +79,6 @@ def test_parser():
 
 
 def test_names():
-
     good = ["a", "b", "name", "complex_name", "proposition10"]
     bad = ["Future", "X", "$", "", "40a", "niceName"]
 
@@ -222,7 +221,6 @@ def test_mona():
 class TestParsingTree:
     @classmethod
     def setup_class(cls):
-
         # Path to grammar
         this_path = os.path.dirname(os.path.abspath(__file__))
         grammar_path = "../ltlf2dfa/parser/ltlf.lark"
@@ -231,7 +229,6 @@ class TestParsingTree:
         cls.checker = ParsingCheck(grammar_path)
 
     def test_propositional(self):
-
         ok, err = self.checker.precedence_check("a & !b | c", list("|&a!bc"))
         assert ok, err
 
@@ -241,7 +238,6 @@ class TestParsingTree:
         assert ok, err
 
     def test_unary(self):
-
         ok, err = self.checker.precedence_check("X X a", list("XXa"))
         assert ok, err
 
@@ -267,7 +263,6 @@ class TestParsingTree:
         assert ok, err
 
     def test_bad_termination(self):
-
         # Wrong termination or space
         with pytest.raises(lark.UnexpectedInput):
             self.checker.precedence_check("!a&", list("!a&"))
@@ -291,7 +286,6 @@ class TestParsingTree:
             self.checker.precedence_check("Xa", list("Xa"))
 
     def test_bad_names(self):
-
         # Invalid names
         with pytest.raises(lark.UnexpectedInput):
             self.checker.precedence_check("G X G", list("GXG"))

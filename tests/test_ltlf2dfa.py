@@ -18,11 +18,11 @@
 #
 """Test the ltlf2dfa tool."""
 
-from sympy import And, Not, Or, Symbol, simplify, symbols
+from sympy import And, Not, Or, Symbol, symbols
 
 from ltlf2dfa.ltlf2dfa import simplify_guard, ter2symb
 from ltlf2dfa.parser.ltlf import LTLfParser
-from ltlf2dfa.parser.pltlf import PLTLfParser
+from ltlf2dfa.parser.ppltl import PPLTLParser
 
 
 def test_ltlf_dfa():
@@ -321,8 +321,8 @@ A = {}"""
     assert mona_dfa_1 == mona_dfa_2
 
 
-def test_pltlf_dfa():
-    parser = PLTLfParser()
+def test_ppltl_dfa():
+    parser = PPLTLParser()
 
     f = parser("a")
     dfa = f.to_dfa(mona_dfa_out=False)
