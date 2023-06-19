@@ -19,6 +19,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@main
+    - name: Install MONA
+      run: sudo apt-get install mona
     - uses: actions/setup-python@main
       with:
         python-version: ${{ matrix.python-version }}
