@@ -68,10 +68,10 @@ def execute(logic, formula):
     help="Path to the LTLf/PPLTL formula file.",
     type=click.Path(exists=True, readable=True),
 )
-def main(logic, formula):
+def cli(logic, formula):
     """From LTLf/PPLTL formulas to DFA."""
     execute(Logic(logic.lower()), formula)
 
 
 if __name__ == "__main__":
-    main()  # pragma: no cover
+    cli()  # pragma: no cover
