@@ -196,6 +196,7 @@ def output2dot(mona_output):
     dot += "}"
     return dot
 
+
 def output2pythomata(mona_output):
     """Parse the mona output and return a pythomata.SymbolicAutomaton."""
 
@@ -213,7 +214,7 @@ def output2pythomata(mona_output):
     print(transitions)
 
     states = set()
-    for (src, dst) in transitions:
+    for src, dst in transitions:
         states.add(src)
         states.add(dst)
 
@@ -235,7 +236,7 @@ def output2pythomata(mona_output):
 
 def to_dfa(f, mona_dfa_out=False) -> str:
     """Translate to deterministic finite-state automaton."""
-    return translate_to_automata(f, 'mona' if mona_dfa_out else 'dot')
+    return translate_to_automata(f, "mona" if mona_dfa_out else "dot")
 
     # p = MonaProgram(f)
     # mona_p_string = p.mona_program()
@@ -246,27 +247,31 @@ def to_dfa(f, mona_dfa_out=False) -> str:
     # check_(mona_dfa_out is False)
     # return output2dot(mona_dfa)
 
+
 def to_pythomata(f):
-    return translate_to_automata(f, 'pythomata')
+    return translate_to_automata(f, "pythomata")
+
 
 def translate_to_automata(f, output_format):
     """Translate to deterministic finite-state automaton."""
 
     output_format = output_format.lower().strip()
 
-    if output_format not in ('dot', 'pythomata', 'mona'):
-        raise ValueError(f"Unknown output format. Expected one of 'dot', 'mona', 'pythomata', got '{output_format}'")
+    if output_format not in ("dot", "pythomata", "mona"):
+        raise ValueError(
+            f"Unknown output format. Expected one of 'dot', 'mona', 'pythomata', got '{output_format}'"
+        )
 
     p = MonaProgram(f)
     mona_p_string = p.mona_program()
     createMonafile(mona_p_string)
     mona_dfa = invoke_mona()
 
-    if output_format == 'mona':
+    if output_format == "mona":
         return mona_dfa
 
-    elif output_format == 'dot':
+    elif output_format == "dot":
         return output2dot(mona_dfa)
 
-    elif output_format == 'pythomata':
+    elif output_format == "pythomata":
         return output2pythomata(mona_dfa)
