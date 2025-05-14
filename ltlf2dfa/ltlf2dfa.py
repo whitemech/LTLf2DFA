@@ -98,17 +98,6 @@ def parse_mona(mona_output):
     ]
     # num_states = get_value(mona_output, '.*Automaton has[\s]*(\d+)[\s]states.*', int) - 1
 
-    dot = """digraph MONA_DFA {
- rankdir = LR;
- center = true;
- size = "7.5,10.5";
- edge [fontname = Courier];
- node [height = .5, width = .5];\n"""
-    dot += f" node [shape = doublecircle]; {'; '.join(accepting_states)};\n"
-    dot += """ node [shape = circle]; 1;
- init [shape = plaintext, label = ""];
- init -> 1;\n"""
-
     dot_trans = {}  # maps each couple (src, dst) to a list of guards
     for line in mona_output.splitlines():
         if line.startswith("State "):
@@ -125,12 +114,8 @@ def parse_mona(mona_output):
                 else:
                     dot_trans[(orig_state, dest_state)] = [guard]
 
-    for c, guards in dot_trans.items():
-        simplified_guard = simplify_guard(guards)
-        dot += f' {c[0]} -> {c[1]} [label="{str(simplified_guard).lower()}"];\n'
-
-    dot += "}"
-    return dot
+    initial_state = 1
+    return initial_state, accepting_states, dot_trans
 
 
 def compute_declare_assumption(s):
@@ -188,7 +173,26 @@ def output2dot(mona_output):
     """Parse the mona output or return the unsatisfiable dot."""
     if "Formula is unsatisfiable" in mona_output:
         return UNSAT_DOT
-    return parse_mona(mona_output)
+
+    initial_state, accepting_states, dot_trans = parse_mona(mona_output)
+
+    dot = """digraph MONA_DFA {
+ rankdir = LR;
+ center = true;
+ size = "7.5,10.5";
+ edge [fontname = Courier];
+ node [height = .5, width = .5];\n"""
+    dot += f" node [shape = doublecircle]; {'; '.join(accepting_states)};\n"
+    dot += """ node [shape = circle]; 1;
+ init [shape = plaintext, label = ""];
+ init -> 1;\n"""
+
+    for c, guards in dot_trans.items():
+        simplified_guard = simplify_guard(guards)
+        dot += f' {c[0]} -> {c[1]} [label="{str(simplified_guard).lower()}"];\n'
+
+    dot += "}"
+    return dot
 
 
 def to_dfa(f, mona_dfa_out=False) -> str:
