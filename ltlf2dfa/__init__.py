@@ -20,5 +20,6 @@
 """Top-level package for ltlf2dfa."""
 
 from .helpers import _get_current_path
+from .ltlf2dfa import to_pythomata, translate_to_automata
 
 _ROOT_PATH = _get_current_path()
