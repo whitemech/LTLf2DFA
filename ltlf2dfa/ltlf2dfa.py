@@ -25,12 +25,11 @@ import re
 import signal
 from subprocess import PIPE, Popen, TimeoutExpired  # nosec B404
 
+import pythomata
 from sympy import And, Not, Or, simplify, symbols
 
 from ltlf2dfa.base import MonaProgram
 from ltlf2dfa.helpers import check_
-
-import pythomata
 
 PACKAGE_DIR = os.path.dirname(os.path.abspath(__file__))
 
