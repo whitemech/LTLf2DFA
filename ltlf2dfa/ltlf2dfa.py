@@ -25,6 +25,7 @@ import re
 import signal
 from subprocess import PIPE, Popen, TimeoutExpired  # nosec B404
 
+import pythomata
 from sympy import And, Not, Or, simplify, symbols
 
 from ltlf2dfa.base import MonaProgram
@@ -78,7 +79,7 @@ def simplify_guard(guards):
 
 
 def parse_mona(mona_output):
-    """Parse mona output and construct a dot."""
+    """Parse mona output and returns accepting states and transitions of the resulting automaton. Initial state defaults to 1."""
     free_variables = get_value(
         mona_output, r".*DFA for formula with free variables:[\s]*(.*?)\n.*", str
     )
@@ -94,20 +95,9 @@ def parse_mona(mona_output):
     # initial_state = get_value(mona_output, '.*Initial state:[\s]*(\d+)\n.*', int)
     accepting_states = get_value(mona_output, r".*Accepting states:[\s]*(.*?)\n.*", str)
     accepting_states = [
-        str(x.strip()) for x in accepting_states.split() if len(x.strip()) > 0
+        int(x.strip()) for x in accepting_states.split() if len(x.strip()) > 0
     ]
     # num_states = get_value(mona_output, '.*Automaton has[\s]*(\d+)[\s]states.*', int) - 1
-
-    dot = """digraph MONA_DFA {
- rankdir = LR;
- center = true;
- size = "7.5,10.5";
- edge [fontname = Courier];
- node [height = .5, width = .5];\n"""
-    dot += f" node [shape = doublecircle]; {'; '.join(accepting_states)};\n"
-    dot += """ node [shape = circle]; 1;
- init [shape = plaintext, label = ""];
- init -> 1;\n"""
 
     dot_trans = {}  # maps each couple (src, dst) to a list of guards
     for line in mona_output.splitlines():
@@ -121,16 +111,12 @@ def parse_mona(mona_output):
             dest_state = get_value(line, r".*state[\s]*(\d+)[\s]*.*", int)
             if orig_state:
                 if (orig_state, dest_state) in dot_trans:
-                    dot_trans[(orig_state, dest_state)].append(guard)
+                    dot_trans[(int(orig_state), int(dest_state))].append(guard)
                 else:
-                    dot_trans[(orig_state, dest_state)] = [guard]
+                    dot_trans[(int(orig_state), int(dest_state))] = [guard]
 
-    for c, guards in dot_trans.items():
-        simplified_guard = simplify_guard(guards)
-        dot += f' {c[0]} -> {c[1]} [label="{str(simplified_guard).lower()}"];\n'
-
-    dot += "}"
-    return dot
+    initial_state = 1
+    return initial_state, accepting_states, dot_trans
 
 
 def compute_declare_assumption(s):
@@ -188,16 +174,100 @@ def output2dot(mona_output):
     """Parse the mona output or return the unsatisfiable dot."""
     if "Formula is unsatisfiable" in mona_output:
         return UNSAT_DOT
-    return parse_mona(mona_output)
+
+    initial_state, accepting_states, dot_trans = parse_mona(mona_output)
+
+    dot = """digraph MONA_DFA {
+ rankdir = LR;
+ center = true;
+ size = "7.5,10.5";
+ edge [fontname = Courier];
+ node [height = .5, width = .5];\n"""
+    dot += f" node [shape = doublecircle]; {'; '.join(str(x) for x in accepting_states)};\n"
+    dot += """ node [shape = circle]; 1;
+ init [shape = plaintext, label = ""];
+ init -> 1;\n"""
+
+    for c, guards in dot_trans.items():
+        simplified_guard = simplify_guard(guards)
+        dot += f' {c[0]} -> {c[1]} [label="{str(simplified_guard).lower()}"];\n'
+
+    dot += "}"
+    return dot
+
+
+def output2pythomata(mona_output):
+    """Parse the mona output and return a pythomata.SymbolicAutomaton."""
+
+    dfa = pythomata.SymbolicAutomaton()
+    if "Formula is unsatisfiable" in mona_output:
+        s = dfa.create_state()
+        dfa.set_initial_state(s)
+        dfa.add_transition((s, "False", ~s))
+        dfa.set_accepting_state(s, False)
+        return dfa
+
+    initial_state, accepting_states, transitions = parse_mona(mona_output)
+
+    states = set()
+    for src, dst in transitions:
+        states.add(src)
+        states.add(dst)
+
+    state_map = dict()
+    for state in states:
+        state_map[state] = dfa.create_state()
+
+    for s in accepting_states:
+        dfa.set_accepting_state(state_map[s], True)
+
+    dfa.set_initial_state(state_map[initial_state])
+
+    for (src, dst), guards in transitions.items():
+        simplified_guard = simplify_guard(guards)
+        dfa.add_transition((state_map[src], simplified_guard, state_map[dst]))
+
+    return dfa
 
 
 def to_dfa(f, mona_dfa_out=False) -> str:
     """Translate to deterministic finite-state automaton."""
+    return translate_to_automata(f, "mona" if mona_dfa_out else "dot")
+
+    # p = MonaProgram(f)
+    # mona_p_string = p.mona_program()
+    # createMonafile(mona_p_string)
+    # mona_dfa = invoke_mona()
+    # if mona_dfa_out:
+    #    return mona_dfa
+    # check_(mona_dfa_out is False)
+    # return output2dot(mona_dfa)
+
+
+def to_pythomata(f):
+    return translate_to_automata(f, "pythomata")
+
+
+def translate_to_automata(f, output_format):
+    """Translate to deterministic finite-state automaton."""
+
+    output_format = output_format.lower().strip()
+
+    if output_format not in ("dot", "pythomata", "mona"):
+        raise ValueError(
+            f"Unknown output format. Expected one of 'dot', 'mona', 'pythomata', got '{output_format}'"
+        )
+
     p = MonaProgram(f)
     mona_p_string = p.mona_program()
     createMonafile(mona_p_string)
     mona_dfa = invoke_mona()
-    if mona_dfa_out:
+
+    if output_format == "mona":
         return mona_dfa
-    check_(mona_dfa_out is False)
-    return output2dot(mona_dfa)
+
+    elif output_format == "dot":
+        return output2dot(mona_dfa)
+
+    elif output_format == "pythomata":
+        return output2pythomata(mona_dfa)
