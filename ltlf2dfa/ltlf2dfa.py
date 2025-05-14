@@ -209,9 +209,6 @@ def output2pythomata(mona_output):
         return dfa
 
     initial_state, accepting_states, transitions = parse_mona(mona_output)
-    print(initial_state)
-    print(accepting_states)
-    print(transitions)
 
     states = set()
     for src, dst in transitions:
