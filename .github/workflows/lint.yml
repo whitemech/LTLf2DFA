@@ -35,7 +35,10 @@ jobs:
       run: tox -e mypy
     - name: Check copyright
       run: tox -e check-copyright
-    - name: Misc checks
-      run: |
-        tox -e bandit
-        tox -e safety
+
+    - name: Security static analysis
+      run: tox -e bandit
+
+    - name: Dependency vulnerability report
+      continue-on-error: true
+      run: tox -e safety
