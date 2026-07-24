@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # This file is part of ltlf2dfa.
 #
@@ -17,6 +16,7 @@
 # along with ltlf2dfa.  If not, see <https://www.gnu.org/licenses/>.
 #
 """Test the Propositional Logic."""
+
 import os
 
 import lark
@@ -59,9 +59,7 @@ def test_parser():
     assert a_or_b == true_a_or_b
 
     material_implication = parser("!A | B <-> !(A & !B) <-> A->B")
-    true_material_implication = PLEquivalence(
-        [PLOr([PLNot(a), b]), PLNot(PLAnd([a, PLNot(b)])), PLImplies([a, b])]
-    )
+    true_material_implication = PLEquivalence([PLOr([PLNot(a), b]), PLNot(PLAnd([a, PLNot(b)])), PLImplies([a, b])])
     assert material_implication == true_material_implication
 
     a_imply_b = parser("A -> B")
@@ -97,7 +95,7 @@ def test_negate():
 def test_nnf():
     parser = PLParser()
     sa, sb = "A", "B"
-    a, b = PLAtomic(sa), PLAtomic(sb)
+    a, _ = PLAtomic(sa), PLAtomic(sb)
 
     not_a_and_b = parser("!(A&B)")
     nnf_not_a_and_b = parser("!A | !B")
@@ -109,9 +107,7 @@ def test_nnf():
     assert nnf_dup == PLAnd([PLNot(a), PLNot(a)])
 
     material_implication = parser("!A | B <-> !(A & !B) <-> A->B")
-    nnf_material_implication = parser(
-        "((!A | B) & (!A | B) & (!A | B)) | ((A & !B) & (A & !B) & (A & !B))"
-    )
+    nnf_material_implication = parser("((!A | B) & (!A | B) & (!A | B)) | ((A & !B) & (A & !B) & (A & !B))")
     nnf_m = material_implication.to_nnf()
     assert nnf_m == nnf_material_implication.to_nnf()
 
@@ -219,20 +215,14 @@ class TestParsingTree:
         assert ok, err
 
     def test_implications(self):
-        ok, err = self.checker.precedence_check(
-            "a <-> b -> c3", "<->,a,->,b,c3".split(",")
-        )
+        ok, err = self.checker.precedence_check("a <-> b -> c3", "<->,a,->,b,c3".split(","))
         assert ok, err
 
-        ok, err = self.checker.precedence_check(
-            "(a <-> b) -> c", "->,(,),<->,a,b,c".split(",")
-        )
+        ok, err = self.checker.precedence_check("(a <-> b) -> c", "->,(,),<->,a,b,c".split(","))
         assert ok, err
 
     def test_misc(self):
-        ok, err = self.checker.precedence_check(
-            "!a&(b->c)", "&,!,a,(,),->,b,c".split(",")
-        )
+        ok, err = self.checker.precedence_check("!a&(b->c)", "&,!,a,(,),->,b,c".split(","))
         assert ok, err
 
     def test_bad_examples(self):

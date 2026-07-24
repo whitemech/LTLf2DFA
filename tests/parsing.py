@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # This file is part of ltlf2dfa.
 #
@@ -18,8 +17,6 @@
 #
 """Small helper class to check the correct parsing."""
 
-from typing import List, Optional, Tuple
-
 from lark import Lark
 from lark.lexer import Token  # type: ignore
 
@@ -33,9 +30,7 @@ class ParsingCheck:
         """
         self.parser = Lark(open(lark), parser="lalr", debug=True)
 
-    def precedence_check(
-        self, formula: str, tokens: List[str], print_tree: bool = False
-    ) -> Tuple[bool, Optional[str]]:
+    def precedence_check(self, formula: str, tokens: list[str], print_tree: bool = False) -> tuple[bool, str | None]:
         """\
         Parse the formula and check that operators have the expected
         precedence.
@@ -63,9 +58,7 @@ class ParsingCheck:
                 # Filter tokens and match
                 if isinstance(child, Token):
                     if child != tokens[token_i]:
-                        err = "Next expected '{}', got '{}'".format(
-                            tokens[token_i], str(child)
-                        )
+                        err = f"Next expected '{tokens[token_i]}', got '{str(child)}'"
                         return False, err
                     token_i += 1
 

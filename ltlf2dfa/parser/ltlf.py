@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # This file is part of ltlf2dfa.
 #
@@ -205,9 +204,7 @@ class LTLfParser:
     def __init__(self):
         """Initialize."""
         self._transformer = LTLfTransformer()
-        self._parser = Lark(
-            _ltlf_parser_lark, parser="lalr", import_paths=[PARSERS_DIRECTORY]
-        )
+        self._parser = Lark(_ltlf_parser_lark, parser="lalr", import_paths=[PARSERS_DIRECTORY])
 
     def __call__(self, text):
         """Call."""

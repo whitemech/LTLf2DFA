@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # This file is part of ltlf2dfa.
 #
@@ -21,7 +20,7 @@
 
 import functools
 from abc import ABC, abstractmethod
-from typing import Any, List, Optional, Set
+from typing import Any
 
 from ltlf2dfa.base import AtomicFormula, BinaryOperator, Formula, UnaryOperator
 from ltlf2dfa.symbols import OpSymbol, Symbols
@@ -39,7 +38,7 @@ class PLFormula(Formula):
         """Return a representation of the formula."""
         return str(self)
 
-    def find_atomics(self) -> Set["PLAtomic"]:
+    def find_atomics(self) -> set["PLAtomic"]:
         """
         Find all the atomic formulas in the propositional formulas.
 
@@ -52,14 +51,14 @@ class PLFormula(Formula):
         return self._atoms
 
     @abstractmethod
-    def _find_atomics(self) -> Set["PLAtomic"]:
+    def _find_atomics(self) -> set["PLAtomic"]:
         """Find all the atomic formulas in the propositional formulas."""
 
     @abstractmethod
     def negate(self) -> "PLFormula":
         """Negate the formula. Used by 'to_nnf'."""
 
-    def to_mona(self, v: Optional[Any] = None) -> str:
+    def to_mona(self, v: Any | None = None) -> str:
         """
         Tranform the PL formula into its encoding in MONA.
 
@@ -71,7 +70,7 @@ class PLFormula(Formula):
 class PLAtomic(AtomicFormula, PLFormula):
     """A class to represent propositional atomic formulas."""
 
-    def find_labels(self) -> List[Any]:
+    def find_labels(self) -> list[Any]:
         """Return the list of symbols."""
         return [self.s]
 
@@ -90,9 +89,10 @@ class PLAtomic(AtomicFormula, PLFormula):
 class PLBinaryOperator(BinaryOperator[PLFormula], PLFormula, ABC):
     """An operator for Propositional Logic."""
 
-    def _find_atomics(self) -> Set[PLAtomic]:
+    def _find_atomics(self) -> set[PLAtomic]:
         return functools.reduce(
-            set.union, [f.find_atomics() for f in self.formulas]  # type: ignore
+            set.union,
+            [f.find_atomics() for f in self.formulas],  # type: ignore
         )
 
 
@@ -107,7 +107,7 @@ class PLTrue(PLAtomic):
         """Negate the formula."""
         return PLFalse()
 
-    def find_labels(self) -> List[Any]:
+    def find_labels(self) -> list[Any]:
         """Return the list of symbols."""
         return []
 
@@ -131,7 +131,7 @@ class PLFalse(PLAtomic):
         """Negate the formula."""
         return PLTrue()
 
-    def find_labels(self) -> List[Any]:
+    def find_labels(self) -> list[Any]:
         """Return the list of symbols."""
         return []
 
@@ -162,7 +162,7 @@ class PLNot(UnaryOperator[PLFormula], PLFormula):
         """Negate the formula."""
         return self.f
 
-    def _find_atomics(self) -> Set["PLAtomic"]:
+    def _find_atomics(self) -> set["PLAtomic"]:
         return self.f.find_atomics()
 
 

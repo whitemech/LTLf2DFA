@@ -7,6 +7,12 @@
 *.mona
 ltlf2dfa/*.mona
 
+# Virtual environments
+.venv/
+
+# Tool caches
+.ruff_cache/
+
 ### Images ###
 # JPEG
 *.jpg
@@ -618,7 +624,7 @@ celerybeat-schedule
 .pydevproject
 
 # mkdocs documentation
-/site
+site/
 
 # mypy
 .mypy_cache/

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # This file is part of ltlf2dfa.
 #
@@ -17,6 +16,7 @@
 # along with ltlf2dfa.  If not, see <https://www.gnu.org/licenses/>.
 #
 """Test PPLTL."""
+
 import os
 
 import lark
@@ -74,7 +74,7 @@ def test_parser():
 
 
 def test_negate():
-    parser = PPLTLParser()
+    _ = PPLTLParser()
     sa, sb, sc = "a", "b", "c"
     a, b, c = PPLTLAtomic(sa), PPLTLAtomic(sb), PPLTLAtomic(sc)
 
@@ -104,11 +104,11 @@ def test_names():
     bad = ["Future", "X", "$", "", "40a", "niceName"]
 
     for name in good:
-        str(PPLTLAtomic(name)) == name
+        assert str(PPLTLAtomic(name)) == name
 
     for name in bad:
         with pytest.raises(ValueError):
-            str(PPLTLAtomic(name)) == name
+            assert str(PPLTLAtomic(name)) == name
 
 
 def test_nnf():
@@ -122,9 +122,7 @@ def test_nnf():
     assert f.to_nnf() == PPLTLAnd([a, PPLTLNot(b)])
 
     f = parser("!(a <-> b)")
-    assert f.to_nnf() == PPLTLAnd(
-        [PPLTLOr([PPLTLNot(a), PPLTLNot(b)]), PPLTLOr([a, b])]
-    )
+    assert f.to_nnf() == PPLTLAnd([PPLTLOr([PPLTLNot(a), PPLTLNot(b)]), PPLTLOr([a, b])])
 
     # Yesterday and Weak Yesterday
     f = parser("!(Y (a & b))")
@@ -135,9 +133,7 @@ def test_nnf():
 
     # Once and Historically
     f = parser("!(O (a | b))")
-    assert (
-        f.to_nnf() == PPLTLHistorically(PPLTLAnd([PPLTLNot(a), PPLTLNot(b)])).to_nnf()
-    )
+    assert f.to_nnf() == PPLTLHistorically(PPLTLAnd([PPLTLNot(a), PPLTLNot(b)])).to_nnf()
 
     # Since
     f = parser("!(a S b)")
@@ -146,9 +142,7 @@ def test_nnf():
     assert f.to_nnf() == PPLTLSince([PPLTLNot(a), PPLTLNot(b)])
 
     f = parser("!(O (a | b))")
-    assert (
-        f.to_nnf() == PPLTLHistorically(PPLTLAnd([PPLTLNot(a), PPLTLNot(b)])).to_nnf()
-    )
+    assert f.to_nnf() == PPLTLHistorically(PPLTLAnd([PPLTLNot(a), PPLTLNot(b)])).to_nnf()
     f = parser("!(H (a | b))")
     assert f.to_nnf() == PPLTLOnce(PPLTLAnd([PPLTLNot(a), PPLTLNot(b)])).to_nnf()
 
@@ -172,17 +166,11 @@ def test_mona():
     assert f.to_mona(v="max($)") == "~((~((max($) in A)) | (max($) in B)))"
 
     f = parser("!(a <-> b)")
-    assert (
-        f.to_nnf().to_mona(v="max($)")
-        == "((~((max($) in A)) | ~((max($) in B))) & ((max($) in A) | (max($) in B)))"
-    )
+    assert f.to_nnf().to_mona(v="max($)") == "((~((max($) in A)) | ~((max($) in B))) & ((max($) in A) | (max($) in B)))"
 
     # Before
     f = parser("Y(a & b)")
-    assert (
-        f.to_mona(v="max($)")
-        == "(ex1 v_1: v_1 in $ & v_1=max($)-1 & max($)>0 & ((v_1 in A) & (v_1 in B)))"
-    )
+    assert f.to_mona(v="max($)") == "(ex1 v_1: v_1 in $ & v_1=max($)-1 & max($)>0 & ((v_1 in A) & (v_1 in B)))"
 
     # Since
     f = parser("a S b")
@@ -195,8 +183,7 @@ def test_mona():
     # Once and Historically
     f = parser("O(a & b)")
     assert (
-        f.to_mona(v="max($)")
-        == "(ex1 v_1: v_1 in $ & 0<=v_1&v_1<=max($) & ((v_1 in A) & (v_1 in B)) & (all1 v_2: "
+        f.to_mona(v="max($)") == "(ex1 v_1: v_1 in $ & 0<=v_1&v_1<=max($) & ((v_1 in A) & (v_1 in B)) & (all1 v_2: "
         "v_2 in $ & v_1<v_2&v_2<=max($) => true))"
     )
     f = parser("a & O(b)")
@@ -241,18 +228,14 @@ class TestParsingTree:
         ok, err = self.checker.precedence_check("a & !b | c", list("|&a!bc"))
         assert ok, err
 
-        ok, err = self.checker.precedence_check(
-            "!a&(b->c)", "&,!,a,(,),->,b,c".split(",")
-        )
+        ok, err = self.checker.precedence_check("!a&(b->c)", "&,!,a,(,),->,b,c".split(","))
         assert ok, err
 
     def test_unary(self):
         ok, err = self.checker.precedence_check("Y Y a", list("YYa"))
         assert ok, err
 
-        ok, err = self.checker.precedence_check(
-            "Y(H faLse)", "Y ( ) H faLse".split(" ")
-        )
+        ok, err = self.checker.precedence_check("Y(H faLse)", "Y ( ) H faLse".split(" "))
         assert ok, err
 
         ok, err = self.checker.precedence_check("Y H a", list("YHa"))
@@ -261,14 +244,10 @@ class TestParsingTree:
         ok, err = self.checker.precedence_check("HY a", list("HYa"))
         assert ok, err
 
-        ok, err = self.checker.precedence_check(
-            "YHYO H prop0", "Y H Y O H prop0".split(" ")
-        )
+        ok, err = self.checker.precedence_check("YHYO H prop0", "Y H Y O H prop0".split(" "))
         assert ok, err
 
-        ok, err = self.checker.precedence_check(
-            "YY!(!HHH a)", "Y Y ! ( ) ! H H H a".split(" ")
-        )
+        ok, err = self.checker.precedence_check("YY!(!HHH a)", "Y Y ! ( ) ! H H H a".split(" "))
         assert ok, err
 
     def test_bad_termination(self):
@@ -288,10 +267,10 @@ class TestParsingTree:
         with pytest.raises(lark.UnexpectedInput):
             self.checker.precedence_check("(a)(", list("(a)("))
 
-        with pytest.raises(lark.UnexpectedInput) as exc:
+        with pytest.raises(lark.UnexpectedInput) as _:
             self.checker.precedence_check("aSa", list("aSa"))
 
-        with pytest.raises(lark.UnexpectedInput) as exc:
+        with pytest.raises(lark.UnexpectedInput) as _:
             self.checker.precedence_check("Ya", list("Ya"))
 
     def test_bad_names(self):

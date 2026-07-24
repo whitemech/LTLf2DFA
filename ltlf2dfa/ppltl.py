@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # This file is part of ltlf2dfa.
 #
@@ -21,7 +20,7 @@
 
 import re
 from abc import ABC, abstractmethod
-from typing import Any, List, Optional
+from typing import Any
 
 from ltlf2dfa.base import (
     AtomicFormula,
@@ -51,7 +50,7 @@ class PPLTLFormula(Formula, ABC):
         """Get the representation."""
         return self.__str__()
 
-    def to_mona(self, v: Optional[Any] = None) -> str:
+    def to_mona(self, v: Any | None = None) -> str:
         """
         Tranform the PPLTL formula into its encoding in MONA.
 
@@ -92,7 +91,7 @@ class PPLTLAtomic(AtomicFormula, PPLTLFormula):
         """Negate the formula."""
         return PPLTLNot(self)
 
-    def find_labels(self) -> List[AtomSymbol]:
+    def find_labels(self) -> list[AtomSymbol]:
         """Find the labels."""
         return PLAtomic(self.s).find_labels()
 
@@ -117,7 +116,7 @@ class PPLTLTrue(PPLTLAtomic):
         """Negate the formula."""
         return PPLTLFalse()
 
-    def find_labels(self) -> List[AtomSymbol]:
+    def find_labels(self) -> list[AtomSymbol]:
         """Find the labels."""
         return []
 
@@ -137,7 +136,7 @@ class PPLTLFalse(PPLTLAtomic):
         """Negate the formula."""
         return PPLTLTrue()
 
-    def find_labels(self) -> List[AtomSymbol]:
+    def find_labels(self) -> list[AtomSymbol]:
         """Find the labels."""
         return []
 
@@ -226,9 +225,7 @@ class PPLTLImplies(PPLTLBinaryOperator):
         first, second = self.formulas[0:2]
         final_formula = PPLTLOr([PPLTLNot(first).to_nnf(), second.to_nnf()])
         for subformula in self.formulas[2:]:
-            final_formula = PPLTLOr(
-                [PPLTLNot(final_formula).to_nnf(), subformula.to_nnf()]
-            )
+            final_formula = PPLTLOr([PPLTLNot(final_formula).to_nnf(), subformula.to_nnf()])
         return final_formula
 
     def to_mona(self, v="max($)") -> str:
@@ -468,7 +465,7 @@ class PPLTLStart(PPLTLFormula):
         """Negate the formula."""
         return self.to_nnf().negate()
 
-    def find_labels(self) -> List[AtomSymbol]:
+    def find_labels(self) -> list[AtomSymbol]:
         """Find the labels."""
         return []
 

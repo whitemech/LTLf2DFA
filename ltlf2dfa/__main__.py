@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # This file is part of ltlf2dfa.
 #
@@ -29,12 +28,10 @@ from ltlf2dfa.parser.ppltl import PPLTLParser
 def execute(logic, formula):
     """Transform the formula."""
     try:
-        with open(formula, "r", encoding="utf-8") as f:
+        with open(formula, encoding="utf-8") as f:
             formula_str = f.read()
     except Exception as exc:
-        raise IOError(
-            "[ERROR]: Something wrong occurred while parsing the domain and problem."
-        ) from exc
+        raise OSError("[ERROR]: Something wrong occurred while parsing the domain and problem.") from exc
 
     if logic == Logic.LTLf:
         f_parser = LTLfParser()

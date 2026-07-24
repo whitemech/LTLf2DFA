@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # This file is part of ltlf2dfa.
 #
@@ -21,7 +20,7 @@
 
 import re
 from abc import ABC, abstractmethod
-from typing import Any, List, Optional
+from typing import Any
 
 from ltlf2dfa.base import (
     AtomicFormula,
@@ -51,7 +50,7 @@ class LTLfFormula(Formula, ABC):
         """Get the representation."""
         return self.__str__()
 
-    def to_mona(self, v: Optional[Any] = None) -> str:
+    def to_mona(self, v: Any | None = None) -> str:
         """
         Tranform the LTLf formula into its encoding in MONA.
 
@@ -92,7 +91,7 @@ class LTLfAtomic(AtomicFormula, LTLfFormula):
         """Negate the formula."""
         return LTLfNot(self)
 
-    def find_labels(self) -> List[AtomSymbol]:
+    def find_labels(self) -> list[AtomSymbol]:
         """Find the labels."""
         return PLAtomic(self.s).find_labels()
 
@@ -118,7 +117,7 @@ class LTLfTrue(LTLfAtomic):
         """Negate the formula."""
         return LTLfFalse()
 
-    def find_labels(self) -> List[AtomSymbol]:
+    def find_labels(self) -> list[AtomSymbol]:
         """Find the labels."""
         return []
 
@@ -142,7 +141,7 @@ class LTLfFalse(LTLfAtomic):
         """Negate the formula."""
         return LTLfTrue()
 
-    def find_labels(self) -> List[AtomSymbol]:
+    def find_labels(self) -> list[AtomSymbol]:
         """Find the labels."""
         return []
 
@@ -237,9 +236,7 @@ class LTLfImplies(LTLfBinaryOperator):
         first, second = self.formulas[0:2]
         final_formula = LTLfOr([LTLfNot(first).to_nnf(), second.to_nnf()])
         for subformula in self.formulas[2:]:
-            final_formula = LTLfOr(
-                [LTLfNot(final_formula).to_nnf(), subformula.to_nnf()]
-            )
+            final_formula = LTLfOr([LTLfNot(final_formula).to_nnf(), subformula.to_nnf()])
         return final_formula
 
     def to_mona(self, v="0") -> str:
@@ -513,7 +510,7 @@ class LTLfLast(LTLfFormula):
         """Negate the formula."""
         return self.to_nnf().negate()
 
-    def find_labels(self) -> List[AtomSymbol]:
+    def find_labels(self) -> list[AtomSymbol]:
         """Find the labels."""
         return []
 
@@ -536,7 +533,7 @@ class LTLfLast(LTLfFormula):
 class LTLfEnd(LTLfFormula):
     """Class for the LTLf End formula."""
 
-    def find_labels(self) -> List[AtomSymbol]:
+    def find_labels(self) -> list[AtomSymbol]:
         """Find the labels."""
         return []
 

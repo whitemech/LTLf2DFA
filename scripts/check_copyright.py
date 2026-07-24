@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # This file is part of ltlf2dfa.
 #
@@ -72,9 +71,7 @@ def parse_args():
     import argparse  # pylint: disable=import-outside-toplevel
 
     parser = argparse.ArgumentParser("check_copyright_notice")
-    parser.add_argument(
-        "--directory", type=str, default=".", help="The path to the repository root."
-    )
+    parser.add_argument("--directory", type=str, default=".", help="The path to the repository root.")
 
 
 if __name__ == "__main__":
@@ -88,11 +85,7 @@ if __name__ == "__main__":
 
     ignore_files = {Path("scripts/whitelist.py")}
 
-    bad_files = {
-        filepath
-        for filepath in python_files.difference(ignore_files)
-        if not check_copyright(filepath)
-    }
+    bad_files = {filepath for filepath in python_files.difference(ignore_files) if not check_copyright(filepath)}
 
     if len(bad_files) > 0:
         print("The following files are not well formatted:")
