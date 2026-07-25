@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # This file is part of ltlf2dfa.
 #
@@ -18,11 +17,13 @@
 #
 
 """Base classes for the implementation of a generic syntax tree."""
+
 import functools
 import re
 from abc import ABC, abstractmethod
+from collections.abc import Sequence
 from enum import Enum
-from typing import Any, Generic, List, Optional, Sequence, Tuple, TypeVar, Union, cast
+from typing import Any, Generic, TypeVar, Union, cast
 
 from ltlf2dfa.helpers import Hashable, Wrapper, check_
 from ltlf2dfa.symbols import OpSymbol, Symbols
@@ -41,7 +42,7 @@ class Formula(Hashable, ABC):
     """Abstract class for a formula."""
 
     @abstractmethod
-    def find_labels(self) -> List[AtomSymbol]:
+    def find_labels(self) -> list[AtomSymbol]:
         """Return the list of symbols."""
 
     def to_nnf(self) -> "Formula":
@@ -53,7 +54,7 @@ class Formula(Hashable, ABC):
         """Negate the formula. Used by 'to_nnf'."""
 
     @abstractmethod
-    def to_mona(self, v: Optional[Any] = None) -> str:
+    def to_mona(self, v: Any | None = None) -> str:
         """Transform the formula in MONA."""
 
 
@@ -67,7 +68,7 @@ class AtomicFormula(Formula, ABC):
 
     name_regex = re.compile(r'(\w+)|(".*")')
 
-    def __init__(self, s: Union[AtomSymbol, Formula]):
+    def __init__(self, s: AtomSymbol | Formula):
         """Inintializes the atomic formula.
 
         :param s: the atomic symbol. Formulas are implicitly converted to
@@ -83,9 +84,7 @@ class AtomicFormula(Formula, ABC):
         else:
             self.s = str(s)
             if not self.name_regex.fullmatch(self.s):
-                raise ValueError(
-                    "The symbol name does not respect the naming convention."
-                )
+                raise ValueError("The symbol name does not respect the naming convention.")
 
     def _members(self):
         return self.s
@@ -94,7 +93,7 @@ class AtomicFormula(Formula, ABC):
         """Get the string representation."""
         return str(self.s)
 
-    def find_labels(self) -> List[AtomSymbol]:
+    def find_labels(self) -> list[AtomSymbol]:
         """Return the list of symbols."""
         return [self.s]
 
@@ -127,7 +126,7 @@ class MonaProgram:
     """Implements a MONA program."""
 
     HEADER = "var2 $ where ~ex1 p where true: p notin $ & p+1 in $;\nallpos $"
-    vars: List[str] = []
+    vars: list[str] = []
 
     def __init__(self, f: Formula):
         """Initialize.
@@ -156,9 +155,7 @@ class MonaProgram:
 class Operator(Formula, ABC):
     """Implements an operator."""
 
-    base_expression = (
-        Symbols.ROUND_BRACKET_LEFT.value + "%s" + Symbols.ROUND_BRACKET_RIGHT.value
-    )
+    base_expression = Symbols.ROUND_BRACKET_LEFT.value + "%s" + Symbols.ROUND_BRACKET_RIGHT.value
 
     @property
     @abstractmethod
@@ -198,7 +195,7 @@ class UnaryOperator(Generic[T], Operator, ABC):
         """Compare the formula with another formula."""
         return self.f.__lt__(other.f)
 
-    def find_labels(self) -> List[AtomSymbol]:
+    def find_labels(self) -> list[AtomSymbol]:
         """Return the list of symbols."""
         return cast(Formula, self.f).find_labels()
 
@@ -218,16 +215,12 @@ class BinaryOperator(Generic[T], Operator, ABC):
 
     def __str__(self):
         """Return the string representation."""
-        return (
-            "("
-            + (" " + str(self.operator_symbol) + " ").join(map(str, self.formulas))
-            + ")"
-        )
+        return "(" + (" " + str(self.operator_symbol) + " ").join(map(str, self.formulas)) + ")"
 
-    def _members(self) -> Tuple[OpSymbol, OperatorChildren]:
+    def _members(self) -> tuple[OpSymbol, OperatorChildren]:
         return self.operator_symbol, self.formulas
 
-    def find_labels(self) -> List[AtomSymbol]:
+    def find_labels(self) -> list[AtomSymbol]:
         """Return the list of symbols."""
         # return set.union(*map(lambda f: f.find_labels(), self.formulas))))
         # seen = set()
@@ -246,7 +239,7 @@ class BinaryOperator(Generic[T], Operator, ABC):
 
 
 @functools.singledispatch
-def flatten(lst) -> List:
+def flatten(lst) -> list:
     """Flatten a list of lists."""
     return [item for sublist in lst for item in sublist.find_labels()]
 
@@ -264,6 +257,6 @@ def _flatten_as_set(lst):
 
 
 @flatten.register(tuple)
-def _(lst: Tuple[Formula]):
+def _(lst: tuple[Formula]):
     """Flatten a list of lists of formulas."""
     return _flatten_as_set(lst)

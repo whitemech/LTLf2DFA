@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # This file is part of ltlf2dfa.
 #
@@ -17,6 +16,7 @@
 # along with ltlf2dfa.  If not, see <https://www.gnu.org/licenses/>.
 #
 """Test LTLf."""
+
 import os
 
 import lark
@@ -83,11 +83,11 @@ def test_names():
     bad = ["Future", "X", "$", "", "40a", "niceName"]
 
     for name in good:
-        str(LTLfAtomic(name)) == name
+        assert str(LTLfAtomic(name)) == name
 
     for name in bad:
         with pytest.raises(ValueError):
-            str(LTLfAtomic(name)) == name
+            assert str(LTLfAtomic(name)) == name
 
 
 def test_nnf():
@@ -145,34 +145,23 @@ def test_mona():
     assert f.to_mona(v="0") == "~((~((0 in A)) | (0 in B)))"
 
     f = parser("!(a <-> b)")
-    assert (
-        f.to_nnf().to_mona(v="0")
-        == "((~((0 in A)) | ~((0 in B))) & ((0 in A) | (0 in B)))"
-    )
+    assert f.to_nnf().to_mona(v="0") == "((~((0 in A)) | ~((0 in B))) & ((0 in A) | (0 in B)))"
 
     f = parser("a & last")
-    assert (
-        f.to_mona(v="0")
-        == "((0 in A) & ((0 = max($)) | (ex1 v_1: v_1 in $ & v_1=1 & false)))"
-    )
+    assert f.to_mona(v="0") == "((0 in A) & ((0 = max($)) | (ex1 v_1: v_1 in $ & v_1=1 & false)))"
 
     # Next and Weak Next
     f = parser("X(a & b)")
     assert f.to_mona(v="0") == "(ex1 v_1: v_1 in $ & v_1=1 & ((v_1 in A) & (v_1 in B)))"
 
     f = parser("WX(a)")
-    assert (
-        f.to_mona(v="0") == "((0 = max($)) | (ex1 v_1: v_1 in $ & v_1=1 & (v_1 in A)))"
-    )
+    assert f.to_mona(v="0") == "((0 = max($)) | (ex1 v_1: v_1 in $ & v_1=1 & (v_1 in A)))"
 
     # f = parser("F(b & WX false) -> F(a & (WX false | X(WX false)))")
     # assert f.to_mona(v="0") == ""
 
     f = parser("WX (a & b)")
-    assert (
-        f.to_mona(v="0")
-        == "((0 = max($)) | (ex1 v_1: v_1 in $ & v_1=1 & ((v_1 in A) & (v_1 in B))))"
-    )
+    assert f.to_mona(v="0") == "((0 = max($)) | (ex1 v_1: v_1 in $ & v_1=1 & ((v_1 in A) & (v_1 in B))))"
 
     # Until and Release
     f = parser("a U b")
@@ -191,8 +180,7 @@ def test_mona():
     # Eventually and Always
     f = parser("F(a & b)")
     assert (
-        f.to_mona(v="0")
-        == "(ex1 v_1: v_1 in $ & 0<=v_1&v_1<=max($) & ((v_1 in A) & (v_1 in B)) & (all1 v_2: "
+        f.to_mona(v="0") == "(ex1 v_1: v_1 in $ & 0<=v_1&v_1<=max($) & ((v_1 in A) & (v_1 in B)) & (all1 v_2: "
         "v_2 in $ & 0<=v_2&v_2<v_1 => true))"
     )
     f = parser("G(a | b)")
@@ -232,18 +220,14 @@ class TestParsingTree:
         ok, err = self.checker.precedence_check("a & !b | c", list("|&a!bc"))
         assert ok, err
 
-        ok, err = self.checker.precedence_check(
-            "!a&(b->c)", "&,!,a,(,),->,b,c".split(",")
-        )
+        ok, err = self.checker.precedence_check("!a&(b->c)", "&,!,a,(,),->,b,c".split(","))
         assert ok, err
 
     def test_unary(self):
         ok, err = self.checker.precedence_check("X X a", list("XXa"))
         assert ok, err
 
-        ok, err = self.checker.precedence_check(
-            "X(G faLse)", "X ( ) G faLse".split(" ")
-        )
+        ok, err = self.checker.precedence_check("X(G faLse)", "X ( ) G faLse".split(" "))
         assert ok, err
 
         ok, err = self.checker.precedence_check("X G a", list("XGa"))
@@ -252,14 +236,10 @@ class TestParsingTree:
         ok, err = self.checker.precedence_check("GX a", list("GXa"))
         assert ok, err
 
-        ok, err = self.checker.precedence_check(
-            "XGXFWX G prop0", "X G X F WX G prop0".split(" ")
-        )
+        ok, err = self.checker.precedence_check("XGXFWX G prop0", "X G X F WX G prop0".split(" "))
         assert ok, err
 
-        ok, err = self.checker.precedence_check(
-            "XXWX!(!WXGGG a)", "X X WX ! ( ) ! WX G G G a".split(" ")
-        )
+        ok, err = self.checker.precedence_check("XXWX!(!WXGGG a)", "X X WX ! ( ) ! WX G G G a".split(" "))
         assert ok, err
 
     def test_bad_termination(self):
@@ -279,10 +259,10 @@ class TestParsingTree:
         with pytest.raises(lark.UnexpectedInput):
             self.checker.precedence_check("(a)(", list("(a)("))
 
-        with pytest.raises(lark.UnexpectedInput) as exc:
+        with pytest.raises(lark.UnexpectedInput) as _:
             self.checker.precedence_check("aUa", list("aUa"))
 
-        with pytest.raises(lark.UnexpectedInput) as exc:
+        with pytest.raises(lark.UnexpectedInput) as _:
             self.checker.precedence_check("Xa", list("Xa"))
 
     def test_bad_names(self):

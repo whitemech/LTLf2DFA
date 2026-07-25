@@ -15,10 +15,7 @@
 </p>
 <p align="center">
   <a href="">
-    <img alt="test" src="https://github.com/whitemech/ltlf2dfa/workflows/test/badge.svg">
-  </a>
-  <a href="">
-    <img alt="lint" src="https://github.com/whitemech/ltlf2dfa/workflows/lint/badge.svg">
+    <img alt="test" src="https://github.com/whitemech/LTLf2DFA/actions/workflows/ci.yml/badge.svg">
   </a>
   <a href="">
     <img alt="docs" src="https://github.com/whitemech/ltlf2dfa/workflows/docs/badge.svg">
@@ -49,22 +46,32 @@ LTL<sub>f</sub>2DFA relies on the MONA tool for the generation of the DFA.
 Please, make sure you have the MONA tool installed on your system before running LTL<sub>f</sub>2DFA. 
 You can follow the instructions [here](http://www.brics.dk/mona/download.html) to get MONA.
 
-## Install
+## Installation
 
-- from [PyPI](https://pypi.org/project/ltlf2dfa/):
-```
+Install the latest release from PyPI:
+
+```bash
 pip install ltlf2dfa
 ```
-- or, from source (`master` branch):
+
+When using uv in another Python project:
+
+```bash
+uv add ltlf2dfa
 ```
+
+Install the latest development version from GitHub:
+
+```bash
 pip install git+https://github.com/whitemech/LTLf2DFA.git
 ```
 
-- or, clone the repository and install:
-```
+Alternatively, clone the repository:
+
+```bash
 git clone https://github.com/whitemech/LTLf2DFA.git
-cd ltlf2dfa
-pip install .
+cd LTLf2DFA
+uv sync
 ```
 
 ## Quickstart
@@ -80,9 +87,9 @@ from ltlf2dfa.parser.ltlf import LTLfParser
 
 parser = LTLfParser()
 formula_str = "G(a -> X b)"
-formula = parser(formula_str)       # returns an LTLfFormula
+formula = parser(formula_str)  # returns an LTLfFormula
 
-print(formula)                      # prints "G(a -> X (b))"
+print(formula)  # prints "G(a -> X (b))"
 ```
 - Or, parse a PPLTL formula:
 ```python
@@ -90,14 +97,14 @@ from ltlf2dfa.parser.ppltl import PPLTLParser
 
 parser = PPLTLParser()
 formula_str = "H(a -> Y b)"
-formula = parser(formula_str)       # returns a PPLTLFormula
+formula = parser(formula_str)  # returns a PPLTLFormula
 
-print(formula)                      # prints "H(a -> Y (b))"
+print(formula)  # prints "H(a -> Y (b))"
 ```
 - Translate a formula to the corresponding DFA automaton:
 ```python
 dfa = formula.to_dfa()
-print(dfa)                          # prints the DFA in DOT format
+print(dfa)  # prints the DFA in DOT format
 ```
 
 ### As a CLI Interface
@@ -119,26 +126,96 @@ have only past, only future or none operators.
 
 ## Development
 
-If you want to contribute, set up your development environment as follows:
+### Requirements
 
-- Intall [Poetry](https://python-poetry.org)
-- Clone the repository: `git clone https://github.com/whitemech/LTLf2DFA.git && cd LTLf2DFA`
-- Install the dependencies: `poetry shell && poetry install`
+To work on LTLf2DFA, you need:
 
-## Tests
+- Python 3.11 or later
+- [uv](https://docs.astral.sh/uv/)
+- [MONA](https://www.brics.dk/mona/)
 
-To run tests: `tox`
+Clone the repository and synchronize the development environment:
 
-To run only the code tests: `tox -e py38`
+```bash
+git clone https://github.com/whitemech/LTLf2DFA.git
+cd LTLf2DFA
+uv sync
+```
 
-To run only the code style checks: `tox -e flake8`
+There is no need to activate the virtual environment manually. Project commands can be run with `uv run`.
 
-## Docs
+### Tests
 
-To build the docs: `mkdocs build`
+Run the complete test suite:
 
-To view documentation in a browser: `mkdocs serve`
-and then go to [http://localhost:8000](http://localhost:8000)
+```bash
+uv run pytest
+```
+
+Run tests with coverage:
+
+```bash
+uv run pytest \
+  --cov=ltlf2dfa \
+  --cov-report=term-missing \
+  --cov-report=xml
+```
+
+### Code quality
+
+Check the code with Ruff:
+
+```bash
+uv run ruff check .
+uv run ruff format --check .
+```
+
+Apply automatic linting and formatting fixes:
+
+```bash
+uv run ruff check . --fix
+uv run ruff format .
+```
+
+### Pre-commit hooks
+
+Install the Git pre-commit hooks:
+
+```bash
+uv run pre-commit install
+```
+
+Run all hooks manually:
+
+```bash
+uv run pre-commit run --all-files
+```
+
+### Documentation
+
+Build the documentation:
+
+```bash
+uv run mkdocs build --clean --strict
+```
+
+Serve the documentation locally:
+
+```bash
+uv run mkdocs serve
+```
+
+Then open <http://localhost:8000> in your browser.
+
+### Build
+
+Build the source distribution and wheel:
+
+```bash
+uv build
+```
+
+The generated artifacts are written to the `dist/` directory.
 
 ## License
 

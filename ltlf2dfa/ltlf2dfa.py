@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # This file is part of ltlf2dfa.
 #
@@ -79,23 +78,15 @@ def simplify_guard(guards):
 
 def parse_mona(mona_output):
     """Parse mona output and construct a dot."""
-    free_variables = get_value(
-        mona_output, r".*DFA for formula with free variables:[\s]*(.*?)\n.*", str
-    )
+    free_variables = get_value(mona_output, r".*DFA for formula with free variables:[\s]*(.*?)\n.*", str)
     if "state" in free_variables:
         free_variables = None
     else:
-        free_variables = symbols(
-            " ".join(
-                x.strip().lower() for x in free_variables.split() if len(x.strip()) > 0
-            )
-        )
+        free_variables = symbols(" ".join(x.strip().lower() for x in free_variables.split() if len(x.strip()) > 0))
 
     # initial_state = get_value(mona_output, '.*Initial state:[\s]*(\d+)\n.*', int)
     accepting_states = get_value(mona_output, r".*Accepting states:[\s]*(.*?)\n.*", str)
-    accepting_states = [
-        str(x.strip()) for x in accepting_states.split() if len(x.strip()) > 0
-    ]
+    accepting_states = [str(x.strip()) for x in accepting_states.split() if len(x.strip()) > 0]
     # num_states = get_value(mona_output, '.*Automaton has[\s]*(\d+)[\s]states.*', int) - 1
 
     dot = """digraph MONA_DFA {
@@ -161,7 +152,7 @@ def createMonafile(p: str):
     try:
         with open(f"{PACKAGE_DIR}/automa.mona", "w+", encoding="utf-8") as file:
             file.write(p)
-    except IOError:
+    except OSError:
         print("[ERROR]: Problem opening the automa.mona file!")
 
 

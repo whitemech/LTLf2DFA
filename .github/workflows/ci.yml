@@ -1,0 +1,111 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  tests:
+    name: Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - "3.11"
+          - "3.12"
+          - "3.13"
+          - "3.14"
+
+    env:
+      UV_PYTHON: ${{ matrix.python-version }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          version: "0.11.31"
+          enable-cache: true
+
+      - name: Install Python
+        run: uv python install "${UV_PYTHON}"
+
+      - name: Install MONA
+        run: sudo apt-get update && sudo apt-get install --yes mona
+
+      - name: Sync environment
+        run: uv sync --locked
+
+      - name: Run tests
+        run: |
+          uv run pytest \
+            --cov=ltlf2dfa \
+            --cov-report=xml \
+            --cov-report=term-missing
+
+      - name: Upload coverage to Codecov
+        if: matrix.python-version == '3.13'
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          disable_search: true
+          plugins: noop
+          fail_ci_if_error: true
+          verbose: true
+
+  quality:
+    name: Quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          version: "0.11.31"
+          enable-cache: true
+
+      - name: Install Python
+        run: uv python install 3.13
+
+      - name: Sync environment
+        run: uv sync --locked
+
+      - name: Check lock file
+        run: uv lock --check
+
+      - name: Check formatting
+        run: uv run ruff format --check .
+
+      - name: Lint
+        run: uv run ruff check .
+
+      - name: Type check
+        run: uv run mypy ltlf2dfa tests
+
+      - name: Build documentation
+        run: uv run mkdocs build --clean --strict
+
+      - name: Audit runtime dependencies
+        run: uv audit --no-group dev
+
+      - name: Build package
+        run: uv build --no-sources
+
+      - name: Test built wheel
+        run: |
+          uv run \
+            --isolated \
+            --no-project \
+            --with dist/*.whl \
+            python -c \
+            'from ltlf2dfa.parser.ltlf import LTLfParser; print(LTLfParser()("F a"))'

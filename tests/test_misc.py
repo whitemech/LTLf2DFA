@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # This file is part of ltlf2dfa.
 #
@@ -17,6 +16,7 @@
 # along with ltlf2dfa.  If not, see <https://www.gnu.org/licenses/>.
 #
 """Misc tests."""
+
 import os
 
 
@@ -72,7 +72,7 @@ def test_QuotedFormula():
 
     f = LTLfParser()("!(G a)")
     qf = QuotedFormula(f)
-    atomf = LTLfAnd([LTLfAtomic(f), LTLfAtomic(f)])
+    _ = LTLfAnd([LTLfAtomic(f), LTLfAtomic(f)])
 
     assert qf.wrapped is f
 

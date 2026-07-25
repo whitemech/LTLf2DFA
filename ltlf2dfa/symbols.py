@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # This file is part of ltlf2dfa.
 #
@@ -18,8 +17,8 @@
 #
 
 """This module contains the definition to deal with symbols."""
+
 from enum import Enum
-from typing import Set
 
 OpSymbol = str
 
@@ -54,4 +53,4 @@ class Symbols(Enum):
     FALSE = "false"
 
 
-ALL_SYMBOLS: Set[str] = {v.value for v in Symbols}
+ALL_SYMBOLS: set[str] = {v.value for v in Symbols}

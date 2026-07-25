@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # This file is part of ltlf2dfa.
 #
@@ -130,7 +129,7 @@ def sym2regexp(sym: Symbols):
     """Transform a symbol to regex."""
     s = sym.value
     if s in r"|()+?*.[]":
-        return r"\%s" % s
+        return f"{s}"
     return s
 
 
