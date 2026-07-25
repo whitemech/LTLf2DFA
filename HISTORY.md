@@ -1,5 +1,14 @@
 # History
 
+## 2.0.0 (2026-07-25)
+
+- Replace `lark-parser` with modern `lark`.
+- Require Python 3.11 or later.
+- Migrate project and dependency management from Poetry to uv.
+- Replace Tox, Black, isort, and Flake8 with direct uv commands and Ruff.
+- Modernize GitHub Actions and Codecov integration.
+- Update the documentation and development workflow.
+
 ## 1.0.2 (2022-02-25)
 * Introduce `PPLTLWeakBefore` and `PPLTLPastRelease` support
 * Hotfix problem on translation of the Once operator
