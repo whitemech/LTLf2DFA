@@ -1,6 +1,6 @@
 [project]
 name = "ltlf2dfa"
-version = "1.0.2"
+version = "2.0.0"
 description = "From LTLf/PPLTL to Deterministic Finite-state Automata (DFA)"
 readme = "README.md"
 requires-python = ">=3.11"
