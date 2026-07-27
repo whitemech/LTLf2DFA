@@ -21,8 +21,8 @@
 import itertools as it
 import os
 import re
-import signal
-from subprocess import PIPE, Popen, TimeoutExpired  # nosec B404
+import subprocess
+import sys
 
 from sympy import And, Not, Or, simplify, symbols
 
@@ -159,19 +159,21 @@ def createMonafile(p: str):
 def invoke_mona():
     """Execute the MONA tool."""
     command = f"mona -q -u -w {PACKAGE_DIR}/automa.mona"
-    process = Popen(
-        args=command,
-        stdout=PIPE,
-        stderr=PIPE,
-        preexec_fn=os.setsid,
-        shell=True,
-        encoding="utf-8",
-    )
     try:
-        output, _ = process.communicate(timeout=30)
-        return str(output).strip()
-    except TimeoutExpired:
-        os.killpg(os.getpgid(process.pid), signal.SIGTERM)
+        completed_proc = subprocess.run(
+            command,
+            shell=True,
+            timeout=30,
+            capture_output=True,
+            encoding="utf-8",
+            cwd=os.getcwd(),
+        )
+        return str(completed_proc.stdout).strip()
+    except subprocess.TimeoutExpired:
+        print("The command timed out.", file=sys.stderr)
+        return False
+    except Exception as e:
+        print(f"An error occurred: {e}", file=sys.stderr)
         return False
 
 
